@@ -235,13 +235,20 @@
       display:flex;
       flex-direction:column;
       position:sticky;
-      top:clamp(1rem, 2vw, 2rem);
+      top:clamp(calc(66px + 1rem), calc(70px + 1rem), calc(70px + 1.5rem));
       align-self:start;
-      max-height:calc(100vh - clamp(3rem, 4vw, 4rem));
+      max-height:calc(100vh - clamp(calc(66px + 2rem), calc(70px + 2rem), calc(70px + 2.5rem)));
       overflow:hidden;
       z-index:var(--z-shell);
       box-shadow:0 4px 20px rgba(0,0,0,0.1);
       transition:all 0.3s ease;
+    }
+    
+    @media (min-width: 769px) {
+      .rentals-wrapper .rs-cart{
+        top:clamp(calc(166px + 1rem), calc(166px + 1.5rem), calc(180px + 2rem));
+        max-height:calc(100vh - clamp(calc(166px + 2rem), calc(166px + 2.5rem), calc(180px + 3rem)));
+      }
     }
     .rentals-wrapper .rs-cart-head{
       display:flex;
