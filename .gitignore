@@ -49,3 +49,10 @@ build/
 *.min.js
 *.min.css
 
+# Node.js
+node_modules/
+package-lock.json
+yarn.lock
+
+# Backup files from optimization
+*.backup
