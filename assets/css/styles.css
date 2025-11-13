@@ -43,7 +43,7 @@ body {
 }
 
 .header-container {
-    max-width: 6000px;
+    max-width: min(90vw, 6000px);
     margin: 0 auto;
     padding: 0 clamp(2rem, 5vw, 4rem);
     display: flex;
@@ -495,7 +495,6 @@ body {
 }
 
 @media (min-width: 1920px) {
-    .header-container,
     .services-container,
     .footer-container {
         max-width: 6000px;
