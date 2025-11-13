@@ -26,8 +26,8 @@
     <style>
     /* Rentals App Styles */
     :root{
-      --rs-bg:#0f2c29; --rs-card:#fff; --rs-text:#131417; --rs-muted:#6b7280;
-      --rs-border:#e6e7ea; --rs-accent:#2B3E5E; --rs-radius:12px;
+      --rs-bg:#173633; --rs-card:#fff; --rs-text:#131417; --rs-muted:#6b7280;
+      --rs-border:rgba(255, 255, 255, 0.1); --rs-accent:#2B3E5E; --rs-radius:12px;
       --rs-gap:clamp(10px, 1.6vw, 16px); --rs-pad:clamp(8px, 1.4vw, 12px);
       --rs-font:clamp(13px, 1.05vw, 15px);
       --rs-chip-h:clamp(32px, 4.8vw, 36px);
@@ -36,7 +36,7 @@
     }
 
     .rentals-wrapper *{box-sizing:border-box}
-    .rentals-wrapper .rs{background:var(--rs-bg);color:var(--rs-text);font:var(--rs-font)/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif}
+    .rentals-wrapper .rs{background:var(--rs-bg);color:var(--rs-text);font:var(--rs-font)/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif}
 
     /* centered shell up to 6000px */
     .rentals-wrapper .rs-shell{
@@ -88,24 +88,37 @@
       align-items:center;
       gap:var(--rs-gap);
       background:#fff;
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:var(--rs-radius);
       padding:var(--rs-pad) calc(var(--rs-pad) + 2px);
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .rentals-wrapper #rs-search{
       flex:1;
       padding:.7rem .9rem;
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:10px;
       font-size:clamp(14px,1.05vw,16px);
+      background:#fff;
+      color:#131417;
+    }
+    .rentals-wrapper #rs-search:focus{
+      outline:none;
+      border-color:#2B3E5E;
+      box-shadow:0 0 0 3px rgba(43, 62, 94, 0.1);
     }
     .rentals-wrapper .rs-toggle{
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       background:#fff;
       border-radius:10px;
       padding:.55rem .7rem;
       line-height:1;
       cursor:pointer;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-toggle:hover{
+      border-color:#2B3E5E;
+      background:#f8f9fa;
     }
     .rentals-wrapper .rs-only-mobile{display:none;}
     .rentals-wrapper .rs-badge{
@@ -126,12 +139,13 @@
     .rentals-wrapper .rs-cats{
       grid-area:cats;
       background:var(--rs-card);
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:var(--rs-radius);
       min-height:60vh;
       display:flex;
       flex-direction:column;
       overflow:hidden;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .rentals-wrapper .rs-cats-head{
       display:flex;
@@ -139,7 +153,8 @@
       justify-content:space-between;
       font-weight:700;
       padding:10px 12px;
-      border-bottom:1px solid var(--rs-border);
+      border-bottom:1px solid #e6e7ea;
+      background:#fafbfc;
     }
     .rentals-wrapper .rs-close{
       border:none;
@@ -160,23 +175,33 @@
       min-width:220px; max-width:100%;
       height:auto; min-height:var(--rs-chip-h);
       display:flex; align-items:center; justify-content:space-between;
-      border:1px solid var(--rs-border); background:#fff; border-radius:10px;
+      border:1px solid #e6e7ea; background:#fff; border-radius:10px;
       padding:.4rem 1.1rem; gap:.75rem; cursor:pointer;
       white-space:normal; text-align:left;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-cat:hover{
+      border-color:#2B3E5E;
+      background:#f8f9fa;
     }
     .rentals-wrapper .rs-cat.active{background:var(--rs-accent);color:#fff;border-color:var(--rs-accent)}
+    .rentals-wrapper .rs-cat.active:hover{
+      background:#3a5477;
+      border-color:#3a5477;
+    }
     .rentals-wrapper .rs-count{opacity:.9}
 
     /* Items grid */
     .rentals-wrapper .rs-items{
       grid-area:items;
       background:var(--rs-card);
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:var(--rs-radius);
       padding:10px;
       display:flex;
       flex-direction:column;
       min-height:50vh;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .rentals-wrapper .rs-grid{
       display:grid;
@@ -184,12 +209,18 @@
       gap:clamp(10px,1.2vw,14px);
     }
     .rentals-wrapper .rs-card{
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:12px;
       background:#fff;
       overflow:hidden;
       display:flex;
       flex-direction:column;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-card:hover{
+      border-color:#2B3E5E;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      transform:translateY(-2px);
     }
     .rentals-wrapper .rs-img{
       aspect-ratio:9/16;
@@ -208,8 +239,16 @@
     .rentals-wrapper .rs-variant{
       width:100%;
       padding:.55rem;
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:10px;
+      background:#fff;
+      color:#131417;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-variant:focus{
+      outline:none;
+      border-color:#2B3E5E;
+      box-shadow:0 0 0 3px rgba(43, 62, 94, 0.1);
     }
     .rentals-wrapper .rs-row{
       display:flex;
@@ -224,13 +263,21 @@
       background:#2B3E5E;
       color:#fff;
       cursor:pointer;
+      font-weight:600;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-add:hover{
+      background:#3a5477;
+      border-color:#3a5477;
+      transform:translateY(-1px);
+      box-shadow:0 2px 8px rgba(43, 62, 94, 0.3);
     }
 
     /* Cart (desktop) */
     .rentals-wrapper .rs-cart{
       grid-area:cart;
       background:var(--rs-card);
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:var(--rs-radius);
       display:flex;
       flex-direction:column;
@@ -256,8 +303,8 @@
       justify-content:space-between;
       font-weight:800;
       padding:12px;
-      border-bottom:1px solid var(--rs-border);
-      background:#fff;
+      border-bottom:1px solid #e6e7ea;
+      background:#fafbfc;
     }
     .rentals-wrapper .rs-head-count{font-weight:600;opacity:.7;margin-left:6px;}
     .rentals-wrapper .rs-cart-scroll{
@@ -288,8 +335,16 @@
     .rentals-wrapper .rs-line input[type=number]{
       width:100px;
       padding:.45rem;
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:10px;
+      background:#fff;
+      color:#131417;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-line input[type=number]:focus{
+      outline:none;
+      border-color:#2B3E5E;
+      box-shadow:0 0 0 3px rgba(43, 62, 94, 0.1);
     }
     .rentals-wrapper .rs-remove{
       border:none;
@@ -299,8 +354,8 @@
       color:#99a0a8;
     }
     .rentals-wrapper .rs-cart-footer{
-      border-top:1px solid var(--rs-border);
-      background:#fff;
+      border-top:1px solid #e6e7ea;
+      background:#fafbfc;
       margin-top:auto;
       padding:10px;
       display:grid;
@@ -308,7 +363,7 @@
     }
     .rentals-wrapper .rs-summary{
       padding:10px;
-      border:1px dashed var(--rs-border);
+      border:1px dashed #e6e7ea;
       border-radius:12px;
       background:#fafbfc;
       font-size:13px;
@@ -319,9 +374,17 @@
     .rentals-wrapper .rs-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
     .rentals-wrapper .rs-form input,.rentals-wrapper .rs-form textarea{
       padding:.55rem .7rem;
-      border:1px solid var(--rs-border);
+      border:1px solid #e6e7ea;
       border-radius:10px;
       grid-column:span 2;
+      background:#fff;
+      color:#131417;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-form input:focus,.rentals-wrapper .rs-form textarea:focus{
+      outline:none;
+      border-color:#2B3E5E;
+      box-shadow:0 0 0 3px rgba(43, 62, 94, 0.1);
     }
     .rentals-wrapper .rs-row2{
       grid-column:span 2;
@@ -348,6 +411,19 @@
       background:#2B3E5E;
       color:#fff;
       cursor:pointer;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+      transition:all 0.3s ease;
+    }
+    .rentals-wrapper .rs-btn-primary:hover{
+      background:#3a5477;
+      border-color:#3a5477;
+      transform:translateY(-1px);
+      box-shadow:0 4px 12px rgba(43, 62, 94, 0.3);
+    }
+    .rentals-wrapper .rs-btn-primary:active{
+      transform:translateY(0);
     }
     .rentals-wrapper .rs-status{font-size:13px;color:var(--rs-muted);}
 
@@ -445,20 +521,213 @@
 
    /* Page content wrapper */
    .page-content {
-     margin-top: clamp(166px, calc(150px + 1rem), 180px);
-     padding: 4rem 0 2rem 0;
+     margin-top: clamp(66px, calc(70px + 2.75rem), 80px);
+     padding: 0;
      background: #173633;
      color: white;
-     min-height: calc(100vh - clamp(166px, calc(150px + 1rem), 180px));
+     min-height: calc(100vh - clamp(66px, calc(70px + 2.75rem), 80px));
    }
 
    .rentals-wrapper {
      width: 100%;
      margin: 0;
+     padding: clamp(2.75rem, 3.75vw, 3.75rem) 0 clamp(1rem, 2vw, 1.5rem) 0;
    }
    
    .rentals-wrapper h1 {
-     padding: 0 1rem;
+     padding: 0 clamp(1rem, 3vw, 2rem);
+     margin-bottom: clamp(1rem, 2vw, 2rem);
+     color: white;
+     font-size: clamp(2rem, 4vw, 3rem);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 2px;
+   }
+
+   /* FAQ Section for Rentals - Modal Overlay */
+   .rentals-faq-wrapper {
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     z-index: 10000;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: clamp(1rem, 3vw, 2rem);
+     opacity: 0;
+     visibility: hidden;
+     transition: opacity 0.4s ease, visibility 0.4s ease;
+     pointer-events: none;
+     background: rgba(0, 0, 0, 0.3);
+   }
+
+   .rentals-faq-wrapper.visible {
+     opacity: 1;
+     visibility: visible;
+     pointer-events: auto;
+   }
+
+   .rentals-faq-container {
+     position: relative;
+     z-index: 1;
+     background: #173633;
+     border: 2px solid rgba(255, 255, 255, 0.2);
+     border-radius: 16px;
+     padding: clamp(2rem, 4vw, 3rem);
+     max-width: min(90vw, 700px);
+     max-height: 85vh;
+     overflow-y: auto;
+     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+     transform: scale(0.95);
+     transition: transform 0.4s ease;
+   }
+
+   .rentals-faq-wrapper.visible .rentals-faq-container {
+     transform: scale(1);
+   }
+
+   .rentals-faq-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: clamp(1rem, 2vw, 1.5rem);
+   }
+
+   .rentals-faq-title {
+     font-size: clamp(1.5rem, 3vw, 2rem);
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 2px;
+     color: white;
+     margin: 0;
+   }
+
+   .rentals-faq-close {
+     background: transparent;
+     border: 2px solid rgba(255, 255, 255, 0.4);
+     border-radius: 50%;
+     width: 36px;
+     height: 36px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     color: white;
+     font-size: 22px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     padding: 0;
+     line-height: 1;
+     flex-shrink: 0;
+   }
+
+   .rentals-faq-close:hover {
+     background: rgba(255, 255, 255, 0.15);
+     border-color: rgba(255, 255, 255, 0.7);
+     transform: scale(1.1);
+   }
+
+   .rentals-faq-content {
+     display: flex;
+     flex-direction: column;
+     gap: clamp(1.5rem, 3vw, 2rem);
+   }
+
+   .rentals-faq-item {
+     padding: clamp(1rem, 2vw, 1.5rem) 0;
+   }
+
+   .rentals-faq-item:not(:last-child) {
+     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+   }
+
+   .rentals-faq-question {
+     font-size: clamp(1rem, 1.8vw, 1.3rem);
+     font-weight: 600;
+     color: white;
+     margin: 0 0 clamp(0.5rem, 1vw, 0.75rem) 0;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+   }
+
+   .rentals-faq-answer {
+     font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+     line-height: 1.8;
+     color: rgba(255, 255, 255, 0.9);
+     margin: 0;
+   }
+
+   .rentals-faq-container::-webkit-scrollbar {
+     width: 8px;
+   }
+
+   .rentals-faq-container::-webkit-scrollbar-track {
+     background: rgba(255, 255, 255, 0.05);
+     border-radius: 4px;
+   }
+
+   .rentals-faq-container::-webkit-scrollbar-thumb {
+     background: rgba(255, 255, 255, 0.3);
+     border-radius: 4px;
+   }
+
+   .rentals-faq-container::-webkit-scrollbar-thumb:hover {
+     background: rgba(255, 255, 255, 0.5);
+   }
+
+   @media (max-width: 768px) {
+     .rentals-faq-wrapper {
+       padding: clamp(1rem, 3vw, 1.5rem);
+     }
+
+     .rentals-faq-container {
+       padding: clamp(1.5rem, 4vw, 2rem);
+       max-height: 90vh;
+     }
+   }
+
+   /* Floating FAQ Button */
+   .rentals-faq-float-btn {
+     position: fixed;
+     bottom: clamp(1.5rem, 3vw, 2rem);
+     left: clamp(1.5rem, 3vw, 2rem);
+     background: #2B3E5E;
+     color: white;
+     border: 2px solid rgba(255, 255, 255, 0.2);
+     border-radius: 50px;
+     padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1.25rem, 2.5vw, 1.75rem);
+     font-size: clamp(0.9rem, 1.5vw, 1rem);
+     font-weight: 700;
+     text-transform: uppercase;
+     letter-spacing: 1px;
+     cursor: pointer;
+     z-index: 9999;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+     transition: all 0.3s ease;
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+   }
+
+   .rentals-faq-float-btn:hover {
+     background: #3a5477;
+     border-color: rgba(255, 255, 255, 0.4);
+     transform: translateY(-2px);
+     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+   }
+
+   .rentals-faq-float-btn:active {
+     transform: translateY(0);
+   }
+
+   @media (max-width: 768px) {
+     .rentals-faq-float-btn {
+       bottom: 1.5rem;
+       left: 1.5rem;
+       padding: 0.875rem 1.5rem;
+       font-size: 0.9rem;
+     }
    }
     </style>
 </head>
@@ -487,7 +756,57 @@
     <!-- Main Content -->
     <main class="page-content">
         <div class="rentals-wrapper">
-            
+            <!-- FAQ Section for First-Time Visitors -->
+            <div class="rentals-faq-wrapper" id="rentalsFaqWrapper">
+                <div class="rentals-faq-container">
+                    <div class="rentals-faq-header">
+                        <h2 class="rentals-faq-title">Rental Information</h2>
+                        <button class="rentals-faq-close" id="rentalsFaqClose" aria-label="Close FAQ">✕</button>
+                    </div>
+                    <div class="rentals-faq-content" id="rentalsFaqContent">
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">Can I edit my rental after I submit it?</h3>
+                            <p class="rentals-faq-answer">Yep. If you need to adjust your gear list, dates, or contact info, just reply to your confirmation email or message us. We'll update the order on our end and send back the revised details.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">How far in advance should I book gear?</h3>
+                            <p class="rentals-faq-answer">For popular items like cameras, lighting kits, and lenses, we recommend booking at least 1–2 weeks ahead. Same-day or next-day bookings are sometimes possible depending on inventory — these are also subject to an additional charge.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">Do you require a deposit?</h3>
+                            <p class="rentals-faq-answer">No — But we require your credit card to put on file.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">What happens after I create a rental?</h3>
+                            <p class="rentals-faq-answer">Once you submit your order: <strong>1)</strong> We review availability, <strong>2)</strong> You receive a confirmation or suggested changes, <strong>3)</strong> You sign the contract, <strong>4)</strong> Your rental is officially booked. You'll also get check-in and check-out instructions before pickup.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">How does pickup and return work?</h3>
+                            <p class="rentals-faq-answer">Pickups and returns happen at our Vancouver office. We'll send you the exact time slot, entry instructions, and any parking notes. If you need an early or late pickup, just ask — we'll try to accommodate.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">What do I need to bring for pickup?</h3>
+                            <p class="rentals-faq-answer">A government-issued ID and a credit card used for the payment. If someone else is picking up the order, let us know in advance so we can authorize them.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">What if the gear breaks during my rental?</h3>
+                            <p class="rentals-faq-answer">Let us know immediately. We handle repairs in-house or through our trusted techs. Damage is assessed fairly — we don't inflate repair costs. Insurance coverage is recommended for larger packages.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">Can I cancel my order?</h3>
+                            <p class="rentals-faq-answer">Yes. Cancellations are free up to 48 hours before pickup. Within 48 hours, the deposit becomes non-refundable due to scheduling and gear lockout.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">What if the gear I want isn't available?</h3>
+                            <p class="rentals-faq-answer">We'll offer alternatives or notify you as soon as it becomes available again. We sometimes sub-rent specialty items — just ask.</p>
+                        </div>
+                        <div class="rentals-faq-item">
+                            <h3 class="rentals-faq-question">Do you rent to beginners or first-time filmmakers?</h3>
+                            <p class="rentals-faq-answer">Absolutely. Whether you're shooting your first short film or a full commercial, we're here to help you choose the right gear and make sure you're set up for success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div id="rs-app" class="rs">
               <header class="rs-top rs-shell">
@@ -605,6 +924,11 @@
         </div>
     </footer>
 
+    <!-- Floating FAQ Button -->
+    <button class="rentals-faq-float-btn" id="rentalsFaqFloatBtn" aria-label="Open FAQ">
+        <span>FAQ</span>
+    </button>
+
     <script src="assets/js/script.js"></script>
     <script>
     /* Robust mobile viewport fallback for --vh */
@@ -621,6 +945,63 @@
       }
       addEventListener('orientationchange', () => setTimeout(setVH, 120), {passive:true});
     })();
+    </script>
+
+    <script>
+    // FAQ Auto-Open on First Visit & Floating Button
+    document.addEventListener('DOMContentLoaded', function() {
+      const faqWrapper = document.getElementById('rentalsFaqWrapper');
+      const faqClose = document.getElementById('rentalsFaqClose');
+      const faqFloatBtn = document.getElementById('rentalsFaqFloatBtn');
+      const faqContainer = faqWrapper ? faqWrapper.querySelector('.rentals-faq-container') : null;
+      const FAQ_SEEN_KEY = 'rentals-faq-seen';
+      
+      if (!faqWrapper || !faqClose) return;
+      
+      function openFaq() {
+        faqWrapper.classList.add('visible');
+      }
+      
+      function closeFaq() {
+        faqWrapper.classList.remove('visible');
+        // Mark as seen (only on first close)
+        if (!localStorage.getItem(FAQ_SEEN_KEY)) {
+          localStorage.setItem(FAQ_SEEN_KEY, 'true');
+        }
+      }
+      
+      // Check if FAQ has been seen before
+      const faqSeen = localStorage.getItem(FAQ_SEEN_KEY);
+      
+      if (!faqSeen) {
+        // Show FAQ on first visit
+        setTimeout(() => {
+          openFaq();
+        }, 300); // Small delay for smooth appearance
+      }
+      
+      // Close button handler
+      faqClose.addEventListener('click', closeFaq);
+      
+      // Floating button handler (always opens FAQ)
+      if (faqFloatBtn) {
+        faqFloatBtn.addEventListener('click', openFaq);
+      }
+      
+      // Click outside to close
+      faqWrapper.addEventListener('click', function(e) {
+        if (e.target === faqWrapper) {
+          closeFaq();
+        }
+      });
+      
+      // Prevent clicks inside container from closing
+      if (faqContainer) {
+        faqContainer.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    });
     </script>
 
     <script>
