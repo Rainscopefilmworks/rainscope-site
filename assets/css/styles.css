@@ -36,8 +36,10 @@ body {
     background: rgba(23, 54, 51, 0.95);
     backdrop-filter: blur(10px);
     z-index: 1000;
-    padding: 0.25rem 0;
+    padding: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
 }
 
 .header-container {
@@ -48,15 +50,17 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    min-height: var(--header-height);
 }
 
 .logo {
     display: flex;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
     transition: opacity 0.3s ease;
     overflow: hidden;
-    height: 100%;
+    padding: clamp(0.75rem, 1.5vw, 1.25rem) 0;
 }
 
 .logo:hover {
@@ -64,12 +68,12 @@ body {
 }
 
 .logo-img {
-    height: 100%;
+    height: auto;
     max-height: 60px;
     width: auto;
     display: block;
     object-fit: contain;
-    object-position: left center;
+    object-position: center center;
 }
 
 .mobile-menu-toggle {
@@ -228,12 +232,16 @@ body {
         transition: padding-left 0.3s ease;
     }
     
+    .logo {
+        padding: clamp(0.5rem, 1.2vw, 1rem) 0;
+    }
+    
     .logo-img {
-        height: 100%;
+        height: auto;
         max-height: clamp(35px, 4.5vw, 45px);
         width: auto;
         object-fit: contain;
-        object-position: left center;
+        object-position: center center;
     }
     
     /* Overlay backdrop */
