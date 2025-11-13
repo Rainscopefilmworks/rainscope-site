@@ -1,7 +1,8 @@
 {
   "name": "rainscope-site",
   "version": "1.0.0",
-  "description": "Rainscope Filmworks website",
+  "description": "Rainscope Filmworks website - optimization scripts",
+  "private": true,
   "scripts": {
     "optimize": "node optimize.js",
     "optimize:images": "node optimize.js --images",
@@ -22,4 +23,3 @@
   },
   "devDependencies": {}
 }
-
