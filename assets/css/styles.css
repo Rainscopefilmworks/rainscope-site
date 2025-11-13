@@ -56,11 +56,12 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-decoration: none;
     transition: opacity 0.3s ease;
     padding: clamp(1rem, 2vw, 1.5rem) clamp(0.5rem, 1vw, 1rem);
     margin: clamp(0.5rem, 1vw, 1rem) 0;
+    margin-right: auto;
 }
 
 .logo:hover {
@@ -69,11 +70,11 @@ body {
 
 .logo-img {
     height: auto;
-    max-height: clamp(50px, 6vw, 70px);
+    max-height: clamp(25px, 3vw, 35px);
     width: auto;
     display: block;
     object-fit: contain;
-    object-position: center center;
+    object-position: left center;
 }
 
 .mobile-menu-toggle {
@@ -236,14 +237,15 @@ body {
     .logo {
         padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(0.5rem, 1vw, 1rem);
         margin: clamp(0.25rem, 0.75vw, 0.75rem) 0;
+        margin-right: auto;
     }
     
     .logo-img {
         height: auto;
-        max-height: clamp(40px, 5vw, 55px);
+        max-height: clamp(20px, 2.5vw, 28px);
         width: auto;
         object-fit: contain;
-        object-position: center center;
+        object-position: left center;
     }
     
     /* Overlay backdrop */
