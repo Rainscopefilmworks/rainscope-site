@@ -9,6 +9,24 @@
     <meta name="author" content="Rainscope Filmworks">
     <link rel="canonical" href="https://rainscopefilmworks.com/">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
+    
+    <!-- Analytics - Add your tracking code here before closing </head> -->
+    <!-- Example Google Analytics 4:
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rainscopefilmworks.com/">
@@ -33,7 +51,7 @@
       "image": "https://rainscopefilmworks.com/assets/images/logo.png",
       "@id": "https://rainscopefilmworks.com",
       "url": "https://rainscopefilmworks.com",
-      "telephone": "",
+      "telephone": "604-910-2845",
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
@@ -65,6 +83,7 @@
       ],
       "contactPoint": {
         "@type": "ContactPoint",
+        "telephone": "604-910-2845",
         "email": "Hello@rainscopefilmworks.com",
         "contactType": "customer service"
       }
@@ -102,7 +121,10 @@
         </div>
         <div class="hero-content">
             <h1 class="hero-tagline">A CREATIVE PRODUCTION COMPANY SHAPED BY THE PACIFIC NORTHWEST</h1>
-            <a href="https://youtu.be/5oXAdpbbG5Y" target="_blank" class="btn-primary">Watch our Reel</a>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary btn-primary-filled">Get Started</a>
+                <a href="https://youtu.be/5oXAdpbbG5Y" target="_blank" class="btn-primary">Watch our Reel</a>
+            </div>
         </div>
       
     </section>
@@ -136,6 +158,55 @@
             <span class="indicator active" data-slide="0"></span>
             <span class="indicator" data-slide="1"></span>
             <span class="indicator" data-slide="2"></span>
+        </div>
+    </section>
+
+    <!-- Trust Indicators Section -->
+    <section class="trust-indicators">
+        <div class="trust-container">
+            <div class="trust-item">
+                <div class="trust-number">50+</div>
+                <div class="trust-label">Projects Completed</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">100%</div>
+                <div class="trust-label">Client Satisfaction</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">3+</div>
+                <div class="trust-label">Years in Business</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Preview Section -->
+    <section class="portfolio-preview">
+        <div class="portfolio-preview-container">
+            <h2 class="section-title">Featured Work</h2>
+            <p class="portfolio-subtitle">A glimpse of our latest creative projects</p>
+            <div class="portfolio-preview-grid">
+                <a href="our-work.html" class="portfolio-preview-item">
+                    <video autoplay loop muted playsinline aria-label="Video production showcase - Rainscope Filmworks">
+                        <source src="assets/videos/work/work-7.mp4" type="video/mp4">
+                    </video>
+                    <div class="portfolio-overlay">
+                        <span class="portfolio-label">View Project</span>
+                    </div>
+                </a>
+                <a href="our-work.html" class="portfolio-preview-item">
+                    <img src="assets/images/work/work-1.gif" alt="Wedding video production - Cinematic wedding film by Rainscope Filmworks">
+                    <div class="portfolio-overlay">
+                        <span class="portfolio-label">View Project</span>
+                    </div>
+                </a>
+                <a href="our-work.html" class="portfolio-preview-item">
+                    <img src="assets/images/work/work-6.gif" alt="Creative video production project - Rainscope Filmworks portfolio">
+                    <div class="portfolio-overlay">
+                        <span class="portfolio-label">View Project</span>
+                    </div>
+                </a>
+            </div>
+            <a href="our-work.html" class="btn-secondary">View All Work</a>
         </div>
     </section>
 
@@ -221,6 +292,7 @@
             <div class="footer-section footer-contact">
                 <h4>CONTACT</h4>
                 <p>
+                    <a href="tel:604-910-2845">604-910-2845</a><br>
                     <a href="mailto:Hello@rainscopefilmworks.com">Hello@Rainscopefilmworks.com</a><br>
                     <a href="mailto:rentals@rainscopefilmworks.com">Rentals@RainscopeFilmworks.com</a>
                 </p>
@@ -239,6 +311,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Floating CTA Button -->
+    <a href="#contact" class="floating-cta" id="floatingCta" aria-label="Get Started">
+        <span>Get Started</span>
+    </a>
 
     <script src="assets/js/script.js"></script>
     <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>

@@ -7,7 +7,8 @@
     "optimize": "node optimize.js",
     "optimize:images": "node optimize.js --images",
     "optimize:videos": "node optimize.js --videos",
-    "optimize:all": "node optimize.js --all"
+    "optimize:all": "node optimize.js --all",
+    "favicons": "node generate-favicons.js"
   },
   "keywords": ["website", "optimization"],
   "author": "",

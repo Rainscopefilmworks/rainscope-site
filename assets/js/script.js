@@ -120,3 +120,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Floating CTA Button - Show after scrolling past hero
+document.addEventListener('DOMContentLoaded', function() {
+    const floatingCta = document.getElementById('floatingCta');
+    const hero = document.querySelector('.hero');
+    
+    if (!floatingCta || !hero) return;
+    
+    function handleScroll() {
+        const heroBottom = hero.offsetTop + hero.offsetHeight;
+        const scrollPosition = window.scrollY + window.innerHeight;
+        
+        // Show floating CTA after scrolling past hero
+        if (window.scrollY > heroBottom - 200) {
+            floatingCta.classList.add('visible');
+        } else {
+            floatingCta.classList.remove('visible');
+        }
+    }
+    
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check on page load
+});
+
+// Smooth scroll for anchor links
+document.addEventListener('DOMContentLoaded', function() {
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#!') return;
+            
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                const headerOffset = 100;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+});
+
