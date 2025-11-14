@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemaps
 Sitemap: https://rainscopefilmworks.com/sitemap.xml
+Sitemap: https://rainscopefilmworks.com/video-sitemap.xml
 

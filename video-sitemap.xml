@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <!-- Video Portfolio Items from Our Work Page -->
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/work/work-7.mp4</video:thumbnail_loc>
+      <video:title>Video Production Showcase - Professional Film Production</video:title>
+      <video:description>Professional film production by Rainscope Filmworks in Vancouver, BC. Showcasing our creative video production services.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/videos/work/work-7.mp4</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/work/work-8.mp4</video:thumbnail_loc>
+      <video:title>Creative Video Production - Film Project</video:title>
+      <video:description>Creative film project by Rainscope Filmworks in Vancouver, BC. Demonstrating our innovative approach to video production.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/videos/work/work-8.mp4</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-1.gif</video:thumbnail_loc>
+      <video:title>Wedding Video Production - Cinematic Wedding Film</video:title>
+      <video:description>Cinematic wedding film by Rainscope Filmworks in Vancouver, BC. Capturing special moments with professional wedding videography.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-1.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-2.gif</video:thumbnail_loc>
+      <video:title>Music Video Production - Creative Music Video</video:title>
+      <video:description>Creative music video by Rainscope Filmworks in Vancouver, BC. Professional music video production services.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-2.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-6.gif</video:thumbnail_loc>
+      <video:title>Creative Video Production Project</video:title>
+      <video:description>Creative video production project by Rainscope Filmworks in Vancouver, BC. Showcasing our portfolio of innovative video work.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-6.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-3.gif</video:thumbnail_loc>
+      <video:title>Church Interview Video Production - Documentary Style</video:title>
+      <video:description>Documentary-style interview by Rainscope Filmworks in Vancouver, BC. Professional interview and documentary video production.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-3.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-4.gif</video:thumbnail_loc>
+      <video:title>Corporate Video Production - Professional Corporate Video</video:title>
+      <video:description>Professional corporate video by Rainscope Filmworks in Vancouver, BC. Business and corporate video production services.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-4.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-5.gif</video:thumbnail_loc>
+      <video:title>Video Production Showcase - Creative Project</video:title>
+      <video:description>Creative project by Rainscope Filmworks in Vancouver, BC. Showcasing our video production capabilities and creative vision.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-5.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <!-- Hero Video from Homepage -->
+  <url>
+    <loc>https://rainscopefilmworks.com/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/hero-video.mp4</video:thumbnail_loc>
+      <video:title>Rainscope Filmworks - A Creative Production Company</video:title>
+      <video:description>A creative production company shaped by the Pacific Northwest. Based in Vancouver, BC. Specializing in video production, post-production, photography, design, and equipment rentals.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/videos/hero-video.mp4</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <!-- Portfolio Preview Videos from Homepage -->
+  <url>
+    <loc>https://rainscopefilmworks.com/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/work/work-7.mp4</video:thumbnail_loc>
+      <video:title>Featured Work - Video Production Showcase</video:title>
+      <video:description>Featured video production showcase from Rainscope Filmworks portfolio. Professional film production in Vancouver, BC.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/videos/work/work-7.mp4</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-1.gif</video:thumbnail_loc>
+      <video:title>Featured Work - Wedding Video Production</video:title>
+      <video:description>Featured wedding video production from Rainscope Filmworks portfolio. Cinematic wedding film production in Vancouver, BC.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-1.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+  
+  <url>
+    <loc>https://rainscopefilmworks.com/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-6.gif</video:thumbnail_loc>
+      <video:title>Featured Work - Creative Video Production</video:title>
+      <video:description>Featured creative video production project from Rainscope Filmworks portfolio. Creative video work in Vancouver, BC.</video:description>
+      <video:content_loc>https://rainscopefilmworks.com/assets/images/work/work-6.gif</video:content_loc>
+      <video:publication_date>2024-01-01T00:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:uploader info="https://rainscopefilmworks.com">Rainscope Filmworks</video:uploader>
+    </video:video>
+  </url>
+</urlset>
+
