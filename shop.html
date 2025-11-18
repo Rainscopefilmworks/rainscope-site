@@ -98,11 +98,11 @@
       padding-right: calc(20px + env(safe-area-inset-right));
     }
     
-    /* Remove shell padding on desktop for full-width */
+    /* Add side padding on desktop */
     @media (min-width: 961px) {
       .shop-wrapper .rs-shell{
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: clamp(1.5rem, 3vw, 2.5rem);
+        padding-right: clamp(1.5rem, 3vw, 2.5rem);
       }
     }
 
@@ -136,11 +136,28 @@
     .shop-wrapper .rs-top{
       grid-area:top;
       display:flex;
-      gap:var(--rs-gap);
       align-items:center;
-      padding:var(--rs-pad);
+      gap:var(--rs-gap);
+      background:#fff;
+      border:1px solid #e6e7ea;
+      border-radius:var(--rs-radius);
+      padding:var(--rs-pad) calc(var(--rs-pad) + 2px);
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
-    .shop-wrapper .rs-search{flex:1;padding:var(--rs-pad);border:1px solid var(--rs-border);border-radius:var(--rs-radius);background:var(--rs-card);font:inherit}
+    .shop-wrapper .rs-search{
+      flex:1;
+      padding:.7rem .9rem;
+      border:1px solid #e6e7ea;
+      border-radius:10px;
+      font-size:clamp(14px,1.05vw,16px);
+      background:#fff;
+      color:#131417;
+    }
+    .shop-wrapper .rs-search:focus{
+      outline:none;
+      border-color:#2B3E5E;
+      box-shadow:0 0 0 3px rgba(43, 62, 94, 0.1);
+    }
     .shop-wrapper .rs-toggle{display:none;padding:var(--rs-pad);border:1px solid var(--rs-border);border-radius:var(--rs-radius);background:var(--rs-accent);color:#fff;font:inherit;cursor:pointer}
     .shop-wrapper .rs-only-mobile{display:none}
     .shop-wrapper .rs-cart-toggle{position:relative}
@@ -180,12 +197,13 @@
       overflow-y:auto;
       background:var(--rs-card);
       border-radius:var(--rs-radius);
-      padding:var(--rs-pad);
+      padding:clamp(1rem, 2vw, 1.5rem);
     }
     .shop-wrapper .rs-grid{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
       gap:var(--rs-gap);
+      padding:0;
     }
     .shop-wrapper .rs-card{
       background:var(--rs-card);
@@ -864,25 +882,38 @@
             vars.forEach(v => allVariationIds.push(v.id));
           });
           
-          const inventoryData = await loadInventory(allVariationIds);
-          inventoryCache = inventoryData;
+          if (allVariationIds.length > 0) {
+            try {
+              const inventoryData = await loadInventory(allVariationIds);
+              inventoryCache = inventoryData;
 
-          // Filter out items with no stock (all variations have 0 inventory)
-          items = items.filter(item => {
-            const vars = item.item_data?.variations || [];
-            if (vars.length === 0) return false; // No variations = exclude
-            
-            // Check if at least one variation has stock
-            const hasStock = vars.some(v => {
-              const inv = inventoryCache[v.id] || {quantity: 0};
-              return inv.quantity > 0;
-            });
-            
-            if (!hasStock) {
-              console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+              // Filter out items with no stock (all variations have 0 inventory)
+              const itemsBeforeInventory = items.length;
+              items = items.filter(item => {
+                const vars = item.item_data?.variations || [];
+                if (vars.length === 0) return false; // No variations = exclude
+                
+                // Check if at least one variation has stock
+                const hasStock = vars.some(v => {
+                  const inv = inventoryCache[v.id] || {quantity: 0};
+                  return inv.quantity > 0;
+                });
+                
+                if (!hasStock) {
+                  console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+                }
+                return hasStock;
+              });
+              console.log(`After inventory filtering: ${items.length} items remain (from ${itemsBeforeInventory})`);
+            } catch (invError) {
+              console.error("Error loading inventory, showing all items:", invError);
+              // If inventory fails, show all items but mark inventory as unknown
+              inventoryCache = {};
             }
-            return hasStock;
-          });
+          } else {
+            console.warn("No variations found to check inventory");
+            inventoryCache = {};
+          }
 
           const counts=new Map(); let unassigned=0;
           for(const it of items){
