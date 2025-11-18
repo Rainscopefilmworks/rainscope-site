@@ -198,7 +198,7 @@
       padding-bottom:var(--rs-gap);
       grid-template-columns:260px 1fr 420px;
       grid-template-rows:56px 1fr;
-      grid-template-areas:"top top cart" "cats items cart";
+      grid-template-areas:"top top top" "cats items cart";
     }
 
     /* Top */
@@ -317,7 +317,7 @@
       background:var(--rs-card);
       border:1px solid #e6e7ea;
       border-radius:var(--rs-radius);
-      padding:10px;
+      padding:clamp(1rem, 2vw, 1.5rem);
       display:flex;
       flex-direction:column;
       min-height:50vh;
@@ -325,8 +325,8 @@
     }
     .rentals-wrapper .rs-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(clamp(200px, 28vw, 260px),1fr));
-      gap:clamp(10px,1.2vw,14px);
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:var(--rs-gap);
     }
     .rentals-wrapper .rs-card{
       border:1px solid #e6e7ea;
