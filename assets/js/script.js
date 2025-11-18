@@ -2,6 +2,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     const slides = document.querySelectorAll('.testimonial-slide');
     const indicators = document.querySelectorAll('.indicator');
+    
+    // Only initialize slider if slides exist
+    if (slides.length === 0) {
+        return; // Exit early if no testimonials on this page
+    }
+    
     let currentSlide = 0;
     let slideInterval;
 
@@ -9,8 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
         slides.forEach(slide => slide.classList.remove('active'));
         indicators.forEach(indicator => indicator.classList.remove('active'));
         
-        slides[index].classList.add('active');
-        indicators[index].classList.add('active');
+        if (slides[index]) {
+            slides[index].classList.add('active');
+        }
+        if (indicators[index]) {
+            indicators[index].classList.add('active');
+        }
     }
 
     function nextSlide() {

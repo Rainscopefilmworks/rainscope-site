@@ -584,10 +584,10 @@
         </div>
     </footer>
 
-    <!-- Square Web Payments SDK - Load first -->
-    <script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
-    
     <script src="assets/js/script.js"></script>
+    
+    <!-- Square Web Payments SDK -->
+    <script type="text/javascript" src="https://js.squareup.com/v2/paymentform" onload="window.squareScriptLoaded = true"></script>
     
     <script>
     // Wait for DOM to be fully ready, then initialize
@@ -595,6 +595,14 @@
       // Ensure DOM is ready
       if (document.readyState === 'loading') {
         await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+      }
+      
+      // Wait for Square script to load
+      let squareLoadAttempts = 0;
+      const maxAttempts = 20; // 2 seconds total
+      while (typeof SqPaymentForm === 'undefined' && squareLoadAttempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        squareLoadAttempts++;
       }
       
       (async () => {
@@ -655,31 +663,14 @@
       const APPLICATION_ID = "sq0idp-Q4C4Lb_w5aFXTJuE_2ebgg"; // Square Application ID
       
       if (APPLICATION_ID) {
-        // Wait for Square script to load (with retry)
-        function waitForSquareAndInit() {
-          if (typeof SqPaymentForm !== 'undefined') {
-            initializeSquarePayments();
-          } else {
-            // Retry after a short delay
-            setTimeout(() => {
-              if (typeof SqPaymentForm !== 'undefined') {
-                initializeSquarePayments();
-              } else {
-                console.error("Square Web Payments SDK failed to load after waiting. Payment form will not work.");
-                if ($cardContainer) {
-                  $cardContainer.innerHTML = "<p style='color:#ef4444;font-size:12px;'>Payment form failed to load. Please refresh the page.</p>";
-                }
-              }
-            }, 500);
-          }
-        }
-        
-        // Check immediately, or wait a bit if script just loaded
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', waitForSquareAndInit);
+        // Square script should be loaded by now (we waited above)
+        if (typeof SqPaymentForm !== 'undefined') {
+          initializeSquarePayments();
         } else {
-          // Script should be loaded by now, but give it a moment
-          setTimeout(waitForSquareAndInit, 100);
+          console.error("Square Web Payments SDK failed to load. Payment form will not work.");
+          if ($cardContainer) {
+            $cardContainer.innerHTML = "<p style='color:#ef4444;font-size:12px;'>Payment form failed to load. Please check your internet connection and refresh the page.</p>";
+          }
         }
       } else {
         console.warn("Square Application ID not configured. Payment processing will not work.");
