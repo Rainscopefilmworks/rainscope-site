@@ -1344,6 +1344,21 @@
             quantity: String(l.qty)
           }));
 
+          // Calculate cart total before attempting payment
+          const cartTotal = cart.reduce((sum, l) => {
+            const price = priceNum(l.priceMoney);
+            const qty = Math.max(1, parseInt(l.qty || "1", 10));
+            return sum + (price * qty);
+          }, 0);
+
+          // Square doesn't allow $0 payments - check before processing
+          if (cartTotal <= 0) {
+            alert("Cannot process payment: Order total must be greater than $0.00.\n\nIf you're testing with free items, please add a paid item to your cart.");
+            setStatus("");
+            $submit.disabled = false;
+            return;
+          }
+
           const note = noteExtra ? `Order notes: ${noteExtra}` : undefined;
 
           setStatus("Processing payment…");
