@@ -591,25 +591,71 @@
         </div>
     </footer>
 
-    <script src="assets/js/script.js" data-cfasync="false"></script>
+    <!-- Skip script.js on shop page to avoid Rocket Loader issues with testimonials slider -->
+    <!-- Only load mobile menu functionality inline -->
+    <script data-cfasync="false">
+    // Minimal mobile menu functionality for shop page
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const nav = document.querySelector('#main-nav');
+        const navOverlay = document.querySelector('#nav-overlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        if (menuToggle && nav) {
+            function closeMenu() {
+                nav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+            
+            menuToggle.addEventListener('click', () => {
+                const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', String(!isExpanded));
+                nav.classList.toggle('active');
+                if (navOverlay) navOverlay.classList.toggle('active');
+                document.body.style.overflow = isExpanded ? '' : 'hidden';
+            });
+            
+            if (navOverlay) {
+                navOverlay.addEventListener('click', closeMenu);
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && nav.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+        }
+    });
+    </script>
     
     <!-- Square Web Payments SDK - Load dynamically to avoid Rocket Loader -->
     <script data-cfasync="false">
-      // Load Square script dynamically
+      // Load Square script dynamically and set up callback
       (function() {
+        window.squareScriptReady = false;
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = 'https://js.squareup.com/v2/paymentform';
         script.setAttribute('data-cfasync', 'false');
+        script.async = false; // Load synchronously to ensure it's available
         script.onload = function() {
           window.squareScriptLoaded = true;
+          window.squareScriptReady = true;
+          console.log('Square Web Payments SDK loaded successfully');
           if (typeof window.onSquareScriptLoaded === 'function') {
             window.onSquareScriptLoaded();
           }
         };
         script.onerror = function() {
-          console.error('Failed to load Square Web Payments SDK');
+          console.error('Failed to load Square Web Payments SDK - check network connection and CORS settings');
           window.squareScriptLoadError = true;
+          window.squareScriptReady = false;
         };
         document.head.appendChild(script);
       })();
@@ -629,7 +675,19 @@
       while (typeof SqPaymentForm === 'undefined' && squareLoadAttempts < maxAttempts) {
         await new Promise(resolve => setTimeout(resolve, 100));
         squareLoadAttempts++;
+        // Check if script failed to load
+        if (window.squareScriptLoadError) {
+          console.error('Square script failed to load - stopping wait');
+          break;
+        }
       }
+      
+      console.log('Square script check complete:', {
+        SqPaymentForm: typeof SqPaymentForm,
+        squareScriptLoaded: window.squareScriptLoaded,
+        squareScriptReady: window.squareScriptReady,
+        attempts: squareLoadAttempts
+      });
       
       (async () => {
       const PROXY_BASE  = "https://rainscope-square-proxy.sweet-queen-15c3.workers.dev";
