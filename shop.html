@@ -612,6 +612,8 @@
       const DEBUG_MODE = false;
       // Temporary: set to true to show all items regardless of category (for debugging)
       const DEBUG_SHOW_ALL_CATEGORIES = false;
+      // Temporary: set to true to show items even with 0 inventory (for debugging)
+      const DEBUG_SHOW_ZERO_INVENTORY = false;
 
       // DOM
       const $cats = document.getElementById("rs-cats-list");
@@ -882,18 +884,33 @@
           });
           
           console.log(`After filtering: ${items.length} items remain (from ${itemsRaw.length} raw items)`);
-          if (items.length === 0 && itemsRaw.length > 0) {
+          
+          // If no items after category filtering, show error immediately
+          if (items.length === 0) {
             console.warn("⚠️ All items were filtered out! Check filtering logic.");
-            console.log("Sample raw item:", itemsRaw[0]);
-            console.log("Sample item category:", itemsRaw[0]?.item_data?.category_id ? nameById[itemsRaw[0].item_data.category_id] : "No category");
-            // Show a helpful message in the UI
-            if ($grid) {
-              $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
-                <p><strong>No items found in "Stuck on set" category.</strong></p>
-                <p style='font-size: 14px; margin-top: 1rem;'>Available categories: ${Object.values(nameById).join(", ")}</p>
-                <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>Check the browser console for detailed filtering information.</p>
-              </div>`;
+            if (itemsRaw.length > 0) {
+              console.log("Sample raw item:", itemsRaw[0]);
+              console.log("Sample item category:", itemsRaw[0]?.item_data?.category_id ? nameById[itemsRaw[0].item_data.category_id] : "No category");
+              // Show a helpful message in the UI
+              if ($grid) {
+                $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
+                  <p><strong>No items found in "Stuck on set" category.</strong></p>
+                  <p style='font-size: 14px; margin-top: 1rem;'>Available categories: ${Object.values(nameById).length > 0 ? Object.values(nameById).join(", ") : "None found"}</p>
+                  <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>Check the browser console for detailed filtering information.</p>
+                  <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>Total items in catalog: ${itemsRaw.length}</p>
+                </div>`;
+              }
+            } else {
+              // No items at all in catalog
+              if ($grid) {
+                $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
+                  <p><strong>No items found in catalog.</strong></p>
+                  <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>Check the browser console for API errors.</p>
+                </div>`;
+              }
             }
+            // Don't continue with inventory loading if no items
+            return;
           }
 
           // Load inventory for all variations
@@ -921,11 +938,30 @@
                 });
                 
                 if (!hasStock) {
-                  console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+                  if (DEBUG_SHOW_ZERO_INVENTORY) {
+                    console.log(`DEBUG: Including item ${item.item_data?.name} with 0 inventory (would normally be filtered)`);
+                    return true;
+                  } else {
+                    console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+                    return false;
+                  }
                 }
                 return hasStock;
               });
               console.log(`After inventory filtering: ${items.length} items remain (from ${itemsBeforeInventory})`);
+              
+              // If all items filtered out by inventory, show message
+              if (items.length === 0 && itemsBeforeInventory > 0 && !DEBUG_SHOW_ZERO_INVENTORY) {
+                console.warn("⚠️ All items filtered out due to zero inventory");
+                if ($grid) {
+                  $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
+                    <p><strong>No items with available inventory.</strong></p>
+                    <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>All items in "Stuck on set" category have zero stock.</p>
+                    <p style='font-size: 12px; margin-top: 0.5rem; color: #999;'>Check the browser console for details.</p>
+                  </div>`;
+                }
+                return;
+              }
             } catch (invError) {
               console.error("Error loading inventory, showing all items:", invError);
               // If inventory fails, show all items but mark inventory as unknown
