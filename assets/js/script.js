@@ -38,8 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Pause on hover
     const testimonialsSection = document.querySelector('.testimonials');
-    testimonialsSection.addEventListener('mouseenter', stopSlider);
-    testimonialsSection.addEventListener('mouseleave', startSlider);
+    if (testimonialsSection) {
+        testimonialsSection.addEventListener('mouseenter', stopSlider);
+        testimonialsSection.addEventListener('mouseleave', startSlider);
+    }
 
     // Start the slider
     startSlider();
