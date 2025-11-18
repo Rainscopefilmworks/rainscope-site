@@ -126,6 +126,21 @@ body {
     position: relative;
 }
 
+/* Hide shop link from navigation */
+.nav-link[href="shop.html"],
+a.nav-link[href="shop.html"],
+.nav .nav-link[href="shop.html"],
+nav .nav-link[href="shop.html"],
+#main-nav .nav-link[href="shop.html"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
 .nav-link:hover {
     opacity: 0.7;
 }
@@ -152,12 +167,6 @@ body {
 
 .nav-link.active::after {
     width: 100%;
-}
-
-/* Hide shop link from navigation */
-.nav-link[href="shop.html"],
-a.nav-link[href="shop.html"] {
-    display: none !important;
 }
 
 /* Responsive Breakpoints */
@@ -247,8 +256,17 @@ a.nav-link[href="shop.html"] {
     
     /* Hide shop link from navigation on mobile */
     .nav-link[href="shop.html"],
-    a.nav-link[href="shop.html"] {
+    a.nav-link[href="shop.html"],
+    .nav .nav-link[href="shop.html"],
+    nav .nav-link[href="shop.html"],
+    #main-nav .nav-link[href="shop.html"] {
         display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
     }
     
     .logo {
