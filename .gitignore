@@ -56,3 +56,6 @@ yarn.lock
 
 # Backup files from optimization
 *.backup
+
+# Documentation files (local setup guides)
+SQUARE-PAYMENT-SETUP.md
