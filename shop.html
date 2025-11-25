@@ -530,7 +530,6 @@
                     <input id="last" placeholder="Last name" />
                     <input id="email" type="email" placeholder="Email *" />
                     <input id="phone" placeholder="Phone (optional)" />
-                    <textarea id="note" rows="3" placeholder="Optional notes"></textarea>
 
                     <!-- Square Payment Form -->
                     <div class="square-payment-form">
@@ -1358,7 +1357,6 @@
           const family_name  = document.getElementById("last").value.trim();
           const email_address= document.getElementById("email").value.trim();
           const phone_number = document.getElementById("phone").value.trim() || undefined;
-          const noteExtra    = document.getElementById("note").value.trim();
 
           // Input validation
           if (!given_name || !email_address) { 
@@ -1390,13 +1388,6 @@
           // Security: Validate phone number format if provided
           if (phone_number && phone_number.length > 20) {
             alert("Phone number is too long.");
-            $submit.disabled = false;
-            return;
-          }
-          
-          // Security: Validate note length
-          if (noteExtra.length > 1000) {
-            alert("Note is too long (max 1000 characters).");
             $submit.disabled = false;
             return;
           }
@@ -1435,8 +1426,6 @@
             return;
           }
 
-          const note = noteExtra ? `Order notes: ${noteExtra}` : undefined;
-
           setStatus("Processing payment…");
           const res = await fetch(`${PROXY_BASE}/api/purchase`, {
             method: "POST",
@@ -1445,7 +1434,6 @@
               customer_id: cust.customer_id,
               location_id: LOCATION_ID,
               line_items,
-              note,
               source_id: sourceId,
             })
           });
@@ -1483,7 +1471,6 @@
           document.getElementById("last").value = "";
           document.getElementById("email").value = "";
           document.getElementById("phone").value = "";
-          document.getElementById("note").value = "";
           
           closeCart();
           setStatus("");
