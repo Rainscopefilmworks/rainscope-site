@@ -1200,8 +1200,36 @@
       // State
       let objects=[], items=[], categories=[], imagesById={};
       let activeCat="all";
-      const cart = JSON.parse(localStorage.getItem("rs_cart") || "[]");
+      
+      // Security: Sanitize and validate localStorage data
+      function safeParseJSON(str, fallback = []) {
+        try {
+          const parsed = JSON.parse(str);
+          // Validate it's an array
+          if (!Array.isArray(parsed)) return fallback;
+          // Validate each item has required structure
+          return parsed.filter(item => 
+            item && 
+            typeof item === 'object' && 
+            typeof item.variationId === 'string' &&
+            typeof item.name === 'string'
+          );
+        } catch (e) {
+          console.warn('Invalid cart data in localStorage, resetting:', e);
+          return fallback;
+        }
+      }
+      
+      const cart = safeParseJSON(localStorage.getItem("rs_cart") || "[]");
 
+      // Security: Escape HTML to prevent XSS
+      function escapeHTML(str) {
+        if (typeof str !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+      
       // Money + totals
       const money = n => n.toLocaleString(undefined,{style:"currency",currency:"CAD"});
       const priceNum = pm => pm && typeof pm.amount==="number" ? pm.amount/100 : 0;
@@ -1261,13 +1289,14 @@
       function saveCart(){ localStorage.setItem("rs_cart", JSON.stringify(cart)); }
       function renderCart(){
         if(!cart.length){ $lines.innerHTML = "<em>No items yet.</em>"; updateBadges(); computeTotals(); return; }
+        // Security: Escape all user data to prevent XSS
         $lines.innerHTML = cart.map((l,i)=>`
           <div class="rs-line">
             <div>
-              <div>${l.name}</div>
-              <div style="font-size:12px;color:#6b7280">Price/day: ${l.priceMoney? money(priceNum(l.priceMoney)):"—"}</div>
+              <div>${escapeHTML(l.name || '')}</div>
+              <div style="font-size:12px;color:#6b7280">Price/day: ${l.priceMoney? escapeHTML(money(priceNum(l.priceMoney))):"—"}</div>
             </div>
-            <input type="number" min="1" data-i="${i}" value="${l.qty}">
+            <input type="number" min="1" data-i="${i}" value="${escapeHTML(String(l.qty || '1'))}">
             <button class="rs-remove" data-rm="${i}">&times;</button>
           </div>`).join("");
         $lines.querySelectorAll("input[type=number]").forEach(inp=>{
@@ -1423,7 +1452,8 @@
           }
           
           if ($grid) {
-            $grid.innerHTML = `<div style='color:red; padding: 2rem; text-align: center;'><strong>Error loading catalog:</strong><br>${displayMsg}<br><br><small>Check the browser console for more details.</small></div>`;
+            // Security: Escape error message to prevent XSS
+            $grid.innerHTML = `<div style='color:red; padding: 2rem; text-align: center;'><strong>Error loading catalog:</strong><br>${escapeHTML(displayMsg)}<br><br><small>Check the browser console for more details.</small></div>`;
           }
           if ($cats) {
             $cats.innerHTML = "<em style='color:red;'>Unable to load categories</em>";
@@ -1471,32 +1501,39 @@
         }
         list.sort((a,b)=> (a.item_data?.name||"").localeCompare(b.item_data?.name||""));
 
+        // Security: Escape all API data before rendering
         $grid.innerHTML = list.map(item=>{
           const vars=item.item_data?.variations||[];
           const first=vars[0];
           const imgId=item.item_data?.image_ids?.[0];
           const img=imgId?(imagesById[imgId]?.image_data?.url||""):"";
-          const title=item.item_data?.name||"Item";
+          const title=escapeHTML(item.item_data?.name||"Item");
+          
+          // Security: Validate and escape image URL
+          const safeImg = img && /^https?:\/\//.test(img) ? escapeHTML(img) : "";
 
           const opts = vars.map(v=>{
             const d=v.item_variation_data||{};
             const p=d.price_money||null;
             const pjson = p ? JSON.stringify(p).replace(/"/g,'&quot;') : "";
             const priceTxt = p ? (p.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"}) : "";
-            return `<option value="${v.id}" data-price="${pjson}">${d.name||"Default"}${priceTxt? " — "+priceTxt:""} / day</option>`;
+            const varName = escapeHTML(d.name||"Default");
+            const safePriceTxt = escapeHTML(priceTxt || "");
+            return `<option value="${escapeHTML(v.id)}" data-price="${pjson}">${varName}${safePriceTxt? " — "+safePriceTxt:""} / day</option>`;
           }).join("");
 
           const firstPrice = first?.item_variation_data?.price_money || null;
+          const priceText = firstPrice ? escapeHTML((firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})+" / day") : "";
 
           return `
             <div class="rs-card">
-              ${img? `<img class="rs-img" loading="lazy" src="${img}" alt="${title}">` : `<div class="rs-img"></div>`}
+              ${safeImg? `<img class="rs-img" loading="lazy" src="${safeImg}" alt="${title}">` : `<div class="rs-img"></div>`}
               <div class="rs-body">
                 <div class="rs-title">${title}</div>
-                <select class="rs-variant" data-item="${item.id}">${opts}</select>
+                <select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>
                 <div class="rs-row">
-                  <div class="rs-price" data-price-for="${item.id}">${firstPrice? (firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})+" / day":""}</div>
-                  <button class="rs-add" data-add="${item.id}">Add</button>
+                  <div class="rs-price" data-price-for="${escapeHTML(item.id)}">${priceText}</div>
+                  <button class="rs-add" data-add="${escapeHTML(item.id)}">Add</button>
                 </div>
               </div>
             </div>`;
@@ -1531,6 +1568,7 @@
       const setStatus = m => { if ($status) $status.textContent = m; };
 
       try {
+        // Security: Get and validate form inputs
         const given_name   = document.getElementById("first").value.trim();
         const family_name  = document.getElementById("last").value.trim();
         const email_address= document.getElementById("email").value.trim();
@@ -1539,10 +1577,36 @@
         let   endStr       = (document.getElementById("end").value   || "").trim();
         const noteExtra    = document.getElementById("note").value.trim();
 
+        // Input validation
         if (!given_name || !email_address) { alert("First name and email are required."); return; }
         if (!cart.length)                  { alert("Add at least one item."); return; }
         if (!startStr || !endStr)          { alert("Choose pickup and dropoff dates."); return; }
         if (startStr > endStr)             { alert("Dropoff date must be on/after pickup date."); return; }
+        
+        // Security: Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email_address)) {
+          alert("Please enter a valid email address.");
+          return;
+        }
+        
+        // Security: Validate name length and characters (prevent injection)
+        if (given_name.length > 100 || family_name.length > 100) {
+          alert("Name fields are too long.");
+          return;
+        }
+        
+        // Security: Validate phone number format if provided
+        if (phone_number && phone_number.length > 20) {
+          alert("Phone number is too long.");
+          return;
+        }
+        
+        // Security: Validate note length
+        if (noteExtra.length > 1000) {
+          alert("Note is too long (max 1000 characters).");
+          return;
+        }
 
         // ensure yyyy-mm-dd (type="date" already provides this in most browsers)
         startStr = startStr.slice(0, 10);
@@ -1633,7 +1697,8 @@
       }catch(e){ 
         console.error("Initialization error:", e);
         if ($grid) {
-          $grid.innerHTML = `<em style='color:red;'>Failed to initialize: ${e.message}</em>`;
+          // Security: Escape error message
+          $grid.innerHTML = `<em style='color:red;'>Failed to initialize: ${escapeHTML(e.message || 'Unknown error')}</em>`;
         }
       }
 

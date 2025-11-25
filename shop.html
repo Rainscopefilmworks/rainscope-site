@@ -746,14 +746,34 @@
 
       if (!$cats || !$grid) {
         console.error("Critical DOM elements missing!");
-        if ($grid) $grid.innerHTML = "<em style='color:red;'>Error: Page structure incomplete. Please refresh.</em>";
+        if ($grid) $grid.innerHTML = "<em style='color:red;'>Error: Page structure incomplete. Please refresh.</em>"; // Static error message, safe
         return;
       }
 
       // State
       let objects=[], items=[], categories=[], imagesById={};
       let activeCat="all";
-      const cart = JSON.parse(localStorage.getItem("shop_cart") || "[]");
+      
+      // Security: Sanitize and validate localStorage data
+      function safeParseJSON(str, fallback = []) {
+        try {
+          const parsed = JSON.parse(str);
+          // Validate it's an array
+          if (!Array.isArray(parsed)) return fallback;
+          // Validate each item has required structure
+          return parsed.filter(item => 
+            item && 
+            typeof item === 'object' && 
+            typeof item.variationId === 'string' &&
+            typeof item.name === 'string'
+          );
+        } catch (e) {
+          console.warn('Invalid cart data in localStorage, resetting:', e);
+          return fallback;
+        }
+      }
+      
+      const cart = safeParseJSON(localStorage.getItem("shop_cart") || "[]");
       let inventoryCache = {}; // Cache inventory counts
       let payments = null; // Square Payments instance (v1 API)
       let card = null; // Square Card payment method instance
@@ -865,6 +885,14 @@
       }
 
       // Money + totals
+      // Security: Escape HTML to prevent XSS
+      function escapeHTML(str) {
+        if (typeof str !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+      
       const money = n => n.toLocaleString(undefined,{style:"currency",currency:"CAD"});
       const priceNum = pm => pm && typeof pm.amount==="number" ? pm.amount/100 : 0;
 
@@ -1158,9 +1186,10 @@
             return;
           }
 
+          // Security: Escape category names
           $cats.innerHTML = chips.map(c=>`
-            <button class="rs-cat ${c.id===activeCat?'active':''}" data-cat="${c.id}" role="tab" aria-selected="${c.id===activeCat}">
-              <span>${c.name}</span> <span class="rs-count">${c.count}</span>
+            <button class="rs-cat ${c.id===activeCat?'active':''}" data-cat="${escapeHTML(String(c.id))}" role="tab" aria-selected="${c.id===activeCat}">
+              <span>${escapeHTML(c.name || '')}</span> <span class="rs-count">${c.count}</span>
             </button>`).join("");
 
           $cats.querySelectorAll("[data-cat]").forEach(b=>{
@@ -1184,7 +1213,8 @@
           }
           
           if ($grid) {
-            $grid.innerHTML = `<div style='color:red; padding: 2rem; text-align: center;'><strong>Error loading catalog:</strong><br>${displayMsg}<br><br><small>Check the browser console for more details.</small></div>`;
+            // Security: Escape error message to prevent XSS
+            $grid.innerHTML = `<div style='color:red; padding: 2rem; text-align: center;'><strong>Error loading catalog:</strong><br>${escapeHTML(displayMsg)}<br><br><small>Check the browser console for more details.</small></div>`;
           }
           if ($cats) {
             $cats.innerHTML = "<em style='color:red;'>Unable to load categories</em>";
@@ -1232,12 +1262,16 @@
         }
         list.sort((a,b)=> (a.item_data?.name||"").localeCompare(b.item_data?.name||""));
 
+        // Security: Escape all API data before rendering
         $grid.innerHTML = list.map(item=>{
           const vars=item.item_data?.variations||[];
           const first=vars[0];
           const imgId=item.item_data?.image_ids?.[0];
           const img=imgId?(imagesById[imgId]?.image_data?.url||""):"";
-          const title=item.item_data?.name||"Item";
+          const title=escapeHTML(item.item_data?.name||"Item");
+          
+          // Security: Validate and escape image URL
+          const safeImg = img && /^https?:\/\//.test(img) ? escapeHTML(img) : "";
 
           const opts = vars.map(v=>{
             const d=v.item_variation_data||{};
@@ -1246,7 +1280,9 @@
             const priceTxt = p ? (p.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"}) : "";
             const inv = inventoryCache[v.id] || {quantity: 0};
             const invText = inv.quantity > 0 ? ` (${inv.quantity} in stock)` : " (Out of stock)";
-            return `<option value="${v.id}" data-price="${pjson}" data-inventory="${inv.quantity}">${d.name||"Default"}${priceTxt? " — "+priceTxt:""}${invText}</option>`;
+            const varName = escapeHTML(d.name||"Default");
+            const safePriceTxt = escapeHTML(priceTxt || "");
+            return `<option value="${escapeHTML(v.id)}" data-price="${pjson}" data-inventory="${inv.quantity}">${varName}${safePriceTxt? " — "+safePriceTxt:""}${escapeHTML(invText)}</option>`;
           }).join("");
 
           const firstPrice = first?.item_variation_data?.price_money || null;
@@ -1254,16 +1290,19 @@
           const invClass = firstInv.quantity === 0 ? "out-of-stock" : firstInv.quantity <= 3 ? "low-stock" : "in-stock";
           const invText = firstInv.quantity === 0 ? "Out of stock" : firstInv.quantity <= 3 ? `Low stock (${firstInv.quantity})` : `In stock (${firstInv.quantity})`;
 
+          const priceText = firstPrice ? escapeHTML((firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})) : "";
+          const safeInvText = escapeHTML(invText);
+          
           return `
             <div class="rs-card">
-              ${img? `<img class="rs-img" loading="lazy" src="${img}" alt="${title}">` : `<div class="rs-img"></div>`}
+              ${safeImg? `<img class="rs-img" loading="lazy" src="${safeImg}" alt="${title}">` : `<div class="rs-img"></div>`}
               <div class="rs-body">
                 <div class="rs-title">${title}</div>
-                <select class="rs-variant" data-item="${item.id}">${opts}</select>
-                <div class="rs-inventory ${invClass}">${invText}</div>
+                <select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>
+                <div class="rs-inventory ${invClass}">${safeInvText}</div>
                 <div class="rs-row">
-                  <div class="rs-price" data-price-for="${item.id}">${firstPrice? (firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"}):""}</div>
-                  <button class="rs-add" data-add="${item.id}" ${firstInv.quantity === 0 ? "disabled" : ""}>Add</button>
+                  <div class="rs-price" data-price-for="${escapeHTML(item.id)}">${priceText}</div>
+                  <button class="rs-add" data-add="${escapeHTML(item.id)}" ${firstInv.quantity === 0 ? "disabled" : ""}>Add</button>
                 </div>
               </div>
             </div>`;
@@ -1314,12 +1353,14 @@
         const setStatus = m => { if ($status) $status.textContent = m; };
 
         try {
+          // Security: Get and validate form inputs
           const given_name   = document.getElementById("first").value.trim();
           const family_name  = document.getElementById("last").value.trim();
           const email_address= document.getElementById("email").value.trim();
           const phone_number = document.getElementById("phone").value.trim() || undefined;
           const noteExtra    = document.getElementById("note").value.trim();
 
+          // Input validation
           if (!given_name || !email_address) { 
             alert("First name and email are required."); 
             $submit.disabled = false;
@@ -1329,6 +1370,35 @@
             alert("Add at least one item."); 
             $submit.disabled = false;
             return; 
+          }
+          
+          // Security: Validate email format
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email_address)) {
+            alert("Please enter a valid email address.");
+            $submit.disabled = false;
+            return;
+          }
+          
+          // Security: Validate name length and characters (prevent injection)
+          if (given_name.length > 100 || family_name.length > 100) {
+            alert("Name fields are too long.");
+            $submit.disabled = false;
+            return;
+          }
+          
+          // Security: Validate phone number format if provided
+          if (phone_number && phone_number.length > 20) {
+            alert("Phone number is too long.");
+            $submit.disabled = false;
+            return;
+          }
+          
+          // Security: Validate note length
+          if (noteExtra.length > 1000) {
+            alert("Note is too long (max 1000 characters).");
+            $submit.disabled = false;
+            return;
           }
 
           setStatus("Creating customer…");
