@@ -110,6 +110,8 @@
             line-height: 1.2 !important;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
             white-space: normal;
             width: 100%;
             max-width: 100%;
@@ -117,7 +119,7 @@
             padding: 0 clamp(0.5rem, 2vw, 2rem);
             box-sizing: border-box;
             margin: 0;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6), -1px -1px 2px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.4), 0 -2px 4px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
             position: relative;
         }
         @media (max-width: 768px) {
@@ -132,7 +134,7 @@
     </style>
     
     <!-- Load CSS - Non-critical styles load after critical rendering -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=7" media="all">
+    <link rel="stylesheet" href="assets/css/styles.css?v=8" media="all">
     
     <script type="application/ld+json">
     {

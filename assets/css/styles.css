@@ -254,6 +254,8 @@ body::after {
         overflow: visible;
         left: 50%;
         transform: translateX(-50%);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .hero-tagline {
@@ -267,6 +269,10 @@ body::after {
         white-space: normal;
         overflow: visible;
         box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
     }
     
     .hero-buttons {
@@ -499,6 +505,8 @@ body::after {
     width: 100%;
     box-sizing: border-box;
     overflow: visible;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .hero-tagline {
@@ -509,9 +517,9 @@ body::after {
     letter-spacing: clamp(0.5px, 0.3vw, 2px);
     margin-top: 0;
     text-shadow: 
-        1px 1px 2px rgba(0, 0, 0, 0.8),
-        0 0 8px rgba(0, 0, 0, 0.6),
-        -1px -1px 2px rgba(0, 0, 0, 0.8);
+        0 -1px 2px rgba(0, 0, 0, 0.4),
+        0 -2px 4px rgba(0, 0, 0, 0.3),
+        0 1px 1px rgba(0, 0, 0, 0.2);
     opacity: 1 !important;
     line-height: 1.2;
     word-wrap: break-word;
