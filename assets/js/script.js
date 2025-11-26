@@ -367,15 +367,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroVideo = document.querySelector('.hero video');
     if (!heroVideo) return;
     
-    // Change preload to 'auto' after a short delay to start loading video
-    // This allows the page to render first, then load the video
-    setTimeout(function() {
+    // Show poster immediately (LCP optimization)
+    heroVideo.classList.add('ready');
+    
+    // Start loading video after page is fully interactive
+    // Use requestIdleCallback if available, otherwise setTimeout
+    const loadVideo = function() {
         if (heroVideo.readyState === 0) { // HAVE_NOTHING
-            heroVideo.preload = 'auto';
-            // Trigger video load
+            heroVideo.preload = 'metadata';
+            // Load just enough to show first frame
             heroVideo.load();
         }
-    }, 1000);
+    };
+    
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadVideo, { timeout: 2000 });
+    } else {
+        setTimeout(loadVideo, 2000);
+    }
     
     // Show video when it can play (even partially loaded)
     heroVideo.addEventListener('canplay', function() {
@@ -386,11 +395,6 @@ document.addEventListener('DOMContentLoaded', function() {
     heroVideo.addEventListener('loadeddata', function() {
         heroVideo.classList.add('ready');
     }, { once: true });
-    
-    // Fallback: show video after 2 seconds even if not ready
-    setTimeout(function() {
-        heroVideo.classList.add('ready');
-    }, 2000);
 });
 
 // Typewriter Effect for Hero Tagline

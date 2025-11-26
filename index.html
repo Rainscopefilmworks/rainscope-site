@@ -71,13 +71,17 @@
     <link rel="preconnect" href="https://www.google.com">
     <link rel="dns-prefetch" href="https://www.google.com">
     
-    <!-- Preload Critical Resources -->
+    <!-- Preload Critical Resources for LCP -->
     <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
-    <!-- Preconnect to video CDN if using external hosting -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <!-- Preload hero video poster for faster LCP -->
+    <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high" imagesrcset="assets/images/logo.png">
     
     <!-- Load CSS - Critical for above-the-fold -->
     <link rel="stylesheet" href="assets/css/styles.css" media="all">
+    
+    <!-- Preconnect to improve resource loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     
     <script type="application/ld+json">
     {
@@ -210,8 +214,8 @@
     }
     </script>
     
-    <!-- Breadcrumb Structured Data -->
-    <script type="application/ld+json">
+    <!-- Breadcrumb Structured Data - Deferred -->
+    <script type="application/ld+json" defer>
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -249,7 +253,8 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video autoplay muted loop playsinline preload="metadata" fetchpriority="high" poster="assets/images/logo.png">
+            <!-- Use poster as LCP element - video loads after -->
+            <video autoplay muted loop playsinline preload="none" poster="assets/images/logo.png" loading="eager" aria-label="Rainscope Filmworks hero video">
                 <source src="assets/videos/hero-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -265,7 +270,7 @@
     <!-- Testimonials Section -->
     <section class="testimonials" id="testimonials">
         <div class="testimonials-slider">
-            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');" loading="lazy">
+            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');" loading="lazy" fetchpriority="low">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
                     <blockquote class="testimonial-text">VERY EASY TO WORK WITH! LOVE THE QUICK RESPONSES AND WAS ABLE TO GET MY EDIT DONE JUST LIKE MY VISION WAS DESCRIBED. HIGHLY RECOMMEND! THANKS AGAIN</blockquote>

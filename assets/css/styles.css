@@ -18,7 +18,7 @@ body {
     position: relative;
 }
 
-/* Animated Background Gradient */
+/* Animated Background Gradient - Optimized for performance */
 body::before {
     content: '';
     position: fixed;
@@ -31,9 +31,11 @@ body::before {
     animation: gradientShift 15s ease infinite;
     z-index: -2;
     opacity: 0.8;
+    will-change: background-position;
+    transform: translateZ(0);
 }
 
-/* Particle System Background */
+/* Particle System Background - Optimized for performance */
 body::after {
     content: '';
     position: fixed;
@@ -54,6 +56,16 @@ body::after {
     z-index: -1;
     opacity: 0.6;
     pointer-events: none;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Reduce animations on slower devices */
+@media (prefers-reduced-motion: reduce) {
+    body::before,
+    body::after {
+        animation: none;
+    }
 }
 
 @keyframes gradientShift {
@@ -437,6 +449,15 @@ nav .nav-link[href="shop.html"],
     z-index: 1;
     will-change: transform;
     transform: translateZ(0);
+    /* Optimize for LCP */
+    contain: layout style paint;
+}
+
+.hero-video-container video[poster] {
+    /* Ensure poster shows immediately for LCP */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Parallax effect for hero video */
@@ -451,6 +472,9 @@ nav .nav-link[href="shop.html"],
     background: #173633;
     opacity: 0;
     transition: opacity 0.5s ease;
+    /* Optimize for LCP */
+    content-visibility: auto;
+    contain-intrinsic-size: 1920px 1080px;
 }
 
 .hero-video-container video[poster] {
