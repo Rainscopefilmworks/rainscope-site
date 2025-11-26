@@ -417,5 +417,23 @@
 
     <script src="assets/js/script.js"></script>
     <script src="assets/js/our-work.js?v=2"></script>
+    <script>
+        // Verify script loaded - inline check
+        setTimeout(function() {
+            const carousel = document.getElementById('postersCarousel');
+            if (carousel) {
+                console.log('Carousel element found in inline check');
+                if (!carousel.classList.contains('infinite-scroll')) {
+                    console.warn('Carousel found but infinite-scroll class not applied - forcing initialization');
+                    // Force add the class if script didn't run
+                    if (typeof window.initCarouselManually !== 'undefined') {
+                        window.initCarouselManually();
+                    }
+                }
+            } else {
+                console.error('Carousel element NOT found in inline check');
+            }
+        }, 1000);
+    </script>
 </body>
 </html>

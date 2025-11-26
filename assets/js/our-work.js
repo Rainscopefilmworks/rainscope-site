@@ -97,4 +97,7 @@ console.log('our-work.js loaded');
             initCarousel();
         }
     }, 500);
+    
+    // Expose function globally as fallback
+    window.initCarouselManually = initCarousel;
 })();
