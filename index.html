@@ -126,17 +126,25 @@
         }
         @media (max-width: 768px) {
             .hero-tagline {
-                font-size: clamp(0.7rem, 5vw, 1.4rem) !important;
+                font-size: clamp(0.65rem, 4.5vw, 1.3rem) !important;
                 opacity: 1 !important;
+                padding: 0 clamp(0.75rem, 2.5vw, 1.5rem) !important;
             }
             .hero-content {
                 top: 40% !important;
             }
         }
+        @media (max-width: 480px) {
+            .hero-tagline {
+                font-size: clamp(0.6rem, 4vw, 1.1rem) !important;
+                padding: 0 clamp(0.5rem, 2vw, 1rem) !important;
+                letter-spacing: clamp(0.3px, 0.1vw, 0.8px) !important;
+            }
+        }
     </style>
     
     <!-- Load CSS - Non-critical styles load after critical rendering -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=8" media="all">
+    <link rel="stylesheet" href="assets/css/styles.css?v=9" media="all">
     
     <script type="application/ld+json">
     {
