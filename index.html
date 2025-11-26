@@ -346,6 +346,8 @@
     </script>
 </head>
 <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <!-- Header -->
     <header class="header">
         <div class="header-container">
@@ -368,10 +370,11 @@
     </header>
 
     <!-- Hero Section -->
+    <main id="main-content">
     <section class="hero">
         <div class="hero-video-container">
             <!-- Hero video - loads immediately on mobile for better UX -->
-            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://media.rainscopefilmworks.com/logo.png" aria-label="Rainscope Filmworks hero video">
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://media.rainscopefilmworks.com/logo.png" aria-label="Rainscope Filmworks hero video" role="img">
                 <source src="https://media.rainscopefilmworks.com/hero-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -523,6 +526,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">

@@ -448,6 +448,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.debug('Video autoplay prevented:', err);
                 });
             }, { once: true });
+            // Add error handler with fallback
+            heroVideo.addEventListener('error', function(e) {
+                console.debug('Video loading error:', e);
+                // Show poster image as fallback
+                heroVideo.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.style.cssText = 'width: 100%; height: 100%; background: url(https://media.rainscopefilmworks.com/logo.png) center/cover no-repeat; background-color: #173633;';
+                fallback.setAttribute('aria-label', 'Rainscope Filmworks');
+                heroVideo.parentElement.appendChild(fallback);
+            }, { once: true });
             return;
         }
         
