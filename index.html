@@ -18,13 +18,29 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM"></script>
+    <!-- Google Analytics - Deferred for performance -->
     <script>
+      // Defer Google Analytics loading
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-7RRQQ33JKM');
+      // Load GA after page is interactive
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(loadGA, 1000);
+        });
+      } else {
+        setTimeout(loadGA, 1000);
+      }
+      function loadGA() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
+        document.head.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
+        // Send pageview after a delay
+        setTimeout(() => gtag('event', 'page_view'), 2000);
+      }
     </script>
     
     <!-- Open Graph / Facebook -->
@@ -56,10 +72,10 @@
     <link rel="dns-prefetch" href="https://www.google.com">
     
     <!-- Preload Critical Resources -->
-    <link rel="preload" as="image" href="assets/images/logo.png">
-    <link rel="preload" as="video" href="assets/videos/hero-video.mp4" type="video/mp4">
+    <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
     
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Load CSS - Critical for above-the-fold -->
+    <link rel="stylesheet" href="assets/css/styles.css" media="all">
     
     <script type="application/ld+json">
     {
@@ -192,7 +208,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video autoplay muted loop playsinline preload="auto" fetchpriority="high">
+            <video autoplay muted loop playsinline preload="metadata" fetchpriority="high">
                 <source src="assets/videos/hero-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -208,21 +224,21 @@
     <!-- Testimonials Section -->
     <section class="testimonials" id="testimonials">
         <div class="testimonials-slider">
-            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');">
+            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');" loading="lazy">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
                     <blockquote class="testimonial-text">VERY EASY TO WORK WITH! LOVE THE QUICK RESPONSES AND WAS ABLE TO GET MY EDIT DONE JUST LIKE MY VISION WAS DESCRIBED. HIGHLY RECOMMEND! THANKS AGAIN</blockquote>
                     <p class="testimonial-author">Noemi Lopez</p>
                 </div>
             </div>
-            <div class="testimonial-slide" style="background-image: url('assets/images/testimonials/testimonial-2.jpg');">
+            <div class="testimonial-slide" style="background-image: url('assets/images/testimonials/testimonial-2.jpg');" loading="lazy">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
                     <blockquote class="testimonial-text">I HAD THE OPPORTUNITY TO WORK WITH THEM FOR A BUNCH OF SHORT FILMS NOT ONLY PROFESSIONAL IN MANNER BUT ALSO IN SKILLS. GREAT PEOPLE! COME TO THEM WITH ANY PROJECT AND THEY WILL ASSIST YOU WITH AN AMAZING TECHNICAL AND CREATIVE KNOWLEDGE!</blockquote>
                     <p class="testimonial-author">ANTON HING</p>
                 </div>
             </div>
-            <div class="testimonial-slide" style="background-image: url('assets/images/testimonials/testimonial-3.jpg');">
+            <div class="testimonial-slide" style="background-image: url('assets/images/testimonials/testimonial-3.jpg');" loading="lazy">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
                     <blockquote class="testimonial-text">I USE RAINSCOPE AS A REGULAR RENTAL HOUSE AND THEY ARE NOTHING SHORT OF EXCEPTIONAL. SERVICE IS ON POINT, GEAR IS ALWAYS IN PERFECT CONDITION AND THEY'RE SUPER KIND! HIGHLY RECOMMENDED GOING TO THEM FOR ANY OF THEIR SERVICES.</blockquote>
@@ -262,7 +278,7 @@
             <p class="portfolio-subtitle scroll-reveal">A glimpse of our latest creative projects</p>
             <div class="portfolio-preview-grid">
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline aria-label="Video production showcase - Rainscope Filmworks">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Video production showcase - Rainscope Filmworks">
                         <source src="assets/videos/work/work-7.mp4" type="video/mp4">
                     </video>
                     <div class="portfolio-overlay">
@@ -396,8 +412,22 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <script src="assets/js/script.js"></script>
-    <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+    <!-- Defer non-critical JavaScript -->
+    <script src="assets/js/script.js" defer></script>
+    <!-- Load Tally form lazily -->
+    <script>
+      // Load Tally form after page is interactive
+      function loadTally() {
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(loadTally, 1500);
+        });
+      } else {
+        setTimeout(loadTally, 1500);
+      }
+    </script>
 </body>
 </html>
 
