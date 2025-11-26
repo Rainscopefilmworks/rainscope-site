@@ -252,9 +252,9 @@ body::after {
         max-width: 100%;
         min-width: 0;
         overflow: visible;
-        left: 0;
-        right: 0;
-        transform: none;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
