@@ -1647,6 +1647,8 @@ body::after {
     -ms-user-select: none;
     position: relative;
     min-height: 1px; /* Ensure carousel has height for layout */
+    width: auto;
+    flex-wrap: nowrap;
 }
 
 /* Infinite scroll animation - using CPU-based transforms to avoid GPU conflicts with videos */
