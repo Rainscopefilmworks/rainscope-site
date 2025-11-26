@@ -214,6 +214,44 @@ document.addEventListener('DOMContentLoaded', function() {
     updateScrollProgress();
 });
 
+// Typewriter Effect for Hero Tagline
+document.addEventListener('DOMContentLoaded', function() {
+    const heroTagline = document.querySelector('.hero-tagline');
+    if (!heroTagline) return;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        heroTagline.style.opacity = '1';
+        return;
+    }
+    
+    const text = heroTagline.textContent.trim();
+    heroTagline.textContent = '';
+    heroTagline.style.opacity = '1';
+    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
+    heroTagline.style.whiteSpace = 'nowrap';
+    heroTagline.style.overflow = 'hidden';
+    
+    let index = 0;
+    const speed = 50; // milliseconds per character
+    
+    function typeWriter() {
+        if (index < text.length) {
+            heroTagline.textContent += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, speed);
+        } else {
+            // Remove cursor after typing is complete
+            setTimeout(() => {
+                heroTagline.style.borderRight = 'none';
+            }, 500);
+        }
+    }
+    
+    // Start typing after a short delay
+    setTimeout(typeWriter, 500);
+});
+
 // Intersection Observer for Scroll Reveal Animations
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user prefers reduced motion
@@ -227,17 +265,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Function to check if element is in viewport
-    function isInViewport(element) {
-        const rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-    
     // Function to check if element is partially visible
     function isPartiallyVisible(element) {
         const rect = element.getBoundingClientRect();
@@ -246,8 +273,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
     };
     
     const observer = new IntersectionObserver(function(entries) {
@@ -262,16 +289,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get all elements that need animation
     const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
     
+    console.log('Found', animatedElements.length, 'elements to animate');
+    
     // Check elements that are already in viewport on load
-    animatedElements.forEach(el => {
+    animatedElements.forEach((el, index) => {
         if (isPartiallyVisible(el)) {
             // Add a small delay for elements already visible to allow CSS to apply
             setTimeout(() => {
                 el.classList.add('animate-in');
-            }, 100);
+                console.log('Animated element', index, 'already visible');
+            }, 200);
         } else {
             // Observe elements not yet visible
             observer.observe(el);
+            console.log('Observing element', index);
         }
     });
     

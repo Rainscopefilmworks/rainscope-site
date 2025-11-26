@@ -489,7 +489,6 @@ nav .nav-link[href="shop.html"],
     margin-top: 0;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
     opacity: 0;
-    animation: fadeInUp 1s ease-out 0.5s forwards;
 }
 
 /* Typewriter effect */
