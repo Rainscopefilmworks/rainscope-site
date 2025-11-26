@@ -56,19 +56,74 @@ console.log('our-work.js loaded');
             // Enable infinite scroll animation via CSS class
             carousel.classList.add('infinite-scroll');
             
-            // Force apply animation inline as fallback if CSS isn't working
+            // Detailed debugging
             const computedStyle = window.getComputedStyle(carousel);
-            let animationName = computedStyle.getPropertyValue('animation-name');
+            const animationName = computedStyle.getPropertyValue('animation-name');
+            const animationDuration = computedStyle.getPropertyValue('animation-duration');
+            const animationTimingFunction = computedStyle.getPropertyValue('animation-timing-function');
+            const animationIterationCount = computedStyle.getPropertyValue('animation-iteration-count');
+            const animationPlayState = computedStyle.getPropertyValue('animation-play-state');
+            const transform = computedStyle.getPropertyValue('transform');
+            const display = computedStyle.getPropertyValue('display');
+            const width = computedStyle.getPropertyValue('width');
+            const carouselWidth = carousel.offsetWidth;
+            const scrollWidth = carousel.scrollWidth;
+            
+            console.log('=== CAROUSEL DEBUG INFO ===');
             console.log('Posters carousel initialized with', originalSlides.length, 'slides');
-            console.log('Animation name:', animationName);
-            console.log('Has infinite-scroll class:', carousel.classList.contains('infinite-scroll'));
             console.log('Total slides (including duplicates):', carousel.querySelectorAll('.poster-slide').length);
+            console.log('Has infinite-scroll class:', carousel.classList.contains('infinite-scroll'));
+            console.log('--- Animation Properties ---');
+            console.log('Animation name:', animationName);
+            console.log('Animation duration:', animationDuration);
+            console.log('Animation timing function:', animationTimingFunction);
+            console.log('Animation iteration count:', animationIterationCount);
+            console.log('Animation play state:', animationPlayState);
+            console.log('--- Layout Properties ---');
+            console.log('Display:', display);
+            console.log('Width (computed):', width);
+            console.log('Width (offsetWidth):', carouselWidth);
+            console.log('Scroll width:', scrollWidth);
+            console.log('Transform:', transform);
+            console.log('--- CSS Check ---');
+            const allStyles = Array.from(document.styleSheets).map(sheet => {
+                try {
+                    return Array.from(sheet.cssRules || []).filter(rule => 
+                        rule.selectorText && rule.selectorText.includes('infinite-scroll')
+                    );
+                } catch(e) {
+                    return [];
+                }
+            }).flat();
+            console.log('Found CSS rules for infinite-scroll:', allStyles.length);
+            if (allStyles.length > 0) {
+                allStyles.forEach(rule => console.log('  -', rule.selectorText, rule.cssText.substring(0, 100)));
+            }
             
             // If animation isn't applied, force it inline
             if (!animationName || animationName === 'none' || animationName.trim() === '') {
-                console.warn('CSS animation not detected, applying inline animation as fallback');
+                console.warn('⚠️ CSS animation not detected, applying inline animation as fallback');
                 carousel.style.animation = 'infiniteScroll 30s linear infinite';
                 carousel.style.willChange = 'transform';
+                
+                // Check again after applying inline
+                setTimeout(() => {
+                    const newComputedStyle = window.getComputedStyle(carousel);
+                    const newAnimationName = newComputedStyle.getPropertyValue('animation-name');
+                    console.log('After inline fallback - Animation name:', newAnimationName);
+                    
+                    // If still not working, try a different approach
+                    if (!newAnimationName || newAnimationName === 'none') {
+                        console.error('❌ Animation still not working - trying alternative method');
+                        // Try setting animation directly on style attribute
+                        carousel.setAttribute('style', 
+                            (carousel.getAttribute('style') || '') + 
+                            ' animation: infiniteScroll 30s linear infinite !important; will-change: transform;'
+                        );
+                    }
+                }, 100);
+            } else {
+                console.log('✅ CSS animation detected and applied');
             }
             
             // Force animation restart if needed
