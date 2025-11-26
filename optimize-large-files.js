@@ -138,7 +138,7 @@ async function optimizeLargeVideo(videoPath) {
         
         const tempPath = videoPath + '.tmp';
         
-        execSync(`ffmpeg -i "${videoPath}" -vf "scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease" -c:v libx264 -crf ${CONFIG.videos.mp4.crf} -preset ${CONFIG.videos.mp4.preset} -b:v ${CONFIG.videos.mp4.bitrate} -maxrate ${CONFIG.videos.mp4.bitrate} -bufsize ${CONFIG.videos.mp4.bitrate} -c:a aac -b:a 96k -movflags +faststart "${tempPath}"`, {
+        execSync(`ffmpeg -i "${videoPath}" -vf "scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease" -c:v libx264 -crf ${CONFIG.videos.mp4.crf} -preset ${CONFIG.videos.mp4.preset} -b:v ${CONFIG.videos.mp4.bitrate} -maxrate ${CONFIG.videos.mp4.bitrate} -bufsize ${CONFIG.videos.mp4.bitrate} -c:a aac -b:a 96k -movflags +faststart -f mp4 "${tempPath}"`, {
             stdio: 'inherit'
         });
         
