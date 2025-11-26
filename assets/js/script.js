@@ -111,56 +111,67 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Mobile Menu Toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.querySelector('.mobile-menu-toggle');
-    const nav = document.querySelector('#main-nav');
-    const navOverlay = document.querySelector('#nav-overlay');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const body = document.body;
+// Initialize immediately (works even if script loads async late)
+(function initMobileMenu() {
+    function initMenu() {
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const nav = document.querySelector('#main-nav');
+        const navOverlay = document.querySelector('#nav-overlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const body = document.body;
 
-    function closeMenu() {
-        menuToggle.setAttribute('aria-expanded', 'false');
-        nav.classList.remove('active');
-        if (navOverlay) navOverlay.classList.remove('active');
-        body.classList.remove('menu-open');
-    }
-
-    function openMenu() {
-        menuToggle.setAttribute('aria-expanded', 'true');
-        nav.classList.add('active');
-        if (navOverlay) navOverlay.classList.add('active');
-        body.classList.add('menu-open');
-    }
-
-    if (menuToggle && nav) {
-        menuToggle.addEventListener('click', () => {
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            
-            if (isExpanded) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        });
-
-        // Close menu when clicking on overlay
-        if (navOverlay) {
-            navOverlay.addEventListener('click', closeMenu);
+        function closeMenu() {
+            if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+            if (nav) nav.classList.remove('active');
+            if (navOverlay) navOverlay.classList.remove('active');
+            if (body) body.classList.remove('menu-open');
         }
 
-        // Close menu when clicking on a link
-        navLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
+        function openMenu() {
+            if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+            if (nav) nav.classList.add('active');
+            if (navOverlay) navOverlay.classList.add('active');
+            if (body) body.classList.add('menu-open');
+        }
 
-        // Close menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && nav.classList.contains('active')) {
-                closeMenu();
+        if (menuToggle && nav) {
+            menuToggle.addEventListener('click', () => {
+                const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                
+                if (isExpanded) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            // Close menu when clicking on overlay
+            if (navOverlay) {
+                navOverlay.addEventListener('click', closeMenu);
             }
-        });
+
+            // Close menu when clicking on a link
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && nav.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+        }
     }
-});
+    
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMenu);
+    } else {
+        // DOM already loaded, initialize immediately
+        initMenu();
+    }
+})();
 
 // Floating CTA Button - Show after scrolling past hero
 document.addEventListener('DOMContentLoaded', function() {

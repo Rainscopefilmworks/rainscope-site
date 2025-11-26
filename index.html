@@ -76,15 +76,37 @@
     <!-- Critical CSS inlined in head for immediate render - Hero tagline must render first -->
     <style>
         /* Critical CSS: Hero tagline must render immediately for LCP */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-content {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 2 !important;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow: visible;
+            pointer-events: none;
+        }
         .hero-tagline {
             opacity: 1 !important;
             visibility: visible !important;
             display: block !important;
-            font-size: clamp(0.75rem, 4vw, 2rem);
-            font-weight: bold;
-            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            font-size: clamp(0.75rem, 4vw, 2rem) !important;
+            font-weight: bold !important;
+            color: white !important;
             text-transform: uppercase;
-            line-height: 1.2;
+            line-height: 1.2 !important;
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
@@ -95,26 +117,21 @@
             box-sizing: border-box;
             margin: 0;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6), -1px -1px 2px rgba(0, 0, 0, 0.8);
-        }
-        .hero-content {
-            position: absolute;
-            z-index: 2;
-            text-align: center;
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            overflow: visible;
+            position: relative;
         }
         @media (max-width: 768px) {
             .hero-tagline {
-                font-size: clamp(0.7rem, 5vw, 1.4rem);
+                font-size: clamp(0.7rem, 5vw, 1.4rem) !important;
                 opacity: 1 !important;
+            }
+            .hero-content {
+                top: 40% !important;
             }
         }
     </style>
     
     <!-- Load CSS - Non-critical styles load after critical rendering -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=6" media="all">
+    <link rel="stylesheet" href="assets/css/styles.css?v=7" media="all">
     
     <script type="application/ld+json">
     {
@@ -512,7 +529,7 @@
             }
         }, 2000);
     </script>
-    <script src="assets/js/script.js?v=8" async></script>
+    <script src="assets/js/script.js?v=9" async></script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive
