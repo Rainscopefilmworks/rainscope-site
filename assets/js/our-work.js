@@ -35,9 +35,26 @@
             carousel.appendChild(clone);
         });
         
-        // Enable infinite scroll animation via CSS class
-        carousel.classList.add('infinite-scroll');
-        console.log('Posters carousel initialized with', originalSlides.length, 'slides');
+        // Wait for images to load before starting animation (ensures proper width calculation)
+        const images = carousel.querySelectorAll('img');
+        const imagePromises = Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve; // Continue even if image fails
+                // Timeout after 2 seconds to not block forever
+                setTimeout(resolve, 2000);
+            });
+        });
+        
+        Promise.all(imagePromises).then(() => {
+            // Force reflow to ensure layout is calculated
+            carousel.offsetHeight;
+            
+            // Enable infinite scroll animation via CSS class
+            carousel.classList.add('infinite-scroll');
+            console.log('Posters carousel initialized with', originalSlides.length, 'slides, animation started');
+        });
     }
     
     // Try multiple initialization strategies to ensure it works

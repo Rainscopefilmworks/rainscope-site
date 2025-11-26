@@ -1651,7 +1651,8 @@ body::after {
 
 /* Infinite scroll animation - using CPU-based transforms to avoid GPU conflicts with videos */
 .posters-carousel.infinite-scroll {
-    animation: infiniteScroll 30s linear infinite;
+    animation: infiniteScroll 30s linear infinite !important;
+    will-change: transform;
 }
 
 @keyframes infiniteScroll {
