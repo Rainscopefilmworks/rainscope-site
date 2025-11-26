@@ -549,6 +549,8 @@ body::after {
     width: 100%;
     max-width: min(90vw, 6000px);
     padding: 0 clamp(1.5rem, 4vw, 3rem);
+    margin: 0 auto;
+    box-sizing: border-box;
     opacity: 0;
     animation: fadeInUp 1s ease-out 1.5s forwards;
 }
