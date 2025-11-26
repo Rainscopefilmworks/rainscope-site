@@ -10,7 +10,9 @@
     "optimize:all": "node optimize.js --all",
     "optimize:large": "node optimize-large-files.js",
     "optimize:css": "postcss assets/css/styles.css -o assets/css/styles.min.css --use cssnano",
-    "favicons": "node generate-favicons.js"
+    "favicons": "node generate-favicons.js",
+    "r2:upload": "node r2-upload.js",
+    "r2:batch": "node r2-batch-upload.js"
   },
   "keywords": [
     "website",
@@ -19,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.940.0",
     "chalk": "^4.1.2",
     "glob": "^10.3.10",
     "imagemin": "^8.0.1",

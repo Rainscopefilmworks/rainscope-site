@@ -60,3 +60,6 @@ yarn.lock
 
 # Documentation files (local setup guides)
 SQUARE-PAYMENT-SETUP.md
+
+# R2 Configuration (contains secrets)
+r2-config.json
