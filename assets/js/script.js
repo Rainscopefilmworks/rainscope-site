@@ -214,43 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateScrollProgress();
 });
 
-// Typewriter Effect for Hero Tagline
-document.addEventListener('DOMContentLoaded', function() {
-    const heroTagline = document.querySelector('.hero-tagline');
-    if (!heroTagline) return;
-    
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-        heroTagline.style.opacity = '1';
-        return;
-    }
-    
-    const text = heroTagline.textContent.trim();
-    heroTagline.textContent = '';
-    heroTagline.style.opacity = '1';
-    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
-    heroTagline.style.whiteSpace = 'nowrap';
-    heroTagline.style.overflow = 'hidden';
-    
-    let index = 0;
-    const speed = 50; // milliseconds per character
-    
-    function typeWriter() {
-        if (index < text.length) {
-            heroTagline.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, speed);
-        } else {
-            // Remove cursor after typing is complete
-            setTimeout(() => {
-                heroTagline.style.borderRight = 'none';
-            }, 500);
-        }
-    }
-    
-    // Start typing after a short delay
-    setTimeout(typeWriter, 500);
-});
 
 // Intersection Observer for Scroll Reveal Animations
 document.addEventListener('DOMContentLoaded', function() {
@@ -289,20 +252,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get all elements that need animation
     const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
     
-    console.log('Found', animatedElements.length, 'elements to animate');
-    
     // Check elements that are already in viewport on load
-    animatedElements.forEach((el, index) => {
+    animatedElements.forEach((el) => {
         if (isPartiallyVisible(el)) {
             // Add a small delay for elements already visible to allow CSS to apply
             setTimeout(() => {
                 el.classList.add('animate-in');
-                console.log('Animated element', index, 'already visible');
             }, 200);
         } else {
             // Observe elements not yet visible
             observer.observe(el);
-            console.log('Observing element', index);
         }
     });
     
@@ -427,44 +386,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2000);
 });
 
-// Typewriter Effect for Hero Tagline - Deferred for performance
+// Typewriter Effect for Hero Tagline
 document.addEventListener('DOMContentLoaded', function() {
-    // Delay typewriter to not block initial render
-    setTimeout(function() {
-        const heroTagline = document.querySelector('.hero-tagline');
-        if (!heroTagline) return;
-        
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReducedMotion) {
-            heroTagline.style.opacity = '1';
-            return;
-        }
-        
-        const text = heroTagline.textContent;
-        heroTagline.textContent = '';
+    const heroTagline = document.querySelector('.hero-tagline');
+    if (!heroTagline) return;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
         heroTagline.style.opacity = '1';
-        heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
-        heroTagline.style.whiteSpace = 'nowrap';
-        heroTagline.style.overflow = 'hidden';
-        
-        let index = 0;
-        const speed = 50; // milliseconds per character
-        
-        function typeWriter() {
-            if (index < text.length) {
-                heroTagline.textContent += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, speed);
-            } else {
-                // Remove cursor after typing is complete
-                setTimeout(() => {
-                    heroTagline.style.borderRight = 'none';
-                }, 500);
-            }
+        return;
+    }
+    
+    // Get text and clear it
+    const text = heroTagline.textContent.trim();
+    heroTagline.textContent = '';
+    heroTagline.style.opacity = '1';
+    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
+    heroTagline.style.whiteSpace = 'nowrap';
+    heroTagline.style.overflow = 'hidden';
+    
+    let index = 0;
+    const speed = 50; // milliseconds per character
+    
+    function typeWriter() {
+        if (index < text.length) {
+            heroTagline.textContent += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, speed);
+        } else {
+            // Remove cursor after typing is complete
+            setTimeout(() => {
+                heroTagline.style.borderRight = 'none';
+            }, 500);
         }
-        
-        // Start typing
-        typeWriter();
-    }, 300);
+    }
+    
+    // Start typing after a short delay
+    setTimeout(typeWriter, 500);
 });
 
