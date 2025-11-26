@@ -253,13 +253,14 @@ body::after {
     
     .hero-buttons {
         bottom: clamp(6rem, 10vw, 10rem);
-        left: 0;
-        right: 0;
-        padding: 0 clamp(1rem, 3vw, 2rem);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0;
         justify-content: center;
         align-items: center;
-        width: 100%;
-        max-width: 100%;
+        width: auto;
+        min-width: fit-content;
+        max-width: calc(100% - 2rem);
         margin: 0;
     }
     
@@ -520,11 +521,11 @@ body::after {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateX(-50%) translateY(30px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 }
 
@@ -541,17 +542,18 @@ body::after {
 .hero-buttons {
     position: absolute;
     bottom: clamp(8rem, 12vw, 12rem);
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 3;
     display: flex;
     gap: clamp(1rem, 2vw, 2rem);
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: auto;
+    min-width: fit-content;
     max-width: 100%;
-    padding: 0 clamp(1.5rem, 4vw, 3rem);
+    padding: 0;
     box-sizing: border-box;
     opacity: 0;
     animation: fadeInUp 1s ease-out 1.5s forwards;
@@ -941,10 +943,11 @@ body::after {
     
     .hero-buttons {
         flex-direction: column;
-        width: 100%;
-        max-width: 100%;
-        left: 0;
-        right: 0;
+        width: auto;
+        min-width: fit-content;
+        max-width: calc(100% - 2rem);
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .hero-buttons .btn-primary {
