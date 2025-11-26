@@ -103,6 +103,27 @@ console.log('our-work.js loaded');
             // If animation isn't applied, force it inline
             if (!animationName || animationName === 'none' || animationName.trim() === '') {
                 console.warn('⚠️ CSS animation not detected, applying inline animation as fallback');
+                
+                // First, inject the @keyframes if it doesn't exist
+                const styleId = 'infinite-scroll-keyframes';
+                if (!document.getElementById(styleId)) {
+                    const keyframesStyle = document.createElement('style');
+                    keyframesStyle.id = styleId;
+                    keyframesStyle.textContent = `
+                        @keyframes infiniteScroll {
+                            0% {
+                                transform: translateX(0);
+                            }
+                            100% {
+                                transform: translateX(-50%);
+                            }
+                        }
+                    `;
+                    document.head.appendChild(keyframesStyle);
+                    console.log('✅ Injected @keyframes infiniteScroll');
+                }
+                
+                // Apply animation inline
                 carousel.style.animation = 'infiniteScroll 30s linear infinite';
                 carousel.style.willChange = 'transform';
                 
@@ -110,16 +131,14 @@ console.log('our-work.js loaded');
                 setTimeout(() => {
                     const newComputedStyle = window.getComputedStyle(carousel);
                     const newAnimationName = newComputedStyle.getPropertyValue('animation-name');
+                    const newAnimationDuration = newComputedStyle.getPropertyValue('animation-duration');
                     console.log('After inline fallback - Animation name:', newAnimationName);
+                    console.log('After inline fallback - Animation duration:', newAnimationDuration);
                     
-                    // If still not working, try a different approach
-                    if (!newAnimationName || newAnimationName === 'none') {
-                        console.error('❌ Animation still not working - trying alternative method');
-                        // Try setting animation directly on style attribute
-                        carousel.setAttribute('style', 
-                            (carousel.getAttribute('style') || '') + 
-                            ' animation: infiniteScroll 30s linear infinite !important; will-change: transform;'
-                        );
+                    if (newAnimationName && newAnimationName !== 'none') {
+                        console.log('✅ Animation successfully applied via inline fallback');
+                    } else {
+                        console.error('❌ Animation still not working after inline fallback');
                     }
                 }, 100);
             } else {
