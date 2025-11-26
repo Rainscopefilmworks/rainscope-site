@@ -15,13 +15,13 @@ const fs = require('fs');
 const path = require('path');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 
-// Load configuration
+// Load configuration (look in parent directory since scripts are in scripts/ folder)
 let config;
 try {
-    config = require('./r2-config.json');
+    config = require('../r2-config.json');
 } catch (error) {
     console.error('❌ Error: r2-config.json not found!');
-    console.error('Please create r2-config.json with your R2 credentials.');
+    console.error('Please create r2-config.json in the project root with your R2 credentials.');
     console.error('\nExample r2-config.json:');
     console.error(JSON.stringify({
         accountId: 'your-account-id',

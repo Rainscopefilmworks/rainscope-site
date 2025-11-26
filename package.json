@@ -8,11 +8,11 @@
     "optimize:images": "node optimize.js --images",
     "optimize:videos": "node optimize.js --videos",
     "optimize:all": "node optimize.js --all",
-    "optimize:large": "node optimize-large-files.js",
+    "optimize:large": "node scripts/optimize-large-files.js",
     "optimize:css": "postcss assets/css/styles.css -o assets/css/styles.min.css --use cssnano",
-    "favicons": "node generate-favicons.js",
-    "r2:upload": "node r2-upload.js",
-    "r2:batch": "node r2-batch-upload.js"
+    "favicons": "node scripts/generate-favicons.js",
+    "r2:upload": "node scripts/r2-upload.js",
+    "r2:batch": "node scripts/r2-batch-upload.js"
   },
   "keywords": [
     "website",
