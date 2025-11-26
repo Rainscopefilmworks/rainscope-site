@@ -147,6 +147,19 @@
     <!-- Load CSS - Non-critical styles load after critical rendering -->
     <link rel="stylesheet" href="assets/css/styles.css?v=11" media="all">
     
+    <!-- Force video load on mobile immediately -->
+    <script>
+        if (window.innerWidth <= 768) {
+            document.addEventListener('DOMContentLoaded', function() {
+                const heroVideo = document.getElementById('heroVideo');
+                if (heroVideo) {
+                    heroVideo.preload = 'auto';
+                    heroVideo.load();
+                }
+            });
+        }
+    </script>
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -319,7 +332,7 @@
         <div class="hero-video-container">
             <!-- Video loads after initial render to improve LCP -->
             <!-- Mobile: use preview video, Desktop: use full video -->
-            <video id="heroVideo" autoplay muted loop playsinline preload="none" poster="https://media.rainscopefilmworks.com/logo.png" loading="lazy" aria-label="Rainscope Filmworks hero video">
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://media.rainscopefilmworks.com/logo.png" aria-label="Rainscope Filmworks hero video">
                 <source id="heroVideoSourceDesktop" src="https://media.rainscopefilmworks.com/hero-video.mp4" type="video/mp4">
             </video>
         </div>

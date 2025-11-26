@@ -435,19 +435,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const heroVideo = document.getElementById('heroVideo');
         if (!heroVideo) return;
         
-        // On mobile, ensure we only load the preview video
         const isMobile = window.innerWidth <= 768;
+        
+        // On mobile, load immediately for better UX
         if (isMobile) {
-            // Remove desktop source on mobile to prevent loading 10MB file
-            const desktopSource = document.getElementById('heroVideoSourceDesktop');
-            if (desktopSource) {
-                desktopSource.remove();
-            }
+            heroVideo.preload = 'auto';
+            heroVideo.load();
+            heroVideo.addEventListener('loadeddata', () => {
+                heroVideo.classList.add('ready');
+                heroVideo.play().catch(err => {
+                    // Autoplay may fail on mobile, that's okay
+                    console.debug('Video autoplay prevented:', err);
+                });
+            }, { once: true });
+            return;
         }
         
-        // Load video after a delay to prioritize LCP
+        // On desktop, delay loading to prioritize LCP
         if ('requestIdleCallback' in window) {
             requestIdleCallback(() => {
+                heroVideo.preload = 'auto';
                 heroVideo.load();
                 heroVideo.addEventListener('loadeddata', () => {
                     heroVideo.classList.add('ready');
@@ -455,6 +462,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, { timeout: 3000 });
         } else {
             setTimeout(() => {
+                heroVideo.preload = 'auto';
                 heroVideo.load();
                 heroVideo.addEventListener('loadeddata', () => {
                     heroVideo.classList.add('ready');
