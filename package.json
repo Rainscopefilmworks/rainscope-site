@@ -8,6 +8,7 @@
     "optimize:images": "node optimize.js --images",
     "optimize:videos": "node optimize.js --videos",
     "optimize:all": "node optimize.js --all",
+    "optimize:large": "node optimize-large-files.js",
     "optimize:css": "postcss assets/css/styles.css -o assets/css/styles.min.css --use cssnano",
     "favicons": "node generate-favicons.js"
   },

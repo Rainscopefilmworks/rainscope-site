@@ -254,7 +254,7 @@
     <section class="hero">
         <div class="hero-video-container">
             <!-- Use poster as LCP element - video loads after -->
-            <video autoplay muted loop playsinline preload="none" poster="assets/images/logo.png" loading="eager" aria-label="Rainscope Filmworks hero video">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/images/logo.png" loading="eager" fetchpriority="high" aria-label="Rainscope Filmworks hero video">
                 <source src="assets/videos/hero-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -270,7 +270,7 @@
     <!-- Testimonials Section -->
     <section class="testimonials" id="testimonials">
         <div class="testimonials-slider">
-            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');" loading="lazy" fetchpriority="low">
+            <div class="testimonial-slide active" style="background-image: url('assets/images/testimonials/testimonial-1.jpg');">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
                     <blockquote class="testimonial-text">VERY EASY TO WORK WITH! LOVE THE QUICK RESPONSES AND WAS ABLE TO GET MY EDIT DONE JUST LIKE MY VISION WAS DESCRIBED. HIGHLY RECOMMEND! THANKS AGAIN</blockquote>
@@ -332,13 +332,19 @@
                     </div>
                 </a>
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <img src="assets/images/work/work-1.gif" alt="Wedding video production - Cinematic wedding film by Rainscope Filmworks" loading="lazy">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Wedding video production - Rainscope Filmworks">
+                        <source src="assets/images/work/work-1.mp4" type="video/mp4">
+                        <img src="assets/images/work/work-1.gif" alt="Wedding video production - Cinematic wedding film by Rainscope Filmworks" loading="lazy">
+                    </video>
                     <div class="portfolio-overlay">
                         <span class="portfolio-label">View Project</span>
                     </div>
                 </a>
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <img src="assets/images/work/work-6.gif" alt="Creative video production project - Rainscope Filmworks portfolio" loading="lazy">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Creative video production project - Rainscope Filmworks">
+                        <source src="assets/images/work/work-6.mp4" type="video/mp4">
+                        <img src="assets/images/work/work-6.gif" alt="Creative video production project - Rainscope Filmworks portfolio" loading="lazy">
+                    </video>
                     <div class="portfolio-overlay">
                         <span class="portfolio-label">View Project</span>
                     </div>
