@@ -150,15 +150,26 @@
     <!-- Force video load on mobile immediately -->
     <script>
         (function() {
-            if (window.innerWidth <= 768) {
+            const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
                 function loadVideo() {
                     const heroVideo = document.getElementById('heroVideo');
-                    if (heroVideo && heroVideo.readyState === 0) {
+                    if (heroVideo) {
+                        // Ensure video loads immediately on mobile
                         heroVideo.preload = 'auto';
                         heroVideo.load();
+                        // Try to play immediately
                         heroVideo.play().catch(function(err) {
-                            // Autoplay may be blocked, that's okay
+                            // Autoplay may be blocked on mobile, try again when user interacts
+                            console.debug('Video autoplay prevented, will try on interaction:', err);
                         });
+                        // Also listen for loadeddata to ensure it shows when ready
+                        heroVideo.addEventListener('loadeddata', function() {
+                            heroVideo.classList.add('ready');
+                            heroVideo.play().catch(function() {
+                                // Silent fail if autoplay is still blocked
+                            });
+                        }, { once: true });
                     }
                 }
                 
