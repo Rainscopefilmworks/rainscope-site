@@ -160,15 +160,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!floatingCta || !hero) return;
     
+    // Cache hero dimensions to avoid forced reflows
+    let heroBottom = null;
+    function cacheHeroDimensions() {
+        if (heroBottom === null) {
+            heroBottom = hero.offsetTop + hero.offsetHeight;
+        }
+    }
+    
+    // Cache on load and resize
+    cacheHeroDimensions();
+    window.addEventListener('resize', () => {
+        heroBottom = null;
+        cacheHeroDimensions();
+    }, { passive: true });
+    
+    let ticking = false;
     function handleScroll() {
-        const heroBottom = hero.offsetTop + hero.offsetHeight;
-        const scrollPosition = window.scrollY + window.innerHeight;
-        
-        // Show floating CTA after scrolling past hero
-        if (window.scrollY > heroBottom - 200) {
-            floatingCta.classList.add('visible');
-        } else {
-            floatingCta.classList.remove('visible');
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                cacheHeroDimensions();
+                // Show floating CTA after scrolling past hero
+                if (window.scrollY > heroBottom - 200) {
+                    floatingCta.classList.add('visible');
+                } else {
+                    floatingCta.classList.remove('visible');
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     }
     
@@ -206,10 +226,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollProgress = document.getElementById('scrollProgress');
     if (!scrollProgress) return;
     
+    let scrollTicking = false;
     function updateScrollProgress() {
-        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (window.scrollY / windowHeight) * 100;
-        scrollProgress.style.width = scrolled + '%';
+        if (!scrollTicking) {
+            window.requestAnimationFrame(() => {
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / windowHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+                scrollTicking = false;
+            });
+            scrollTicking = true;
+        }
     }
     
     window.addEventListener('scroll', updateScrollProgress, { passive: true });
@@ -232,11 +259,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Function to check if element is partially visible
+    // Cached to avoid forced reflows
+    let cachedWindowHeight = null;
+    function getWindowHeight() {
+        if (cachedWindowHeight === null) {
+            cachedWindowHeight = window.innerHeight || document.documentElement.clientHeight;
+        }
+        return cachedWindowHeight;
+    }
+    
     function isPartiallyVisible(element) {
         const rect = element.getBoundingClientRect();
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        const windowHeight = getWindowHeight();
         return rect.top < windowHeight && rect.bottom > 0;
     }
+    
+    // Update cached window height on resize
+    window.addEventListener('resize', () => {
+        cachedWindowHeight = null;
+    }, { passive: true });
     
     const observerOptions = {
         threshold: 0.1,
@@ -340,24 +381,41 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let ticking = false;
         
-        function updateParallax() {
-            const scrollY = window.scrollY;
-            const heroHeight = hero.offsetHeight;
-            
-            if (scrollY < heroHeight) {
-                const offset = scrollY * 0.3; // Parallax speed
-                hero.style.setProperty('--scroll-offset', offset);
-                hero.classList.add('parallax-active');
+        // Cache hero height to avoid forced reflows
+        let cachedHeroHeight = null;
+        function getHeroHeight() {
+            if (cachedHeroHeight === null) {
+                cachedHeroHeight = hero.offsetHeight;
             }
-            
-            ticking = false;
+            return cachedHeroHeight;
+        }
+        
+        window.addEventListener('resize', () => {
+            cachedHeroHeight = null;
+        }, { passive: true });
+        
+        let parallaxTicking = false;
+        function updateParallax() {
+            if (!parallaxTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const heroHeight = getHeroHeight();
+                    
+                    if (scrollY < heroHeight) {
+                        const offset = scrollY * 0.3; // Parallax speed
+                        hero.style.setProperty('--scroll-offset', offset);
+                        hero.classList.add('parallax-active');
+                    } else {
+                        hero.classList.remove('parallax-active');
+                    }
+                    parallaxTicking = false;
+                });
+                parallaxTicking = true;
+            }
         }
         
         window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(updateParallax);
-                ticking = true;
-            }
+            updateParallax();
         }, { passive: true });
     }, 500);
 });
@@ -410,8 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (prefersReducedMotion || isMobile) {
         // On mobile or reduced motion, show text immediately
-        heroTagline.style.opacity = '1';
-        heroTagline.style.borderRight = 'none';
+        // Text is already visible via CSS opacity: 1, so no JS needed
         return;
     }
     

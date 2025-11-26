@@ -64,27 +64,17 @@
     <meta name="twitter:image" content="https://rainscopefilmworks.com/assets/images/logo.png">
     <meta name="twitter:image:alt" content="Rainscope Filmworks Logo">
     
-    <!-- Resource Hints -->
+    <!-- Resource Hints - Limited to 4 most critical -->
     <link rel="preconnect" href="https://www.googletagmanager.com">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-    <link rel="preconnect" href="https://tally.so">
     <link rel="dns-prefetch" href="https://tally.so">
-    <link rel="preconnect" href="https://www.google.com">
-    <link rel="dns-prefetch" href="https://www.google.com">
-    <link rel="preconnect" href="https://static.cloudflareinsights.com">
-    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com">
-    <link rel="preconnect" href="https://maps.googleapis.com">
     <link rel="dns-prefetch" href="https://maps.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     
     <!-- Preload Critical Resources for LCP -->
     <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
     
     <!-- Load CSS - Critical for above-the-fold -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=2" media="all">
-    
-    <!-- Preconnect to improve resource loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="assets/css/styles.css?v=3" media="all">
     
     <script type="application/ld+json">
     {
@@ -465,8 +455,8 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- Load JavaScript -->
-    <script src="assets/js/script.js?v=4" defer></script>
+    <!-- Load JavaScript - Defer non-critical scripts -->
+    <script src="assets/js/script.js?v=5" defer></script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive
