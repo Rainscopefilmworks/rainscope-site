@@ -1,15 +1,7 @@
 // Testimonials Slider
-// Set a flag to prove script executed
-window.testScriptLoaded = true;
-console.log('=== SCRIPT.JS IS EXECUTING ===');
-console.log('script.js file loaded and executing - line 2');
-console.log('Current time:', new Date().toISOString());
 
-// Immediate test - should run right away
-alert('Script.js is executing! Check console for logs.');
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Testimonials slider DOMContentLoaded fired');
     try {
         const slides = document.querySelectorAll('.testimonial-slide');
         const indicators = document.querySelectorAll('.indicator');
@@ -226,9 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Intersection Observer for Scroll Reveal Animations
-console.log('Scroll animations code reached');
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Scroll animations DOMContentLoaded fired');
     
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -254,39 +244,32 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px 0px -100px 0px'
     };
     
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                console.log('Element intersecting:', entry.target);
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
     
     // Get all elements that need animation
     const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
     
-    console.log('Found', animatedElements.length, 'elements to animate');
-    
     if (animatedElements.length === 0) {
-        console.warn('No animated elements found - check HTML classes');
         return;
     }
     
     // Check elements that are already in viewport on load
-    animatedElements.forEach((el, index) => {
-        console.log(`Element ${index}:`, el.className, 'visible:', isPartiallyVisible(el));
+    animatedElements.forEach((el) => {
         if (isPartiallyVisible(el)) {
             // Add a small delay for elements already visible to allow CSS to apply
             setTimeout(() => {
                 el.classList.add('animate-in');
-                console.log(`Animated element ${index} (already visible)`);
             }, 100);
         } else {
             // Observe elements not yet visible
             observer.observe(el);
-            console.log(`Observing element ${index}`);
         }
     });
     
@@ -295,11 +278,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', function() {
         if (!ticking) {
             window.requestAnimationFrame(function() {
-                animatedElements.forEach((el, index) => {
+                animatedElements.forEach((el) => {
                     if (!el.classList.contains('animate-in') && isPartiallyVisible(el)) {
                         el.classList.add('animate-in');
                         observer.unobserve(el);
-                        console.log(`Animated element ${index} on scroll`);
                     }
                 });
                 ticking = false;
@@ -413,33 +395,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Typewriter Effect for Hero Tagline
-console.log('Typewriter effect code reached');
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Typewriter DOMContentLoaded fired');
     const heroTagline = document.querySelector('.hero-tagline');
-    
-    if (!heroTagline) {
-        console.error('Hero tagline not found!');
-        return;
-    }
-    
-    console.log('Hero tagline found:', heroTagline);
+    if (!heroTagline) return;
     
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-        console.log('Reduced motion - showing tagline immediately');
         heroTagline.style.opacity = '1';
         return;
     }
     
     // Get text and clear it
     const text = heroTagline.textContent.trim();
-    console.log('Tagline text:', text);
-    
-    if (!text) {
-        console.error('Hero tagline has no text!');
-        return;
-    }
+    if (!text) return;
     
     heroTagline.textContent = '';
     heroTagline.style.opacity = '1';
@@ -464,7 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Start typing after a short delay
-    console.log('Starting typewriter in 500ms');
     setTimeout(typeWriter, 500);
 });
 

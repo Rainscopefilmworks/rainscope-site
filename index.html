@@ -415,34 +415,7 @@
     <div class="scroll-progress" id="scrollProgress"></div>
 
     <!-- Load JavaScript -->
-    <script>
-        console.log('HTML script tag executing');
-        console.log('About to load script.js');
-        
-        // Test if console works
-        try {
-            console.log('Console test - this should appear');
-            alert('If you see this, JavaScript is working');
-        } catch(e) {
-            console.error('Console error:', e);
-        }
-    </script>
-    <script src="assets/js/script.js?v=2" onerror="console.error('Failed to load script.js:', this.src)" onload="console.log('script.js loaded successfully'); setTimeout(function(){console.log('Checking if script executed...'); if(typeof window.testScriptLoaded === 'undefined'){console.error('Script did not execute - no testScriptLoaded variable');}}, 1000);"></script>
-    <script>
-        console.log('After script tag');
-        
-        // Add a test variable that the script should set
-        window.testScriptLoaded = false;
-        
-        // Check after a delay
-        setTimeout(function() {
-            console.log('Checking script execution...');
-            console.log('testScriptLoaded:', window.testScriptLoaded);
-            if (!window.testScriptLoaded) {
-                console.error('SCRIPT NOT EXECUTING - testScriptLoaded is still false');
-            }
-        }, 2000);
-    </script>
+    <script src="assets/js/script.js"></script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive
