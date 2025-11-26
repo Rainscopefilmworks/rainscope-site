@@ -427,7 +427,7 @@
             console.error('Console error:', e);
         }
     </script>
-    <script src="assets/js/script.js" onerror="console.error('Failed to load script.js:', this.src)" onload="console.log('script.js loaded successfully'); setTimeout(function(){console.log('Checking if script executed...'); if(typeof window.testScriptLoaded === 'undefined'){console.error('Script did not execute - no testScriptLoaded variable');}}, 1000);"></script>
+    <script src="assets/js/script.js?v=2" onerror="console.error('Failed to load script.js:', this.src)" onload="console.log('script.js loaded successfully'); setTimeout(function(){console.log('Checking if script executed...'); if(typeof window.testScriptLoaded === 'undefined'){console.error('Script did not execute - no testScriptLoaded variable');}}, 1000);"></script>
     <script>
         console.log('After script tag');
         

@@ -1,16 +1,12 @@
 // Testimonials Slider
 // Set a flag to prove script executed
 window.testScriptLoaded = true;
+console.log('=== SCRIPT.JS IS EXECUTING ===');
 console.log('script.js file loaded and executing - line 2');
 console.log('Current time:', new Date().toISOString());
-console.log('Window object:', typeof window);
-console.log('Document object:', typeof document);
 
 // Immediate test - should run right away
-(function() {
-    console.log('IIFE executing immediately');
-    alert('Script.js is executing!');
-})();
+alert('Script.js is executing! Check console for logs.');
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Testimonials slider DOMContentLoaded fired');
