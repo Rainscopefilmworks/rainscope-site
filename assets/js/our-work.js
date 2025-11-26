@@ -1,6 +1,8 @@
 // Infinite Auto-Scrolling Posters Carousel for Our Work Page
 // Initialize immediately (works even if script loads async late)
+console.log('our-work.js loaded');
 (function initInfinitePostersCarousel() {
+    console.log('initInfinitePostersCarousel function called');
     function initCarousel() {
         const carousel = document.getElementById('postersCarousel');
         if (!carousel) {
