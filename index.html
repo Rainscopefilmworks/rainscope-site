@@ -88,17 +88,18 @@
         .hero-content {
             position: absolute !important;
             top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
+            left: 0 !important;
+            right: 0 !important;
+            transform: translateY(-50%) !important;
             z-index: 2 !important;
             text-align: center;
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            overflow: visible;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            overflow: visible !important;
             pointer-events: none;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
         }
         .hero-tagline {
             opacity: 1 !important;
@@ -144,7 +145,7 @@
     </style>
     
     <!-- Load CSS - Non-critical styles load after critical rendering -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=9" media="all">
+    <link rel="stylesheet" href="assets/css/styles.css?v=10" media="all">
     
     <script type="application/ld+json">
     {
