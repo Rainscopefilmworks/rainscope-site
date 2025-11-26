@@ -56,18 +56,23 @@ console.log('our-work.js loaded');
             // Enable infinite scroll animation via CSS class
             carousel.classList.add('infinite-scroll');
             
-            // Verify animation is applied
+            // Force apply animation inline as fallback if CSS isn't working
             const computedStyle = window.getComputedStyle(carousel);
-            const animationName = computedStyle.getPropertyValue('animation-name');
+            let animationName = computedStyle.getPropertyValue('animation-name');
             console.log('Posters carousel initialized with', originalSlides.length, 'slides');
             console.log('Animation name:', animationName);
             console.log('Has infinite-scroll class:', carousel.classList.contains('infinite-scroll'));
             console.log('Total slides (including duplicates):', carousel.querySelectorAll('.poster-slide').length);
             
+            // If animation isn't applied, force it inline
+            if (!animationName || animationName === 'none' || animationName.trim() === '') {
+                console.warn('CSS animation not detected, applying inline animation as fallback');
+                carousel.style.animation = 'infiniteScroll 30s linear infinite';
+                carousel.style.willChange = 'transform';
+            }
+            
             // Force animation restart if needed
-            carousel.style.animation = 'none';
             carousel.offsetHeight; // Trigger reflow
-            carousel.style.animation = null;
         });
     }
     
