@@ -73,8 +73,48 @@
     <!-- Preload Critical Resources for LCP - Hero tagline text is the LCP element -->
     <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
     
-    <!-- Load CSS - Critical for above-the-fold -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=4" media="all">
+    <!-- Critical CSS inlined in head for immediate render - Hero tagline must render first -->
+    <style>
+        /* Critical CSS: Hero tagline must render immediately for LCP */
+        .hero-tagline {
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+            font-size: clamp(0.75rem, 4vw, 2rem);
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            line-height: 1.2;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            padding: 0 clamp(0.5rem, 2vw, 2rem);
+            box-sizing: border-box;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6), -1px -1px 2px rgba(0, 0, 0, 0.8);
+        }
+        .hero-content {
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow: visible;
+        }
+        @media (max-width: 768px) {
+            .hero-tagline {
+                font-size: clamp(0.7rem, 5vw, 1.4rem);
+                opacity: 1 !important;
+            }
+        }
+    </style>
+    
+    <!-- Load CSS - Non-critical styles load after critical rendering -->
+    <link rel="stylesheet" href="assets/css/styles.css?v=5" media="all">
     
     <script type="application/ld+json">
     {
@@ -247,9 +287,10 @@
     <section class="hero">
         <div class="hero-video-container">
             <!-- Video loads after initial render to improve LCP -->
+            <!-- Mobile: use preview video, Desktop: use full video -->
             <video id="heroVideo" autoplay muted loop playsinline preload="none" poster="assets/images/logo.png" loading="lazy" aria-label="Rainscope Filmworks hero video">
-                <source src="assets/videos/hero-video-preview.mp4" type="video/mp4" media="(max-width: 768px)">
-                <source src="assets/videos/hero-video.mp4" type="video/mp4">
+                <source id="heroVideoSourceMobile" src="assets/videos/hero-video-preview.mp4" type="video/mp4" media="(max-width: 768px)">
+                <source id="heroVideoSourceDesktop" src="assets/videos/hero-video.mp4" type="video/mp4" media="(min-width: 769px)">
             </video>
         </div>
         <div class="hero-content">
@@ -456,8 +497,9 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- Load JavaScript - Defer non-critical scripts -->
-    <script src="assets/js/script.js?v=6" defer></script>
+    <!-- Load JavaScript - Async to prevent blocking LCP -->
+    <!-- Critical rendering (hero tagline) is handled by CSS, scripts load asynchronously -->
+    <script src="assets/js/script.js?v=7" async></script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive

@@ -370,12 +370,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Parallax Effect for Hero Video - Deferred for performance
-document.addEventListener('DOMContentLoaded', function() {
+// Use DOMContentLoaded or immediate execution depending on script load timing
+(function() {
     // Load hero video after initial render to improve LCP
     // Only load video after page is interactive
     function loadHeroVideo() {
         const heroVideo = document.getElementById('heroVideo');
         if (!heroVideo) return;
+        
+        // On mobile, ensure we only load the preview video
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            // Remove desktop source on mobile to prevent loading 10MB file
+            const desktopSource = document.getElementById('heroVideoSourceDesktop');
+            if (desktopSource) {
+                desktopSource.remove();
+            }
+        }
         
         // Load video after a delay to prioritize LCP
         if ('requestIdleCallback' in window) {
@@ -384,22 +395,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 heroVideo.addEventListener('loadeddata', () => {
                     heroVideo.classList.add('ready');
                 }, { once: true });
-            }, { timeout: 2000 });
+            }, { timeout: 3000 });
         } else {
             setTimeout(() => {
                 heroVideo.load();
                 heroVideo.addEventListener('loadeddata', () => {
                     heroVideo.classList.add('ready');
                 }, { once: true });
-            }, 1000);
+            }, 2000);
         }
     }
     
-    // Start loading video after DOM is ready
+    // Start loading video after DOM is ready or immediately if already loaded
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', loadHeroVideo);
     } else {
-        loadHeroVideo();
+        // DOM already loaded, wait a bit for LCP
+        setTimeout(loadHeroVideo, 1000);
     }
     
     // Delay parallax initialization
@@ -409,8 +421,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) return;
-        
-        let ticking = false;
         
         // Cache hero height to avoid forced reflows
         let cachedHeroHeight = null;
@@ -449,50 +459,62 @@ document.addEventListener('DOMContentLoaded', function() {
             updateParallax();
         }, { passive: true });
     }, 500);
-});
+})();
 
 // Typewriter Effect for Hero Tagline
 // Disabled on mobile to improve LCP performance
-document.addEventListener('DOMContentLoaded', function() {
-    const heroTagline = document.querySelector('.hero-tagline');
-    if (!heroTagline) return;
-    
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    // Disable typewriter on mobile devices (improves LCP significantly)
-    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (prefersReducedMotion || isMobile) {
-        // On mobile or reduced motion, show text immediately
-        // Text is already visible via CSS opacity: 1, so no JS needed
-        return;
-    }
-    
-    // Desktop: Get text and clear it for typewriter effect
-    const text = heroTagline.textContent.trim();
-    if (!text) return;
-    
-    heroTagline.textContent = '';
-    heroTagline.style.opacity = '1';
-    heroTagline.style.whiteSpace = 'nowrap';
-    heroTagline.style.overflow = 'hidden';
-    heroTagline.classList.add('typewriter');
-    
-    let index = 0;
-    const speed = 50; // milliseconds per character
-    
-    function typeWriter() {
-        if (index < text.length) {
-            heroTagline.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, speed);
-        } else {
-            // Keep cursor visible (don't remove it)
-            // The cursor will blink via CSS animation
+// Wrapped in IIFE to prevent blocking if script loads early
+(function() {
+    function initTypewriter() {
+        const heroTagline = document.querySelector('.hero-tagline');
+        if (!heroTagline) return;
+        
+        // Tagline is already visible via critical CSS, just add typewriter effect on desktop
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // Disable typewriter on mobile devices (improves LCP significantly)
+        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (prefersReducedMotion || isMobile) {
+            // On mobile or reduced motion, text is already visible via CSS
+            // No JavaScript manipulation needed
+            return;
         }
+    
+        // Desktop: Get text and clear it for typewriter effect
+        const text = heroTagline.textContent.trim();
+        if (!text) return;
+        
+        heroTagline.textContent = '';
+        heroTagline.style.opacity = '1';
+        heroTagline.style.whiteSpace = 'nowrap';
+        heroTagline.style.overflow = 'hidden';
+        heroTagline.classList.add('typewriter');
+        
+        let index = 0;
+        const speed = 50; // milliseconds per character
+        
+        function typeWriter() {
+            if (index < text.length) {
+                heroTagline.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, speed);
+            } else {
+                // Keep cursor visible (don't remove it)
+                // The cursor will blink via CSS animation
+            }
+        }
+        
+        // Start typing after a short delay
+        setTimeout(typeWriter, 500);
     }
     
-    // Start typing after a short delay
-    setTimeout(typeWriter, 500);
-});
+    // Initialize typewriter when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTypewriter);
+    } else {
+        // DOM already loaded, defer slightly to ensure LCP
+        setTimeout(initTypewriter, 100);
+    }
+})();
 
