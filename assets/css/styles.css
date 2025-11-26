@@ -1109,6 +1109,27 @@ body::after {
     opacity: 0;
 }
 
+/* Fallback: Show elements after 3 seconds if JavaScript hasn't loaded (graceful degradation) */
+@media (prefers-reduced-motion: no-preference) {
+    /* Only apply fallback if motion is not reduced */
+    .scroll-reveal:not(.animate-in),
+    .scroll-reveal-left:not(.animate-in),
+    .scroll-reveal-right:not(.animate-in),
+    .scroll-reveal-scale:not(.animate-in),
+    .section-title.scroll-reveal:not(.animate-in),
+    .section-title.scroll-reveal-left:not(.animate-in),
+    .section-title.scroll-reveal-right:not(.animate-in) {
+        animation: fadeInFallback 0.5s ease forwards 3s;
+    }
+}
+
+@keyframes fadeInFallback {
+    to {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+    }
+}
+
 .section-title.scroll-reveal {
     transform: translateY(30px);
     transition: opacity 0.8s ease, transform 0.8s ease;

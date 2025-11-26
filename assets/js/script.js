@@ -1,7 +1,7 @@
 // Testimonials Slider
-
-
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize immediately (works even if script loads async late)
+(function initTestimonialsSlider() {
+    function initSlider() {
     try {
         const slides = document.querySelectorAll('.testimonial-slide');
         const indicators = document.querySelectorAll('.indicator');
@@ -75,8 +75,17 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
         // Silently fail if testimonials slider can't initialize (e.g., on shop page)
         console.debug('Testimonials slider not available on this page:', error);
+        }
     }
-});
+    
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSlider);
+    } else {
+        // DOM already loaded, initialize immediately
+        initSlider();
+    }
+})();
 
 // Accordion functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -245,45 +254,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Intersection Observer for Scroll Reveal Animations
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (prefersReducedMotion) {
-        // If reduced motion, just show everything immediately
-        document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
-            el.classList.add('animate-in');
-        });
-        return;
-    }
-    
-    // Function to check if element is partially visible
-    // Cached to avoid forced reflows
-    let cachedWindowHeight = null;
-    function getWindowHeight() {
-        if (cachedWindowHeight === null) {
-            cachedWindowHeight = window.innerHeight || document.documentElement.clientHeight;
+// Initialize immediately (works even if script loads async late)
+(function initScrollReveal() {
+    function initAnimations() {
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (prefersReducedMotion) {
+            // If reduced motion, just show everything immediately
+            document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
+                el.classList.add('animate-in');
+            });
+            return;
         }
-        return cachedWindowHeight;
-    }
-    
-    function isPartiallyVisible(element) {
-        const rect = element.getBoundingClientRect();
-        const windowHeight = getWindowHeight();
-        return rect.top < windowHeight && rect.bottom > 0;
-    }
-    
-    // Update cached window height on resize
-    window.addEventListener('resize', () => {
-        cachedWindowHeight = null;
-    }, { passive: true });
-    
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-    
+        
+        // Function to check if element is partially visible
+        // Cached to avoid forced reflows
+        let cachedWindowHeight = null;
+        function getWindowHeight() {
+            if (cachedWindowHeight === null) {
+                cachedWindowHeight = window.innerHeight || document.documentElement.clientHeight;
+            }
+            return cachedWindowHeight;
+        }
+        
+        function isPartiallyVisible(element) {
+            const rect = element.getBoundingClientRect();
+            const windowHeight = getWindowHeight();
+            return rect.top < windowHeight && rect.bottom > 0;
+        }
+        
+        // Update cached window height on resize
+        window.addEventListener('resize', () => {
+            cachedWindowHeight = null;
+        }, { passive: true });
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -292,49 +302,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }, observerOptions);
-    
-    // Get all elements that need animation
-    const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
-    
-    if (animatedElements.length === 0) {
-        return;
+        
+        // Get all elements that need animation
+        const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
+        
+        if (animatedElements.length === 0) {
+            return;
+        }
+        
+        // Check elements that are already in viewport on load
+        animatedElements.forEach((el) => {
+            if (isPartiallyVisible(el)) {
+                // Add a small delay for elements already visible to allow CSS to apply
+                setTimeout(() => {
+                    el.classList.add('animate-in');
+                }, 100);
+            } else {
+                // Observe elements not yet visible
+                observer.observe(el);
+            }
+        });
+        
+        // Also observe on scroll for elements that come into view
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    animatedElements.forEach((el) => {
+                        if (!el.classList.contains('animate-in') && isPartiallyVisible(el)) {
+                            el.classList.add('animate-in');
+                            observer.unobserve(el);
+                        }
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
     }
     
-    // Check elements that are already in viewport on load
-    animatedElements.forEach((el) => {
-        if (isPartiallyVisible(el)) {
-            // Add a small delay for elements already visible to allow CSS to apply
-            setTimeout(() => {
-                el.classList.add('animate-in');
-            }, 100);
-        } else {
-            // Observe elements not yet visible
-            observer.observe(el);
-        }
-    });
-    
-    // Also observe on scroll for elements that come into view
-    let ticking = false;
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                animatedElements.forEach((el) => {
-                    if (!el.classList.contains('animate-in') && isPartiallyVisible(el)) {
-                        el.classList.add('animate-in');
-                        observer.unobserve(el);
-                    }
-                });
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-});
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAnimations);
+    } else {
+        // DOM already loaded, initialize immediately
+        initAnimations();
+    }
+})();
 
 // Count-up Animation for Trust Indicators - Deferred for performance
-document.addEventListener('DOMContentLoaded', function() {
-    // Delay count-up initialization
-    setTimeout(function() {
+(function initCountUp() {
+    function initCountUpAnimation() {
+        // Delay count-up initialization
+        setTimeout(function() {
         const trustNumbers = document.querySelectorAll('.trust-number[data-count]');
         
         const countUpObserver = new IntersectionObserver(function(entries) {
@@ -363,11 +383,20 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { threshold: 0.5 });
         
-        trustNumbers.forEach(num => {
-            countUpObserver.observe(num);
-        });
-    }, 400);
-});
+            trustNumbers.forEach(num => {
+                countUpObserver.observe(num);
+            });
+        }, 400);
+    }
+    
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCountUpAnimation);
+    } else {
+        // DOM already loaded, initialize immediately
+        initCountUpAnimation();
+    }
+})();
 
 // Parallax Effect for Hero Video - Deferred for performance
 // Use DOMContentLoaded or immediate execution depending on script load timing

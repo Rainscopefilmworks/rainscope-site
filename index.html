@@ -114,7 +114,7 @@
     </style>
     
     <!-- Load CSS - Non-critical styles load after critical rendering -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=5" media="all">
+    <link rel="stylesheet" href="assets/css/styles.css?v=6" media="all">
     
     <script type="application/ld+json">
     {
@@ -499,7 +499,20 @@
 
     <!-- Load JavaScript - Async to prevent blocking LCP -->
     <!-- Critical rendering (hero tagline) is handled by CSS, scripts load asynchronously -->
-    <script src="assets/js/script.js?v=7" async></script>
+    <!-- Fallback: Show scroll-reveal elements if JavaScript fails or loads late -->
+    <script>
+        // Fallback: Show all scroll-reveal elements after 2 seconds if JS hasn't loaded
+        setTimeout(function() {
+            if (document.querySelectorAll('.scroll-reveal:not(.animate-in)').length > 0) {
+                document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(function(el) {
+                    if (!el.classList.contains('animate-in')) {
+                        el.classList.add('animate-in');
+                    }
+                });
+            }
+        }, 2000);
+    </script>
+    <script src="assets/js/script.js?v=8" async></script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive
