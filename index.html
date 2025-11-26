@@ -154,23 +154,41 @@
             if (isMobile) {
                 function loadVideo() {
                     const heroVideo = document.getElementById('heroVideo');
-                    if (heroVideo) {
-                        // Ensure video loads immediately on mobile
-                        heroVideo.preload = 'auto';
-                        heroVideo.load();
-                        // Try to play immediately
-                        heroVideo.play().catch(function(err) {
-                            // Autoplay may be blocked on mobile, try again when user interacts
-                            console.debug('Video autoplay prevented, will try on interaction:', err);
-                        });
-                        // Also listen for loadeddata to ensure it shows when ready
-                        heroVideo.addEventListener('loadeddata', function() {
-                            heroVideo.classList.add('ready');
-                            heroVideo.play().catch(function() {
-                                // Silent fail if autoplay is still blocked
-                            });
-                        }, { once: true });
+                    if (!heroVideo) {
+                        console.debug('Hero video element not found');
+                        return;
                     }
+                    
+                    // Check if video source exists
+                    const sources = heroVideo.querySelectorAll('source');
+                    if (sources.length === 0) {
+                        console.debug('No video source found');
+                        return;
+                    }
+                    
+                    // Ensure video loads immediately on mobile
+                    heroVideo.preload = 'auto';
+                    
+                    // Add error handler
+                    heroVideo.addEventListener('error', function(e) {
+                        console.debug('Video loading error:', e);
+                    }, { once: true });
+                    
+                    // Load the video
+                    heroVideo.load();
+                    
+                    // Try to play immediately
+                    heroVideo.play().catch(function(err) {
+                        console.debug('Video autoplay prevented:', err);
+                    });
+                    
+                    // Also listen for loadeddata to ensure it shows when ready
+                    heroVideo.addEventListener('loadeddata', function() {
+                        heroVideo.classList.add('ready');
+                        heroVideo.play().catch(function() {
+                            // Silent fail if autoplay is still blocked
+                        });
+                    }, { once: true });
                 }
                 
                 if (document.readyState === 'loading') {
