@@ -1,4 +1,5 @@
 // Testimonials Slider
+console.log('script.js file loaded and executing');
 document.addEventListener('DOMContentLoaded', function() {
     try {
         const slides = document.querySelectorAll('.testimonial-slide');

@@ -415,7 +415,14 @@
     <div class="scroll-progress" id="scrollProgress"></div>
 
     <!-- Load JavaScript -->
-    <script src="assets/js/script.js"></script>
+    <script>
+        console.log('HTML script tag executing');
+        console.log('About to load script.js');
+    </script>
+    <script src="assets/js/script.js" onerror="console.error('Failed to load script.js')" onload="console.log('script.js loaded successfully')"></script>
+    <script>
+        console.log('After script tag');
+    </script>
     <!-- Load Tally form lazily -->
     <script>
       // Load Tally form after page is interactive
