@@ -1291,7 +1291,7 @@
 
           const priceText = firstPrice ? escapeHTML((firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})) : "";
           const safeInvText = escapeHTML(invText);
-          
+
           return `
             <div class="rs-card">
               ${safeImg? `<img class="rs-img" loading="lazy" src="${safeImg}" alt="${title}">` : `<div class="rs-img"></div>`}
@@ -1389,7 +1389,7 @@
           if (phone_number && phone_number.length > 20) {
             alert("Phone number is too long.");
             $submit.disabled = false;
-            return;
+            return; 
           }
 
           setStatus("Creating customer…");

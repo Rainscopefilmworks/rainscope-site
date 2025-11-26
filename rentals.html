@@ -1229,7 +1229,7 @@
         div.textContent = str;
         return div.innerHTML;
       }
-      
+
       // Money + totals
       const money = n => n.toLocaleString(undefined,{style:"currency",currency:"CAD"});
       const priceNum = pm => pm && typeof pm.amount==="number" ? pm.amount/100 : 0;

@@ -980,14 +980,38 @@ nav .nav-link[href="shop.html"],
     letter-spacing: 2px;
     margin-bottom: clamp(1.5rem, 3vw, 2rem);
     color: white;
+}
+
+/* Only apply animation styles if element has scroll-reveal class */
+.section-title:not(.scroll-reveal):not(.scroll-reveal-left):not(.scroll-reveal-right) {
+    opacity: 1;
+    transform: none;
+}
+
+.section-title.scroll-reveal,
+.section-title.scroll-reveal-left,
+.section-title.scroll-reveal-right {
     opacity: 0;
+}
+
+.section-title.scroll-reveal {
     transform: translateY(30px);
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
+.section-title.scroll-reveal-left {
+    transform: translateX(-40px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-title.scroll-reveal-right {
+    transform: translateX(40px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .section-title.animate-in {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateX(0);
 }
 
 /* Scroll Reveal Animations */
