@@ -371,6 +371,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Parallax Effect for Hero Video - Deferred for performance
 document.addEventListener('DOMContentLoaded', function() {
+    // Load hero video after initial render to improve LCP
+    // Only load video after page is interactive
+    function loadHeroVideo() {
+        const heroVideo = document.getElementById('heroVideo');
+        if (!heroVideo) return;
+        
+        // Load video after a delay to prioritize LCP
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                heroVideo.load();
+                heroVideo.addEventListener('loadeddata', () => {
+                    heroVideo.classList.add('ready');
+                }, { once: true });
+            }, { timeout: 2000 });
+        } else {
+            setTimeout(() => {
+                heroVideo.load();
+                heroVideo.addEventListener('loadeddata', () => {
+                    heroVideo.classList.add('ready');
+                }, { once: true });
+            }, 1000);
+        }
+    }
+    
+    // Start loading video after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadHeroVideo);
+    } else {
+        loadHeroVideo();
+    }
+    
     // Delay parallax initialization
     setTimeout(function() {
         const hero = document.querySelector('.hero');
@@ -418,41 +449,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateParallax();
         }, { passive: true });
     }, 500);
-});
-
-// Optimize video loading - start loading video after page is interactive
-document.addEventListener('DOMContentLoaded', function() {
-    const heroVideo = document.querySelector('.hero video');
-    if (!heroVideo) return;
-    
-    // Show poster immediately (LCP optimization)
-    heroVideo.classList.add('ready');
-    
-    // Start loading video after page is fully interactive
-    // Use requestIdleCallback if available, otherwise setTimeout
-    const loadVideo = function() {
-        if (heroVideo.readyState === 0) { // HAVE_NOTHING
-            heroVideo.preload = 'metadata';
-            // Load just enough to show first frame
-            heroVideo.load();
-        }
-    };
-    
-    if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadVideo, { timeout: 2000 });
-    } else {
-        setTimeout(loadVideo, 2000);
-    }
-    
-    // Show video when it can play (even partially loaded)
-    heroVideo.addEventListener('canplay', function() {
-        heroVideo.classList.add('ready');
-    }, { once: true });
-    
-    // Also show on loadeddata (first frame loaded)
-    heroVideo.addEventListener('loadeddata', function() {
-        heroVideo.classList.add('ready');
-    }, { once: true });
 });
 
 // Typewriter Effect for Hero Tagline
