@@ -199,3 +199,155 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Scroll Progress Indicator
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollProgress = document.getElementById('scrollProgress');
+    if (!scrollProgress) return;
+    
+    function updateScrollProgress() {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight) * 100;
+        scrollProgress.style.width = scrolled + '%';
+    }
+    
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    updateScrollProgress();
+});
+
+// Intersection Observer for Scroll Reveal Animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+        // If reduced motion, just show everything immediately
+        document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
+            el.classList.add('animate-in');
+        });
+        return;
+    }
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all scroll reveal elements
+    document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
+        observer.observe(el);
+    });
+});
+
+// Count-up Animation for Trust Indicators
+document.addEventListener('DOMContentLoaded', function() {
+    const trustNumbers = document.querySelectorAll('.trust-number[data-count]');
+    
+    const countUpObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                entry.target.classList.add('counted');
+                const target = parseInt(entry.target.getAttribute('data-count'));
+                const suffix = entry.target.getAttribute('data-suffix') || '';
+                const duration = 2000; // 2 seconds
+                const steps = 60;
+                const increment = target / steps;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        entry.target.textContent = target + suffix;
+                        clearInterval(timer);
+                    } else {
+                        entry.target.textContent = Math.floor(current) + suffix;
+                    }
+                }, duration / steps);
+                
+                countUpObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    trustNumbers.forEach(num => {
+        countUpObserver.observe(num);
+    });
+});
+
+// Parallax Effect for Hero Video
+document.addEventListener('DOMContentLoaded', function() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    
+    let ticking = false;
+    
+    function updateParallax() {
+        const scrollY = window.scrollY;
+        const heroHeight = hero.offsetHeight;
+        
+        if (scrollY < heroHeight) {
+            const offset = scrollY * 0.3; // Parallax speed
+            hero.style.setProperty('--scroll-offset', offset);
+            hero.classList.add('parallax-active');
+        }
+        
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }, { passive: true });
+});
+
+// Typewriter Effect for Hero Tagline
+document.addEventListener('DOMContentLoaded', function() {
+    const heroTagline = document.querySelector('.hero-tagline');
+    if (!heroTagline) return;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        heroTagline.style.opacity = '1';
+        return;
+    }
+    
+    const text = heroTagline.textContent;
+    heroTagline.textContent = '';
+    heroTagline.style.opacity = '1';
+    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
+    heroTagline.style.whiteSpace = 'nowrap';
+    heroTagline.style.overflow = 'hidden';
+    
+    let index = 0;
+    const speed = 50; // milliseconds per character
+    
+    function typeWriter() {
+        if (index < text.length) {
+            heroTagline.textContent += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, speed);
+        } else {
+            // Remove cursor after typing is complete
+            setTimeout(() => {
+                heroTagline.style.borderRight = 'none';
+            }, 500);
+        }
+    }
+    
+    // Start typing after a short delay
+    setTimeout(typeWriter, 500);
+});
+
