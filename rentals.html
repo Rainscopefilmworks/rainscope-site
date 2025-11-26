@@ -57,29 +57,42 @@
       gtag('config', 'G-7RRQQ33JKM');
     </script>
     
-    <!-- Structured Data -->
+    <!-- Structured Data - Equipment Rental Service -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Film Equipment Rentals",
-      "description": "Rent professional film equipment in Vancouver, BC. Cameras, lighting, audio gear, and production equipment available for rent. Reliable, well-maintained gear at competitive rates.",
+      "@type": "RentalStore",
+      "name": "Rainscope Filmworks Equipment Rentals",
+      "description": "Professional film equipment rentals in Vancouver, BC. Rent cameras, lighting, audio gear, gimbals, monitors, and production equipment for film and video production.",
       "url": "https://rainscopefilmworks.com/rentals.html",
-      "provider": {
-        "@type": "LocalBusiness",
-        "name": "Rainscope Filmworks",
-        "telephone": "604-910-2845",
-        "email": "rentals@rainscopefilmworks.com",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "1868 Glen Dr #235",
-          "addressLocality": "Vancouver",
-          "addressRegion": "BC",
-          "postalCode": "V6A 4K4",
-          "addressCountry": "CA"
-        }
+      "image": "https://rainscopefilmworks.com/assets/images/logo.png",
+      "telephone": "604-910-2845",
+      "email": "rentals@rainscopefilmworks.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1868 Glen Dr #235",
+        "addressLocality": "Vancouver",
+        "addressRegion": "BC",
+        "postalCode": "V6A 4K4",
+        "addressCountry": "CA"
       },
-      "serviceType": "Equipment Rental",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 49.2683796,
+        "longitude": -123.0806155
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "17:00"
+      },
       "areaServed": [
         {
           "@type": "City",
@@ -125,28 +138,73 @@
           "@id": "https://www.wikidata.org/wiki/Q1974"
         }
       ],
-      "availableChannel": {
-        "@type": "ServiceChannel",
-        "serviceUrl": "https://rainscopefilmworks.com/rentals.html",
-        "servicePhone": "604-910-2845"
-      },
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Film Equipment Rentals",
         "itemListElement": [
           {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://rainscopefilmworks.com/"
+            "@type": "OfferCatalog",
+            "name": "Camera Equipment",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Camera Rental"
+                }
+              }
+            ]
           },
           {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Rentals",
-            "item": "https://rainscopefilmworks.com/rentals.html"
+            "@type": "OfferCatalog",
+            "name": "Lighting Equipment",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Lighting Rental"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "OfferCatalog",
+            "name": "Audio Equipment",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Audio Gear Rental"
+                }
+              }
+            ]
           }
         ]
       }
+    }
+    </script>
+    
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://rainscopefilmworks.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Rentals",
+          "item": "https://rainscopefilmworks.com/rentals.html"
+        }
+      ]
     }
     </script>
     
