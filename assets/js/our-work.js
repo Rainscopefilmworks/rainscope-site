@@ -106,6 +106,7 @@ console.log('our-work.js loaded');
                 
                 // First, inject the @keyframes if it doesn't exist
                 const styleId = 'infinite-scroll-keyframes';
+                let keyframesInjected = false;
                 if (!document.getElementById(styleId)) {
                     const keyframesStyle = document.createElement('style');
                     keyframesStyle.id = styleId;
@@ -120,27 +121,66 @@ console.log('our-work.js loaded');
                         }
                     `;
                     document.head.appendChild(keyframesStyle);
+                    keyframesInjected = true;
                     console.log('✅ Injected @keyframes infiniteScroll');
+                } else {
+                    console.log('✅ @keyframes already exists');
                 }
                 
-                // Apply animation inline
-                carousel.style.animation = 'infiniteScroll 30s linear infinite';
-                carousel.style.willChange = 'transform';
-                
-                // Check again after applying inline
-                setTimeout(() => {
-                    const newComputedStyle = window.getComputedStyle(carousel);
-                    const newAnimationName = newComputedStyle.getPropertyValue('animation-name');
-                    const newAnimationDuration = newComputedStyle.getPropertyValue('animation-duration');
-                    console.log('After inline fallback - Animation name:', newAnimationName);
-                    console.log('After inline fallback - Animation duration:', newAnimationDuration);
+                // Wait a moment for keyframes to be parsed if we just injected them
+                const applyAnimation = () => {
+                    // Apply animation inline with !important to override any conflicting styles
+                    carousel.style.setProperty('animation', 'infiniteScroll 30s linear infinite', 'important');
+                    carousel.style.setProperty('will-change', 'transform', 'important');
                     
-                    if (newAnimationName && newAnimationName !== 'none') {
-                        console.log('✅ Animation successfully applied via inline fallback');
-                    } else {
-                        console.error('❌ Animation still not working after inline fallback');
-                    }
-                }, 100);
+                    // Force reflow
+                    carousel.offsetHeight;
+                    
+                    // Check again after applying inline
+                    setTimeout(() => {
+                        const newComputedStyle = window.getComputedStyle(carousel);
+                        const newAnimationName = newComputedStyle.getPropertyValue('animation-name');
+                        const newAnimationDuration = newComputedStyle.getPropertyValue('animation-duration');
+                        const newAnimationIteration = newComputedStyle.getPropertyValue('animation-iteration-count');
+                        const newTransform = newComputedStyle.getPropertyValue('transform');
+                        
+                        console.log('--- After Inline Fallback ---');
+                        console.log('Animation name:', newAnimationName);
+                        console.log('Animation duration:', newAnimationDuration);
+                        console.log('Animation iteration:', newAnimationIteration);
+                        console.log('Current transform:', newTransform);
+                        
+                        // Verify keyframes exist
+                        const keyframesCheck = Array.from(document.styleSheets).map(sheet => {
+                            try {
+                                return Array.from(sheet.cssRules || []).filter(rule => 
+                                    rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'infiniteScroll'
+                                );
+                            } catch(e) {
+                                return [];
+                            }
+                        }).flat();
+                        console.log('Found @keyframes infiniteScroll:', keyframesCheck.length);
+                        
+                        if (newAnimationName && newAnimationName !== 'none' && newAnimationName.includes('infiniteScroll')) {
+                            console.log('✅ Animation successfully applied via inline fallback');
+                            // Force animation to start
+                            carousel.style.animation = 'none';
+                            carousel.offsetHeight;
+                            carousel.style.setProperty('animation', 'infiniteScroll 30s linear infinite', 'important');
+                        } else {
+                            console.error('❌ Animation still not working after inline fallback');
+                            console.error('Animation name is:', newAnimationName);
+                        }
+                    }, 200);
+                };
+                
+                if (keyframesInjected) {
+                    // Wait for keyframes to be parsed
+                    setTimeout(applyAnimation, 50);
+                } else {
+                    applyAnimation();
+                }
             } else {
                 console.log('✅ CSS animation detected and applied');
             }
