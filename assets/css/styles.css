@@ -751,12 +751,16 @@ nav .nav-link[href="shop.html"],
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+}
+
+/* Trust items with scroll-reveal class should animate */
+.trust-item.scroll-reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.trust-item.animate-in {
+.trust-item.scroll-reveal.animate-in {
     opacity: 1;
     transform: translateY(0);
 }
@@ -798,6 +802,18 @@ nav .nav-link[href="shop.html"],
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: clamp(3rem, 6vw, 4rem);
     margin-top: 1rem;
+}
+
+/* Portfolio subtitle with scroll-reveal should animate */
+.portfolio-subtitle.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio-subtitle.scroll-reveal.animate-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .portfolio-preview-grid {

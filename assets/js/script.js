@@ -216,72 +216,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Intersection Observer for Scroll Reveal Animations
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (prefersReducedMotion) {
-        // If reduced motion, just show everything immediately
-        document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
-            el.classList.add('animate-in');
-        });
-        return;
-    }
-    
-    // Function to check if element is partially visible
-    function isPartiallyVisible(element) {
-        const rect = element.getBoundingClientRect();
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        return rect.top < windowHeight && rect.bottom > 0;
-    }
-    
-    const observerOptions = {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
+(function() {
+    function initScrollAnimations() {
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (prefersReducedMotion) {
+            // If reduced motion, just show everything immediately
+            document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title').forEach(el => {
+                el.classList.add('animate-in');
+            });
+            return;
+        }
+        
+        // Function to check if element is partially visible
+        function isPartiallyVisible(element) {
+            const rect = element.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            return rect.top < windowHeight && rect.bottom > 0;
+        }
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Get all elements that need animation
+        const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
+        
+        if (animatedElements.length === 0) {
+            console.warn('No animated elements found');
+            return;
+        }
+        
+        // Check elements that are already in viewport on load
+        animatedElements.forEach((el) => {
+            if (isPartiallyVisible(el)) {
+                // Add a small delay for elements already visible to allow CSS to apply
+                setTimeout(() => {
+                    el.classList.add('animate-in');
+                }, 100);
+            } else {
+                // Observe elements not yet visible
+                observer.observe(el);
             }
         });
-    }, observerOptions);
-    
-    // Get all elements that need animation
-    const animatedElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .section-title');
-    
-    // Check elements that are already in viewport on load
-    animatedElements.forEach((el) => {
-        if (isPartiallyVisible(el)) {
-            // Add a small delay for elements already visible to allow CSS to apply
-            setTimeout(() => {
-                el.classList.add('animate-in');
-            }, 200);
-        } else {
-            // Observe elements not yet visible
-            observer.observe(el);
-        }
-    });
-    
-    // Also observe on scroll for elements that come into view
-    let ticking = false;
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                animatedElements.forEach(el => {
-                    if (!el.classList.contains('animate-in') && isPartiallyVisible(el)) {
-                        el.classList.add('animate-in');
-                        observer.unobserve(el);
-                    }
+        
+        // Also observe on scroll for elements that come into view
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    animatedElements.forEach(el => {
+                        if (!el.classList.contains('animate-in') && isPartiallyVisible(el)) {
+                            el.classList.add('animate-in');
+                            observer.unobserve(el);
+                        }
+                    });
+                    ticking = false;
                 });
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-});
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+    
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScrollAnimations);
+    } else {
+        // DOM is already ready
+        initScrollAnimations();
+    }
+})();
 
 // Count-up Animation for Trust Indicators - Deferred for performance
 document.addEventListener('DOMContentLoaded', function() {
@@ -387,41 +402,59 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Typewriter Effect for Hero Tagline
-document.addEventListener('DOMContentLoaded', function() {
-    const heroTagline = document.querySelector('.hero-tagline');
-    if (!heroTagline) return;
-    
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-        heroTagline.style.opacity = '1';
-        return;
-    }
-    
-    // Get text and clear it
-    const text = heroTagline.textContent.trim();
-    heroTagline.textContent = '';
-    heroTagline.style.opacity = '1';
-    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
-    heroTagline.style.whiteSpace = 'nowrap';
-    heroTagline.style.overflow = 'hidden';
-    
-    let index = 0;
-    const speed = 50; // milliseconds per character
-    
-    function typeWriter() {
-        if (index < text.length) {
-            heroTagline.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, speed);
-        } else {
-            // Remove cursor after typing is complete
-            setTimeout(() => {
-                heroTagline.style.borderRight = 'none';
-            }, 500);
+(function() {
+    function initTypewriter() {
+        const heroTagline = document.querySelector('.hero-tagline');
+        if (!heroTagline) {
+            console.warn('Hero tagline not found');
+            return;
         }
+        
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+            heroTagline.style.opacity = '1';
+            return;
+        }
+        
+        // Get text and clear it
+        const text = heroTagline.textContent.trim();
+        if (!text) {
+            console.warn('Hero tagline has no text');
+            return;
+        }
+        
+        heroTagline.textContent = '';
+        heroTagline.style.opacity = '1';
+        heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
+        heroTagline.style.whiteSpace = 'nowrap';
+        heroTagline.style.overflow = 'hidden';
+        
+        let index = 0;
+        const speed = 50; // milliseconds per character
+        
+        function typeWriter() {
+            if (index < text.length) {
+                heroTagline.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, speed);
+            } else {
+                // Remove cursor after typing is complete
+                setTimeout(() => {
+                    heroTagline.style.borderRight = 'none';
+                }, 500);
+            }
+        }
+        
+        // Start typing after a short delay
+        setTimeout(typeWriter, 500);
     }
     
-    // Start typing after a short delay
-    setTimeout(typeWriter, 500);
-});
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTypewriter);
+    } else {
+        // DOM is already ready
+        initTypewriter();
+    }
+})();
 
