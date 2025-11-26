@@ -398,17 +398,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Typewriter Effect for Hero Tagline
+// Disabled on mobile to improve LCP performance
 document.addEventListener('DOMContentLoaded', function() {
     const heroTagline = document.querySelector('.hero-tagline');
     if (!heroTagline) return;
     
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
+    
+    // Disable typewriter on mobile devices (improves LCP significantly)
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (prefersReducedMotion || isMobile) {
+        // On mobile or reduced motion, show text immediately
         heroTagline.style.opacity = '1';
+        heroTagline.style.borderRight = 'none';
         return;
     }
     
-    // Get text and clear it
+    // Desktop: Get text and clear it for typewriter effect
     const text = heroTagline.textContent.trim();
     if (!text) return;
     

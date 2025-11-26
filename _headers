@@ -22,13 +22,13 @@
 /assets/videos/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache CSS and JS (conservative cache with versioning support)
+# Cache CSS and JS (long cache with versioning support)
 # Versioned URLs (?v=X) allow for safe cache busting when needed
 /assets/css/*
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/js/*
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=31536000, immutable
 
 # HTML files - no cache (always check for updates)
 /*.html
