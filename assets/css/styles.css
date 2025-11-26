@@ -528,7 +528,7 @@ body::after {
     display: block;
 }
 
-/* Poster image shows immediately via poster attribute while video loads */
+/* Video background shows while video loads */
 
 /* Show video when it's ready to play */
 .hero-video-container video.ready {
