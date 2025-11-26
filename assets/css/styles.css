@@ -448,6 +448,20 @@ nav .nav-link[href="shop.html"],
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: #173633;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.hero-video-container video[poster] {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Show video when it's ready to play */
+.hero-video-container video.ready {
+    opacity: 1;
 }
 
 .hero-content {

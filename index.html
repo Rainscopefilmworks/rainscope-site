@@ -73,6 +73,8 @@
     
     <!-- Preload Critical Resources -->
     <link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
+    <!-- Preconnect to video CDN if using external hosting -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Load CSS - Critical for above-the-fold -->
     <link rel="stylesheet" href="assets/css/styles.css" media="all">
@@ -208,7 +210,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-video-container">
-            <video autoplay muted loop playsinline preload="metadata" fetchpriority="high">
+            <video autoplay muted loop playsinline preload="metadata" fetchpriority="high" poster="assets/images/logo.png">
                 <source src="assets/videos/hero-video.mp4" type="video/mp4">
             </video>
         </div>

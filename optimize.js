@@ -376,9 +376,9 @@ async function optimizeMP4(inputPath, outputPath) {
         const originalSize = getFileSize(inputPath);
         const originalSizeMB = parseFloat(originalSize);
         
-        // Always optimize files over 20MB to ensure they stay well under 25MB
-        // Skip only if file is already well under limit (<20MB)
-        if (originalSizeMB < 20) {
+        // Optimize files over 10MB (including hero video which is 17MB)
+        // Skip only if file is already well optimized (<10MB)
+        if (originalSizeMB < 10) {
             return {
                 success: true,
                 originalSize,
@@ -395,11 +395,16 @@ async function optimizeMP4(inputPath, outputPath) {
         const tempPath = path.join(dir, `${baseName}.tmp${ext}`);
 
         // Use more aggressive compression for large files (>25MB)
+        // For hero videos (10-25MB), use slightly more compression for faster loading
         const isLarge = originalSizeMB > 25;
-        const crf = isLarge ? CONFIG.videos.mp4.crfLarge : CONFIG.videos.mp4.crf;
+        const isHeroVideo = originalSizeMB >= 10 && originalSizeMB <= 25;
+        const crf = isLarge ? CONFIG.videos.mp4.crfLarge : (isHeroVideo ? 30 : CONFIG.videos.mp4.crf);
 
         // Use ffmpeg to compress video - preserve original filename
-        const command = `ffmpeg -i "${inputPath}" -c:v libx264 -crf ${crf} -preset ${CONFIG.videos.mp4.preset} -c:a aac -b:a 128k -movflags +faststart "${tempPath}" -y`;
+        // For hero videos, optimize for web: lower bitrate, faster preset, faststart for streaming
+        const audioBitrate = isHeroVideo ? '96k' : '128k';
+        const preset = isHeroVideo ? 'fast' : CONFIG.videos.mp4.preset;
+        const command = `ffmpeg -i "${inputPath}" -c:v libx264 -crf ${crf} -preset ${preset} -c:a aac -b:a ${audioBitrate} -movflags +faststart -pix_fmt yuv420p "${tempPath}" -y`;
 
         execSync(command, { stdio: 'ignore' });
 

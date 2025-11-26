@@ -322,6 +322,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 500);
 });
 
+// Optimize video loading - start loading video after page is interactive
+document.addEventListener('DOMContentLoaded', function() {
+    const heroVideo = document.querySelector('.hero video');
+    if (!heroVideo) return;
+    
+    // Change preload to 'auto' after a short delay to start loading video
+    // This allows the page to render first, then load the video
+    setTimeout(function() {
+        if (heroVideo.readyState === 0) { // HAVE_NOTHING
+            heroVideo.preload = 'auto';
+            // Trigger video load
+            heroVideo.load();
+        }
+    }, 1000);
+    
+    // Show video when it can play (even partially loaded)
+    heroVideo.addEventListener('canplay', function() {
+        heroVideo.classList.add('ready');
+    }, { once: true });
+    
+    // Also show on loadeddata (first frame loaded)
+    heroVideo.addEventListener('loadeddata', function() {
+        heroVideo.classList.add('ready');
+    }, { once: true });
+    
+    // Fallback: show video after 2 seconds even if not ready
+    setTimeout(function() {
+        heroVideo.classList.add('ready');
+    }, 2000);
+});
+
 // Typewriter Effect for Hero Tagline - Deferred for performance
 document.addEventListener('DOMContentLoaded', function() {
     // Delay typewriter to not block initial render
