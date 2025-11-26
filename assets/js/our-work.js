@@ -1,20 +1,12 @@
 // Infinite Auto-Scrolling Posters Carousel for Our Work Page
 // Initialize immediately (works even if script loads async late)
-console.log('our-work.js loaded');
 (function initInfinitePostersCarousel() {
-    console.log('initInfinitePostersCarousel function called');
     function initCarousel() {
         const carousel = document.getElementById('postersCarousel');
-        if (!carousel) {
-            console.warn('Posters carousel element not found');
-            return;
-        }
+        if (!carousel) return;
         
         const slides = Array.from(carousel.querySelectorAll('.poster-slide'));
-        if (slides.length === 0) {
-            console.warn('No poster slides found');
-            return;
-        }
+        if (slides.length === 0) return;
         
         // Duplicate slides once for seamless infinite scroll
         // Moving by 50% will loop perfectly back to start
@@ -56,55 +48,13 @@ console.log('our-work.js loaded');
             // Enable infinite scroll animation via CSS class
             carousel.classList.add('infinite-scroll');
             
-            // Detailed debugging
+            // Check if CSS animation is applied
             const computedStyle = window.getComputedStyle(carousel);
             const animationName = computedStyle.getPropertyValue('animation-name');
-            const animationDuration = computedStyle.getPropertyValue('animation-duration');
-            const animationTimingFunction = computedStyle.getPropertyValue('animation-timing-function');
-            const animationIterationCount = computedStyle.getPropertyValue('animation-iteration-count');
-            const animationPlayState = computedStyle.getPropertyValue('animation-play-state');
-            const transform = computedStyle.getPropertyValue('transform');
-            const display = computedStyle.getPropertyValue('display');
-            const width = computedStyle.getPropertyValue('width');
-            const carouselWidth = carousel.offsetWidth;
-            const scrollWidth = carousel.scrollWidth;
             
-            console.log('=== CAROUSEL DEBUG INFO ===');
-            console.log('Posters carousel initialized with', originalSlides.length, 'slides');
-            console.log('Total slides (including duplicates):', carousel.querySelectorAll('.poster-slide').length);
-            console.log('Has infinite-scroll class:', carousel.classList.contains('infinite-scroll'));
-            console.log('--- Animation Properties ---');
-            console.log('Animation name:', animationName);
-            console.log('Animation duration:', animationDuration);
-            console.log('Animation timing function:', animationTimingFunction);
-            console.log('Animation iteration count:', animationIterationCount);
-            console.log('Animation play state:', animationPlayState);
-            console.log('--- Layout Properties ---');
-            console.log('Display:', display);
-            console.log('Width (computed):', width);
-            console.log('Width (offsetWidth):', carouselWidth);
-            console.log('Scroll width:', scrollWidth);
-            console.log('Transform:', transform);
-            console.log('--- CSS Check ---');
-            const allStyles = Array.from(document.styleSheets).map(sheet => {
-                try {
-                    return Array.from(sheet.cssRules || []).filter(rule => 
-                        rule.selectorText && rule.selectorText.includes('infinite-scroll')
-                    );
-                } catch(e) {
-                    return [];
-                }
-            }).flat();
-            console.log('Found CSS rules for infinite-scroll:', allStyles.length);
-            if (allStyles.length > 0) {
-                allStyles.forEach(rule => console.log('  -', rule.selectorText, rule.cssText.substring(0, 100)));
-            }
-            
-            // If animation isn't applied, force it inline
+            // If animation isn't applied, inject keyframes and apply inline as fallback
             if (!animationName || animationName === 'none' || animationName.trim() === '') {
-                console.warn('⚠️ CSS animation not detected, applying inline animation as fallback');
-                
-                // First, inject the @keyframes if it doesn't exist
+                // Inject the @keyframes if it doesn't exist
                 const styleId = 'infinite-scroll-keyframes';
                 let keyframesInjected = false;
                 if (!document.getElementById(styleId)) {
@@ -122,67 +72,20 @@ console.log('our-work.js loaded');
                     `;
                     document.head.appendChild(keyframesStyle);
                     keyframesInjected = true;
-                    console.log('✅ Injected @keyframes infiniteScroll');
-                } else {
-                    console.log('✅ @keyframes already exists');
                 }
                 
-                // Wait a moment for keyframes to be parsed if we just injected them
+                // Wait for keyframes to be parsed if we just injected them, then apply animation
                 const applyAnimation = () => {
-                    // Apply animation inline with !important to override any conflicting styles
                     carousel.style.setProperty('animation', 'infiniteScroll 30s linear infinite', 'important');
                     carousel.style.setProperty('will-change', 'transform', 'important');
-                    
-                    // Force reflow
-                    carousel.offsetHeight;
-                    
-                    // Check again after applying inline
-                    setTimeout(() => {
-                        const newComputedStyle = window.getComputedStyle(carousel);
-                        const newAnimationName = newComputedStyle.getPropertyValue('animation-name');
-                        const newAnimationDuration = newComputedStyle.getPropertyValue('animation-duration');
-                        const newAnimationIteration = newComputedStyle.getPropertyValue('animation-iteration-count');
-                        const newTransform = newComputedStyle.getPropertyValue('transform');
-                        
-                        console.log('--- After Inline Fallback ---');
-                        console.log('Animation name:', newAnimationName);
-                        console.log('Animation duration:', newAnimationDuration);
-                        console.log('Animation iteration:', newAnimationIteration);
-                        console.log('Current transform:', newTransform);
-                        
-                        // Verify keyframes exist
-                        const keyframesCheck = Array.from(document.styleSheets).map(sheet => {
-                            try {
-                                return Array.from(sheet.cssRules || []).filter(rule => 
-                                    rule.type === CSSRule.KEYFRAMES_RULE && rule.name === 'infiniteScroll'
-                                );
-                            } catch(e) {
-                                return [];
-                            }
-                        }).flat();
-                        console.log('Found @keyframes infiniteScroll:', keyframesCheck.length);
-                        
-                        if (newAnimationName && newAnimationName !== 'none' && newAnimationName.includes('infiniteScroll')) {
-                            console.log('✅ Animation successfully applied via inline fallback');
-                            // Force animation to start
-                            carousel.style.animation = 'none';
-                            carousel.offsetHeight;
-                            carousel.style.setProperty('animation', 'infiniteScroll 30s linear infinite', 'important');
-                        } else {
-                            console.error('❌ Animation still not working after inline fallback');
-                            console.error('Animation name is:', newAnimationName);
-                        }
-                    }, 200);
+                    carousel.offsetHeight; // Force reflow
                 };
                 
                 if (keyframesInjected) {
-                    // Wait for keyframes to be parsed
                     setTimeout(applyAnimation, 50);
                 } else {
                     applyAnimation();
                 }
-            } else {
-                console.log('✅ CSS animation detected and applied');
             }
             
             // Force animation restart if needed
@@ -212,11 +115,7 @@ console.log('our-work.js loaded');
     setTimeout(function() {
         const carousel = document.getElementById('postersCarousel');
         if (carousel && !carousel.classList.contains('infinite-scroll')) {
-            console.log('Retrying carousel initialization...');
             initCarousel();
         }
     }, 500);
-    
-    // Expose function globally as fallback
-    window.initCarouselManually = initCarousel;
 })();
