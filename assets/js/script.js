@@ -1,6 +1,8 @@
 // Testimonials Slider
-console.log('script.js file loaded and executing');
+console.log('script.js file loaded and executing - line 2');
+console.log('Current time:', new Date().toISOString());
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Testimonials slider DOMContentLoaded fired');
     try {
         const slides = document.querySelectorAll('.testimonial-slide');
         const indicators = document.querySelectorAll('.indicator');
@@ -217,9 +219,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Intersection Observer for Scroll Reveal Animations
-console.log('Script loaded - initializing scroll animations');
+console.log('Scroll animations code reached');
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOMContentLoaded fired - setting up animations');
+    console.log('Scroll animations DOMContentLoaded fired');
     
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -404,9 +406,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Typewriter Effect for Hero Tagline
-console.log('Setting up typewriter effect');
+console.log('Typewriter effect code reached');
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOMContentLoaded fired - setting up typewriter');
+    console.log('Typewriter DOMContentLoaded fired');
     const heroTagline = document.querySelector('.hero-tagline');
     
     if (!heroTagline) {
