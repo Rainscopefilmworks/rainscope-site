@@ -941,8 +941,10 @@ body::after {
     
     .hero-buttons {
         flex-direction: column;
-        width: auto;
-        max-width: min(90vw, 6000px);
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        right: 0;
     }
     
     .hero-buttons .btn-primary {
