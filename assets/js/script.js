@@ -421,9 +421,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     heroTagline.textContent = '';
     heroTagline.style.opacity = '1';
-    heroTagline.style.borderRight = '2px solid rgba(255, 255, 255, 0.8)';
     heroTagline.style.whiteSpace = 'nowrap';
     heroTagline.style.overflow = 'hidden';
+    heroTagline.classList.add('typewriter');
     
     let index = 0;
     const speed = 50; // milliseconds per character
@@ -434,10 +434,8 @@ document.addEventListener('DOMContentLoaded', function() {
             index++;
             setTimeout(typeWriter, speed);
         } else {
-            // Remove cursor after typing is complete
-            setTimeout(() => {
-                heroTagline.style.borderRight = 'none';
-            }, 500);
+            // Keep cursor visible (don't remove it)
+            // The cursor will blink via CSS animation
         }
     }
     
