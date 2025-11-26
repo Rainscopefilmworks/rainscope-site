@@ -88,27 +88,44 @@
 })();
 
 // Accordion functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const accordionItems = document.querySelectorAll('.accordion-item');
-
-    accordionItems.forEach(item => {
-        const header = item.querySelector('.accordion-header');
+// Initialize immediately (works even if script loads async late)
+(function initAccordion() {
+    function initAccordionFunctionality() {
+        const accordionItems = document.querySelectorAll('.accordion-item');
         
-        header.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
+        if (!accordionItems || accordionItems.length === 0) {
+            return; // Exit if no accordion items on this page
+        }
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
             
-            // Close all items
-            accordionItems.forEach(accItem => {
-                accItem.classList.remove('active');
+            if (!header) return;
+            
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                accordionItems.forEach(accItem => {
+                    accItem.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
             });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                item.classList.add('active');
-            }
         });
-    });
-});
+    }
+    
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAccordionFunctionality);
+    } else {
+        // DOM already loaded, initialize immediately
+        initAccordionFunctionality();
+    }
+})();
 
 // Mobile Menu Toggle
 // Initialize immediately (works even if script loads async late)
