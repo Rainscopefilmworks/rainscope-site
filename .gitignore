@@ -63,3 +63,9 @@ SQUARE-PAYMENT-SETUP.md
 
 # R2 Configuration (contains secrets)
 r2-config.json
+
+# Media assets - now stored on Cloudflare R2, keep local copies but don't track in git
+assets/images/**
+assets/videos/**
+!assets/images/.gitkeep
+!assets/videos/.gitkeep
