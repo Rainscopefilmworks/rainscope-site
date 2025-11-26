@@ -12,24 +12,32 @@ rainscope-site/
 ├── our-team.html           # Our team page
 ├── contact.html            # Contact page
 ├── serve.py                # Local development server script
+├── optimize.js             # Image and video optimization script
+├── optimize-hero-video.sh  # Hero video preview generator
+├── generate-favicons.js    # Favicon generator script
 ├── _headers                # Cloudflare Pages headers configuration
 ├── _redirects              # Cloudflare Pages redirects configuration
 ├── .gitignore              # Git ignore rules
 ├── README.md               # This file
+├── README-OPTIMIZATION.md  # Optimization guide
+├── SECURITY-AUDIT.md       # Security documentation
 ├── assets/
 │   ├── css/
 │   │   └── styles.css      # Main stylesheet
 │   ├── js/
-│   │   └── script.js       # JavaScript functionality
+│   │   ├── script.js       # Main JavaScript functionality
+│   │   └── our-work.js     # Our work page scripts
 │   ├── images/
 │   │   ├── testimonials/   # Testimonial images
-│   │   │   ├── testimonial-1.jpg
-│   │   │   ├── testimonial-2.jpg
-│   │   │   └── testimonial-3.jpg
-│   │   └── hero-fallback.jpg  # Fallback image for video
+│   │   ├── posters/        # Poster images
+│   │   ├── work/           # Work showcase images/gifs
+│   │   ├── team/           # Team member photos
+│   │   ├── contact/        # Contact page images
+│   │   └── logo.png        # Company logo
 │   └── videos/
-│       └── hero-video.mp4  # Hero section video
-└── main.py                 # Flask app (optional, not used for static site)
+│       ├── hero-video.mp4  # Hero section video
+│       ├── hero-video-preview.mp4  # Optimized preview version
+│       └── work/           # Work showcase videos
 ```
 
 ## Setup
@@ -37,7 +45,6 @@ rainscope-site/
 1. Clone the repository
 2. Add your media files:
    - Place hero video in `assets/videos/hero-video.mp4`
-   - Place hero fallback image in `assets/images/hero-fallback.jpg`
    - Place testimonial images in `assets/images/testimonials/`:
      - `testimonial-1.jpg` (Noemi Lopez)
      - `testimonial-2.jpg` (Anton Hing)
