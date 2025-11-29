@@ -1720,7 +1720,7 @@
 
         const line_items = cart.flatMap(l => {
           const units = Math.max(1, parseInt(l.qty || "1", 10));
-          const base  = { catalog_object_id: l.variationId, quantity: daysBill };
+          const base  = { catalog_object_id: l.variationId, quantity: String(daysBill) };
           return Array.from({ length: units }, () => base);
         });
 
