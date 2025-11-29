@@ -1454,6 +1454,11 @@
               location_id: LOCATION_ID,
               line_items,
               source_id: sourceId,
+              // Pass customer info explicitly for receipt
+              customer_email: email_address,
+              customer_name: `${given_name}${family_name ? ' ' + family_name : ''}`.trim(),
+              // Request email receipt
+              delivery_method: "EMAIL",
             })
           });
 
@@ -1478,7 +1483,7 @@
           }
 
           setStatus("Purchase successful!");
-          alert("Thank you for your purchase! Your order has been processed.");
+          alert("Thank you for your purchase! Your order has been processed. A receipt will be emailed to " + email_address + ".");
           
           // Clear cart
           cart.length = 0;
