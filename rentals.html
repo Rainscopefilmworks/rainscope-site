@@ -1710,10 +1710,17 @@
           return;
         }
         const daysBill = billableDays(daysActual);
+        
+        // Validate that billable days is positive
+        if (daysBill <= 0) {
+          alert("Invalid date range. Billed days must be greater than 0.");
+          setStatus("");
+          return;
+        }
 
         const line_items = cart.flatMap(l => {
           const units = Math.max(1, parseInt(l.qty || "1", 10));
-          const base  = { catalog_object_id: l.variationId, quantity: String(daysBill) };
+          const base  = { catalog_object_id: l.variationId, quantity: daysBill };
           return Array.from({ length: units }, () => base);
         });
 
