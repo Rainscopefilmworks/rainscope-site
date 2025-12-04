@@ -1,4 +1,21 @@
-# Cloudflare Pages Redirects
-# Add redirects here if needed
-# Example: /old-page /new-page 301
+# === Old Product Pages ===
 
+
+
+/rentals/p/*        /rentals    301
+
+# === Old Photography Categories ===
+
+/rentals/photography/*     /rentals    301
+
+# === Old Camera Accessory Pages ===
+
+/rentals/camera/*          /rentals    301
+
+# === Old Tripods, Mounts, Jib, Crane, Dolly, Slider ===
+
+/rentals/tripods-and-mounts/*    /rentals    301
+
+# === Fallback for Any Old Rentals Subpage ===
+
+/rentals/*       /rentals    301
