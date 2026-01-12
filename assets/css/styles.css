@@ -2097,9 +2097,12 @@ body::after {
 }
 
 .team-container {
-    max-width: min(90vw, 6000px);
+    max-width: min(90vw, 1400px);
     margin: 0 auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .team-title {
@@ -2114,7 +2117,7 @@ body::after {
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: clamp(1.5rem, 3vw, 3rem);
     max-width: 6000px;
     margin: 0 auto;
@@ -2132,19 +2135,23 @@ body::after {
 }
 
 .team-member-image {
-    width: clamp(200px, 22vw, 280px);
-    height: clamp(200px, 22vw, 280px);
+    width: clamp(180px, 18vw, 240px);
+    height: clamp(180px, 18vw, 240px);
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: clamp(1.5rem, 3vw, 2rem);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     border: 3px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    position: relative;
+    aspect-ratio: 1 / 1;
 }
 
 .team-member-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
 }
 
@@ -2172,7 +2179,7 @@ body::after {
 
 @media (max-width: 1200px) {
     .team-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: clamp(2rem, 4vw, 3rem);
     }
 }
@@ -2188,8 +2195,8 @@ body::after {
     }
     
     .team-member-image {
-        width: clamp(160px, 35vw, 220px);
-        height: clamp(160px, 35vw, 220px);
+        width: clamp(140px, 32vw, 180px);
+        height: clamp(140px, 32vw, 180px);
     }
 }
 
@@ -2201,6 +2208,11 @@ body::after {
     
     .team-title {
         margin-bottom: clamp(2rem, 5vw, 3rem);
+    }
+    
+    .team-member-image {
+        width: clamp(160px, 50vw, 200px);
+        height: clamp(160px, 50vw, 200px);
     }
 }
 
