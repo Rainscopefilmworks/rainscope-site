@@ -1068,7 +1068,10 @@
                   <div class="rs-summary">
                     <div>Days: <span id="rs-days">—</span></div>
                     <div>Per-day subtotal: <span id="rs-subday">—</span></div>
-                    <div class="rs-total">Estimated total (excl. tax): <strong id="rs-total">—</strong></div>
+                    <div>Subtotal: <span id="rs-subtotal">—</span></div>
+                    <div>GST (5%): <span id="rs-gst">—</span></div>
+                    <div>Service Fee (3%): <span id="rs-service-fee">—</span></div>
+                    <div class="rs-total">Estimated total: <strong id="rs-total">—</strong></div>
                   </div>
 
                   <div class="rs-form">
@@ -1255,6 +1258,9 @@
       const $status = document.getElementById("rs-status");
       const $days = document.getElementById("rs-days");
       const $subDay = document.getElementById("rs-subday");
+      const $subtotal = document.getElementById("rs-subtotal");
+      const $gst = document.getElementById("rs-gst");
+      const $serviceFee = document.getElementById("rs-service-fee");
       const $total = document.getElementById("rs-total");
       const $cartPanel = document.getElementById("rs-cart");
       const $openCart = document.getElementById("rs-open-cart");
@@ -1355,14 +1361,24 @@
         if($count){ if(units>0){ $count.textContent = `(${units})`; $count.hidden=false; } else $count.hidden=true; }
       }
 
-      // >>> UPDATED: use billableDays() and display "actual (billed)"
+      // >>> UPDATED: use billableDays() and display "actual (billed)" with GST and service fee
       function computeTotals(){
         const daysActual = getDays();
         const daysBill   = billableDays(daysActual);
         const perDay = cart.reduce((sum,l)=> sum + priceNum(l.priceMoney) * Math.max(1,parseInt(l.qty||"1",10)), 0);
+        const subtotal = perDay * daysBill;
+        const GST_RATE = 0.05; // 5% GST
+        const SERVICE_FEE_RATE = 0.03; // 3% service fee
+        const gstAmount = Math.round(subtotal * GST_RATE);
+        const serviceFeeAmount = Math.round(subtotal * SERVICE_FEE_RATE);
+        const total = subtotal + gstAmount + serviceFeeAmount;
+        
         $days.textContent   = daysActual >= 0 ? `${daysActual} (billed ${daysBill})` : "—";
         $subDay.textContent = perDay ? money(perDay) : "—";
-        $total.textContent  = (perDay && daysBill) ? money(perDay * daysBill) : "—";
+        $subtotal.textContent = subtotal ? money(subtotal) : "—";
+        $gst.textContent = gstAmount > 0 ? money(gstAmount) : "—";
+        $serviceFee.textContent = serviceFeeAmount > 0 ? money(serviceFeeAmount) : "—";
+        $total.textContent  = total ? money(total) : "—";
       }
 
       function saveCart(){ localStorage.setItem("rs_cart", JSON.stringify(cart)); }
@@ -1725,6 +1741,50 @@
           const base  = { catalog_object_id: l.variationId, quantity: String(daysBill) };
           return Array.from({ length: units }, () => base);
         });
+
+        // Calculate subtotal for tax/service fee calculation
+        const subtotal = cart.reduce((sum, l) => {
+          const price = priceNum(l.priceMoney);
+          const units = Math.max(1, parseInt(l.qty || "1", 10));
+          return sum + (price * units * daysBill);
+        }, 0);
+
+        // Calculate 5% GST and 3% service fee separately
+        // Note: Square expects amounts in cents (smallest currency unit)
+        const GST_RATE = 0.05; // 5% GST
+        const SERVICE_FEE_RATE = 0.03; // 3% service fee
+        
+        // Calculate amounts in cents (multiply by 100)
+        const gstAmountCents = Math.round(subtotal * GST_RATE * 100);
+        const serviceFeeAmountCents = Math.round(subtotal * SERVICE_FEE_RATE * 100);
+        
+        // Add GST and service fee as separate line items
+        // Using name and base_price_money for custom line items (not in catalog)
+        // NOTE: The worker must handle both line item formats:
+        //   1. { catalog_object_id: "...", quantity: "..." } - for catalog items
+        //   2. { name: "...", quantity: "...", base_price_money: {...} } - for custom items
+        // Square's Orders API supports both formats when creating an order.
+        if (gstAmountCents > 0) {
+          line_items.push({
+            name: "GST (5%)",
+            quantity: "1",
+            base_price_money: {
+              amount: gstAmountCents,
+              currency: "CAD"
+            }
+          });
+        }
+        
+        if (serviceFeeAmountCents > 0) {
+          line_items.push({
+            name: "Service Fee (3%)",
+            quantity: "1",
+            base_price_money: {
+              amount: serviceFeeAmountCents,
+              currency: "CAD"
+            }
+          });
+        }
 
         // >>> UPDATED: note shows pickup/dropoff dates and days in between
         const note = `Rental: Pickup ${startStr}, Dropoff ${endStr} (${daysActual} day${daysActual !== 1 ? 's' : ''} in between, billed ${daysBill}). ${noteExtra || ""}`.trim();
