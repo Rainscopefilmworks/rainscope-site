@@ -1758,31 +1758,42 @@
         const gstAmountCents = Math.round(subtotal * GST_RATE * 100);
         const serviceFeeAmountCents = Math.round(subtotal * SERVICE_FEE_RATE * 100);
         
-        // Add GST and service fee as separate line items
-        // Using name and base_price_money for custom line items (not in catalog)
-        // NOTE: The worker must handle both line item formats:
-        //   1. { catalog_object_id: "...", quantity: "..." } - for catalog items
-        //   2. { name: "...", quantity: "...", base_price_money: {...} } - for custom items
-        // Square's Orders API supports both formats when creating an order.
-        if (gstAmountCents > 0) {
-          line_items.push({
-            name: "GST (5%)",
-            quantity: "1",
-            base_price_money: {
-              amount: gstAmountCents,
-              currency: "CAD"
-            }
-          });
+        // Apply GST as a tax to all line items
+        // Find GST tax from catalog (loaded earlier)
+        let gstTaxId = null;
+        if (objects && objects.length > 0) {
+          const gstTax = objects.find(o => 
+            o.type === "TAX" && 
+            o.tax_data && 
+            o.tax_data.name && 
+            o.tax_data.name.toLowerCase().includes("gst")
+          );
+          if (gstTax) {
+            gstTaxId = gstTax.id;
+          }
         }
         
+        const taxes = [];
+        if (gstTaxId) {
+          // Apply GST tax to the entire order (all line items)
+          taxes.push({
+            catalog_object_id: gstTaxId,
+            scope: "ORDER"
+          });
+        } else {
+          console.warn("GST tax not found in catalog. Make sure you have a tax named 'GST' in your Square catalog.");
+        }
+        
+        // Add service fee as a service charge (not a tax)
+        const service_charges = [];
         if (serviceFeeAmountCents > 0) {
-          line_items.push({
+          service_charges.push({
             name: "Service Fee (3%)",
-            quantity: "1",
-            base_price_money: {
+            amount_money: {
               amount: serviceFeeAmountCents,
               currency: "CAD"
-            }
+            },
+            calculation_phase: "TOTAL_PHASE"
           });
         }
 
@@ -1802,6 +1813,8 @@
             customer_id: cust.customer_id,
             location_id: LOCATION_ID,
             line_items,
+            taxes,
+            service_charges,
             note,
             publish: true,
             delivery_method: "EMAIL",
