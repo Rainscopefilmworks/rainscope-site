@@ -29,11 +29,11 @@ html {
     --color-surface-elevated: rgba(15, 44, 41, 0.95);
     --color-surface-card: rgba(15, 44, 41, 0.8);
     
-    /* Text Colors - High contrast for accessibility (WCAG AA compliant) */
+    /* Text Colors - High contrast for accessibility (WCAG AAA compliant) */
     --color-text-primary: #ffffff;
     --color-text-secondary: rgba(255, 255, 255, 0.95);
     --color-text-tertiary: rgba(255, 255, 255, 0.9);
-    --color-text-muted: rgba(255, 255, 255, 0.85);
+    --color-text-muted: rgba(255, 255, 255, 0.90);
     
     /* Border Colors */
     --color-border: rgba(255, 255, 255, 0.1);
@@ -44,7 +44,18 @@ html {
     --color-hover: rgba(255, 255, 255, 0.1);
     --color-active: rgba(255, 255, 255, 0.15);
     --color-focus: #00d4aa;
-    
+
+    /* Gradients - 2026 Visual Enhancement */
+    --gradient-primary: linear-gradient(135deg, #00d4aa 0%, #00b8d4 50%, #4fc3f7 100%);
+    --gradient-teal-cyan: linear-gradient(135deg, #00d4aa 0%, #00b8d4 100%);
+    --gradient-surface: linear-gradient(135deg, rgba(15, 44, 41, 0.8) 0%, rgba(23, 54, 51, 0.8) 100%);
+
+    /* Colored Shadows - Add depth and premium feel */
+    --shadow-colored-teal: 0 8px 32px rgba(0, 212, 170, 0.3);
+    --shadow-colored-cyan: 0 8px 32px rgba(0, 184, 212, 0.3);
+    --shadow-colored-blue: 0 8px 32px rgba(79, 195, 247, 0.25);
+    --shadow-glow-teal: 0 0 40px rgba(0, 212, 170, 0.4);
+
     /* Spacing Scale */
     --spacing-xs: 0.5rem;
     --spacing-sm: 0.75rem;

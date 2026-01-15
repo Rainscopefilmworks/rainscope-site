@@ -331,7 +331,58 @@
             }
           }
         ]
-      }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "3",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Noemi Lopez"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "Very easy to work with! Love the quick responses and was able to get my edit done just like my vision was described. Highly recommend! Thanks again.",
+          "datePublished": "2024-09-15"
+        },
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Anton Hing"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "I had the opportunity to work with them for a bunch of short films. Not only professional in manner but also in skills. Great people! Come to them with any project and they will assist you with amazing technical and creative knowledge.",
+          "datePublished": "2024-08-20"
+        },
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Danny Astefan"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "I use Rainscope as a regular rental house and they are nothing short of exceptional. Service is on point, gear is always in perfect condition and they're super kind! Highly recommended going to them for any of their services.",
+          "datePublished": "2024-07-10"
+        }
+      ]
     }
     </script>
     
@@ -346,6 +397,80 @@
         "name": "Home",
         "item": "https://rainscopefilmworks.com/"
       }]
+    }
+    </script>
+
+    <!-- FAQ Structured Data for Rich Results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What video production services does Rainscope Filmworks offer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rainscope Filmworks offers comprehensive video production services including full-service production, post-production (editing, color grading, sound design, motion graphics), commercial video production, wedding videography, corporate videos, and equipment rentals. We handle every aspect from concept development to final delivery, serving clients across Vancouver and Greater Vancouver."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does a typical video production project take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most video production projects take 2-4 weeks from initial consultation to final delivery, depending on the project's complexity and scope. Simple projects like social media content can be completed in 1-2 weeks, while larger productions such as commercials or wedding films may take 3-6 weeks. We also offer rush services for urgent needs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What areas does Rainscope Filmworks serve?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We serve Vancouver, Burnaby, Richmond, Surrey, Coquitlam, North Vancouver, West Vancouver, New Westminster, and throughout Greater Vancouver and British Columbia. Our team is experienced with filming across the Pacific Northwest and can travel for larger productions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in your video production service?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our full-service video production includes pre-production planning and storyboarding, professional on-location filming with cinema-grade equipment, professional editing and post-production, color grading for cinematic look, sound design and audio mixing, motion graphics and visual effects, and final delivery in your preferred format. We provide a complete end-to-end solution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does video production cost in Vancouver?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Video production costs vary based on project scope, duration, location requirements, and post-production needs. We offer flexible pricing options to fit different budgets without compromising quality. Contact us for a free consultation and custom quote tailored to your specific project requirements."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer equipment rentals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Rainscope Filmworks offers professional equipment rentals including cameras, lenses, lighting, audio equipment, and accessories. All our gear is well-maintained and available at competitive rates. We offer flexible rental periods and same-day pickup options for local clients in Vancouver."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you provide just post-production services?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! If you already have footage, we offer standalone post-production services including video editing, color grading, sound design, motion graphics, and final delivery. Our post-production team can work with footage from any camera or source to create polished, professional final products."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes Rainscope Filmworks different from other video production companies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rainscope Filmworks combines Pacific Northwest-inspired creativity with technical excellence. We deliver cinematic-quality videos that fit your budget, maintain quick response times and clear communication, offer comprehensive services from concept to delivery, use professional cinema-grade equipment, and are a trusted rental house with exceptional customer service. Our work is shaped by the beauty and creativity of the Pacific Northwest."
+          }
+        }
+      ]
     }
     </script>
 </head>
@@ -379,7 +504,7 @@
     <section class="hero">
         <div class="hero-video-container">
             <!-- Hero video - loads immediately on mobile for better UX -->
-            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" aria-label="Rainscope Filmworks hero video" role="img">
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" aria-label="Vancouver film production company - Pacific Northwest cinematic landscape showcasing creative video production services" role="img">
                 <source src="https://media.rainscopefilmworks.com/hero-videov3.mp4" type="video/mp4">
             </video>
         </div>
@@ -449,7 +574,7 @@
             <p class="portfolio-subtitle scroll-reveal">A glimpse of our latest creative projects</p>
             <div class="portfolio-preview-grid">
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Video production showcase - Rainscope Filmworks">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Commercial video production Vancouver - Creative spec ad showcasing cinematic storytelling and brand marketing">
                         <source src="https://media.rainscopefilmworks.com/work/work-7.mp4" type="video/mp4">
                     </video>
                     <div class="portfolio-overlay">
@@ -461,7 +586,7 @@
                     </div>
                 </a>
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Wedding video production - Rainscope Filmworks">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Vancouver wedding videography - Cinematic wedding film featuring emotional bride and groom moments in Pacific Northwest">
                             <source src="https://media.rainscopefilmworks.com/work/work-1.mp4" type="video/mp4">
                     </video>
                     <div class="portfolio-overlay">
@@ -473,7 +598,7 @@
                     </div>
                 </a>
                 <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Creative video production project - Rainscope Filmworks">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Social media content production Vancouver - Creative video for digital marketing and online engagement">
                             <source src="https://media.rainscopefilmworks.com/work/work-6.mp4" type="video/mp4">
                     </video>
                     <div class="portfolio-overlay">
