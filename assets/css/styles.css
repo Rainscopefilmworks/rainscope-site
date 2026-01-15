@@ -66,9 +66,12 @@ html {
     --spacing-3xl: 4rem;
     --spacing-4xl: 6rem;
     
-    /* Typography Scale */
+    /* Typography Scale - Variable Font */
     --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Fluid Font Weight for Variable Fonts */
+    --font-weight-fluid: clamp(400, calc(400 + (600 - 400) * ((100vw - 320px) / (1920 - 320))), 600);
     
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
@@ -125,6 +128,8 @@ body {
     overflow-x: hidden;
     background: var(--color-primary);
     position: relative;
+    font-optical-sizing: auto;
+    font-variation-settings: 'wght' var(--font-weight-normal);
 }
 
 /* Skip link for accessibility */
@@ -224,21 +229,21 @@ body::after {
     66% { transform: translate(-20px, 20px) rotate(240deg); }
 }
 
-/* Header */
+/* Header - Glassmorphism Enhanced */
 .header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background: var(--color-surface-elevated);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(15, 44, 41, 0.85);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
     z-index: 1000;
     padding: clamp(0.5rem, 1vw, 1rem) 0;
-    border-bottom: 1px solid var(--color-border-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 212, 170, 0.1);
 }
 
 .header-container {
@@ -691,6 +696,16 @@ body::after {
     overflow: hidden;
 }
 
+/* Enhanced video overlay for better text contrast */
+.hero-video-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* Parallax effect for hero video */
 .hero.parallax-active .hero-video-container {
     transform: translateY(calc(var(--scroll-offset, 0) * 0.5px));
@@ -744,10 +759,6 @@ body::after {
     text-transform: uppercase;
     letter-spacing: clamp(0.5px, 0.2vw, 1.5px);
     margin-top: 0;
-    text-shadow: 
-        0 -1px 2px rgba(0, 0, 0, 0.5),
-        0 -2px 4px rgba(0, 0, 0, 0.4),
-        0 1px 1px rgba(0, 0, 0, 0.3);
     opacity: 1 !important;
     line-height: var(--line-height-tight);
     word-wrap: break-word;
@@ -762,15 +773,20 @@ body::after {
     padding: 0;
     box-sizing: border-box;
     position: relative;
-    background: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    color: var(--color-text-primary);
-    -webkit-text-fill-color: var(--color-text-primary);
-    -webkit-text-stroke: 0;
+    /* Gradient Text with Glow - 2026 Enhancement */
+    background: linear-gradient(135deg, #ffffff 0%, #00d4aa 40%, #00b8d4 70%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease-in-out infinite;
+    /* Glow effect */
+    filter: drop-shadow(0 0 20px rgba(0, 212, 170, 0.4)) drop-shadow(0 0 40px rgba(0, 184, 212, 0.2));
     /* Ensure hero tagline is the LCP element */
     content-visibility: visible;
     contain: none;
+    /* Fallback for browsers without gradient support */
+    color: var(--color-text-primary);
 }
 
 /* Make hero tagline visible immediately on mobile for better LCP */
@@ -892,6 +908,7 @@ body::after {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .btn-primary::before {
@@ -906,11 +923,33 @@ body::after {
     z-index: -1;
 }
 
+/* Ripple effect - 2026 Micro-interaction */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: transform 0.6s, opacity 0.6s;
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+.btn-primary:active::after {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 1;
+    transition: 0s;
+}
+
 .btn-primary:hover {
     background: var(--color-text-primary);
     color: var(--color-primary);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-md), 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 .btn-primary:hover::before {
@@ -1315,9 +1354,10 @@ body::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(15, 44, 41, 0.95) 100%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -1523,7 +1563,7 @@ body::after {
 
 .service-card {
     background: rgba(15, 44, 41, 0.6);
-    border: 1px solid var(--color-border-light);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-xl);
     padding: clamp(2rem, 4vw, 3rem);
     transition: all var(--transition-base);
@@ -1531,8 +1571,9 @@ body::after {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .service-card::before {
@@ -1550,8 +1591,8 @@ body::after {
 
 .service-card:hover {
     transform: translateY(-8px);
-    border-color: var(--color-accent-teal);
-    box-shadow: 0 12px 40px rgba(0, 212, 170, 0.2);
+    border-color: rgba(0, 212, 170, 0.5);
+    box-shadow: var(--shadow-colored-teal);
     background: rgba(15, 44, 41, 0.8);
 }
 
