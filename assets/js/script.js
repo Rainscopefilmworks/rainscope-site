@@ -191,47 +191,56 @@
 })();
 
 // Floating CTA Button - Show after scrolling past hero
-document.addEventListener('DOMContentLoaded', function() {
-    const floatingCta = document.getElementById('floatingCta');
-    const hero = document.querySelector('.hero');
-    
-    if (!floatingCta || !hero) return;
-    
-    // Cache hero dimensions to avoid forced reflows
-    let heroBottom = null;
-    function cacheHeroDimensions() {
-        if (heroBottom === null) {
-            heroBottom = hero.offsetTop + hero.offsetHeight;
+(function initFloatingCta() {
+    function setupFloatingCta() {
+        const floatingCta = document.getElementById('floatingCta');
+        const hero = document.querySelector('.hero');
+        
+        if (!floatingCta || !hero) return;
+        
+        // Cache hero dimensions to avoid forced reflows
+        let heroBottom = null;
+        function cacheHeroDimensions() {
+            if (heroBottom === null) {
+                heroBottom = hero.offsetTop + hero.offsetHeight;
+            }
         }
-    }
-    
-    // Cache on load and resize
-    cacheHeroDimensions();
-    window.addEventListener('resize', () => {
-        heroBottom = null;
+        
+        // Cache on load and resize
         cacheHeroDimensions();
-    }, { passive: true });
-    
-    let ticking = false;
-    function handleScroll() {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                cacheHeroDimensions();
-                // Show floating CTA after scrolling past hero
-                if (window.scrollY > heroBottom - 200) {
-                    floatingCta.classList.add('visible');
-                } else {
-                    floatingCta.classList.remove('visible');
-                }
-                ticking = false;
-            });
-            ticking = true;
+        window.addEventListener('resize', () => {
+            heroBottom = null;
+            cacheHeroDimensions();
+        }, { passive: true });
+        
+        let ticking = false;
+        function handleScroll() {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    cacheHeroDimensions();
+                    // Show floating CTA after scrolling past hero
+                    if (window.scrollY > heroBottom - 200) {
+                        floatingCta.classList.add('visible');
+                    } else {
+                        floatingCta.classList.remove('visible');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
         }
+        
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Check on page load
     }
     
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check on page load
-});
+    // Initialize immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupFloatingCta);
+    } else {
+        setupFloatingCta();
+    }
+})();
 
 // Smooth scroll for anchor links
 document.addEventListener('DOMContentLoaded', function() {
@@ -592,4 +601,3 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(initTypewriter, 100);
     }
 })();
-

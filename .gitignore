@@ -47,6 +47,7 @@ yarn-error.log*
 # Build outputs (if using any build tools)
 dist/
 build/
+_site/
 *.min.js
 *.min.css
 
@@ -57,6 +58,8 @@ yarn.lock
 
 # Backup files from optimization
 *.backup
+index-old.html
+our-work-old.html
 
 # R2 Configuration (contains secrets)
 r2-config.json

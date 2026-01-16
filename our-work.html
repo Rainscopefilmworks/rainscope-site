@@ -1,3 +1,7 @@
+---
+layout: null
+permalink: our-work-next.html
+---
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
@@ -270,121 +274,82 @@
     </header>
 
     <!-- Main Content -->
-    <main id="main-content" class="page-content our-work-page">
-        <div class="our-work-container">
-            <h1 class="our-work-title">Our Work</h1>
-            
-            <!-- Video/GIF Gallery Section -->
-            <section class="video-gallery">
-                <div class="video-gallery-grid">
-                    <!-- Add your GIFs or MP4 videos here - easy to duplicate this block -->
-                    <!-- For GIFs, use <img> tag -->
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Commercial video production showcase Vancouver - Professional cinematic film production and brand storytelling" title="Video production showcase - Professional film production">
-                            <source src="https://media.rainscopefilmworks.com/work/work-7.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Creative video production Vancouver - Artistic film project showcasing innovative cinematography and visual storytelling" title="Creative video production - Film project">
-                            <source src="https://media.rainscopefilmworks.com/work/work-8.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Vancouver wedding videography - Cinematic wedding film capturing romantic moments and emotional celebrations in British Columbia" title="Wedding video production - Cinematic wedding film">
-                            <source src="https://media.rainscopefilmworks.com/work/work-1.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Music video production Vancouver - Creative music video featuring artistic cinematography and performance visuals" title="Music video production - Creative music video">
-                            <source src="https://media.rainscopefilmworks.com/work/work-2.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Social media video content Vancouver - Engaging short-form content for digital marketing and brand storytelling" title="Creative video production project - Portfolio showcase">
-                            <source src="https://media.rainscopefilmworks.com/work/work-6.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Documentary interview video Vancouver - Professional testimonial and interview video production for organizations" title="Church interview video production - Documentary-style interview">
-                            <source src="https://media.rainscopefilmworks.com/work/work-3.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Corporate video production Vancouver - Professional business video for brand marketing and internal communications" title="Corporate video production - Professional corporate video">
-                            <source src="https://media.rainscopefilmworks.com/work/work-4.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-gallery-item">
-                        <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Creative video showcase Vancouver - Artistic film project demonstrating cinematic techniques and visual effects" title="Video production showcase - Creative project">
-                            <source src="https://media.rainscopefilmworks.com/work/work-5.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    
-                    <!-- For MP4 videos, use <video> tag with autoplay, loop, muted, and playsinline -->
-                   
-                    <!-- To add more items:
-                        - For GIFs: <div class="video-gallery-item"><img src="path/to/file.gif" alt="Description"></div>
-                        - For MP4s: <div class="video-gallery-item"><video autoplay loop muted playsinline><source src="path/to/file.mp4" type="video/mp4"></video></div>
-                    -->
-                </div>
-            </section>
+    <main id="main-content" class="page-content work-page">
+        <section class="work-hero">
+            <div class="work-hero-inner">
+                <h1 class="work-title">Our Work</h1>
+                <p class="work-subtitle">A focused selection of projects spanning commercial, corporate, and narrative work.</p>
+            </div>
+        </section>
 
-            <!-- Movie Posters Carousel Section -->
-            <section class="posters-section">
-                <h2 class="posters-section-title">Films</h2>
-                <div class="posters-carousel-wrapper">
-                    <div class="posters-carousel" id="postersCarousel">
-                        <!-- Add your movie posters here - easy to duplicate this block -->
-                        <div class="poster-slide">
+        <section class="video-gallery">
+            <div class="video-gallery-grid">
+                {% for project in work %}
+                <button class="video-gallery-item work-overlay-card scroll-reveal" type="button" data-title="{{ project.title }}" data-category="{{ project.category }}" data-description="{{ project.description }}"{% if project.embed %} data-embed="{{ project.embed }}"{% endif %}{% if project.video %} data-video="{{ project.video }}"{% endif %}>
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-hidden="true">
+                        <source src="{{ project.preview or project.video }}" type="video/mp4">
+                    </video>
+                    <span class="work-overlay">
+                        <span class="work-overlay-category">{{ project.category }}</span>
+                        <span class="work-overlay-title">{{ project.title }}</span>
+                        <span class="work-overlay-copy">Watch + Details</span>
+                    </span>
+                </button>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="posters-section posters-section-impact">
+            <h2 class="posters-section-title">Films</h2>
+            <p class="posters-section-subtitle">Narrative and documentary work with a cinematic finish.</p>
+            <div class="posters-carousel-wrapper">
+                <div class="posters-carousel" id="postersCarousel">
+                    {% for film in films %}
+                    <div class="poster-slide">
+                        <button class="poster-card" type="button" data-title="{{ film.title }}" data-year="{{ film.year }}" data-logline="{{ film.logline }}" data-poster="{{ film.poster }}"{% if film.embed %} data-embed="{{ film.embed }}"{% endif %}{% if film.cast %} data-cast="{{ film.cast }}"{% endif %}{% if film.written %} data-written="{{ film.written }}"{% endif %}{% if film.directed %} data-directed="{{ film.directed }}"{% endif %}{% if film.dop %} data-dop="{{ film.dop }}"{% endif %}{% if film.pd %} data-pd="{{ film.pd }}"{% endif %}{% if film.produced %} data-produced="{{ film.produced }}"{% endif %}>
                             <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-1.jpg" alt="showstorm" loading="eager">
+                                <img src="{{ film.poster }}" alt="{{ film.title }}" loading="eager">
                             </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-7.jpg" alt="No TIP TONY" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-8.jpg" alt="Driver" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-9.jpg" alt="One Small Step" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-2.jpg" alt="Two OF US" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-3.jpg" alt="Spyman" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-4.jpg" alt="ABRAZAME BABY" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-5.jpg" alt="DYSFUNCTIONAL D IS FOR FAMILY" loading="eager">
-                            </div>
-                        </div>
-                        <div class="poster-slide">
-                            <div class="poster-image-wrapper">
-                                <img src="https://media.rainscopefilmworks.com/posters/poster-6.jpg" alt="REDACTED" loading="eager">
-                            </div>
-                        </div>
-                        
-                        <!-- To add more posters, just copy one of the poster-slide divs above and update the src and alt -->
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <div class="work-modal" id="workModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="workModalTitle">
+            <div class="work-modal-backdrop" data-close></div>
+            <div class="work-modal-content" role="document">
+                <button class="work-modal-close" type="button" aria-label="Close project">×</button>
+                <div class="work-modal-media">
+                    <iframe id="workModalEmbed" title="Project video player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+                    <video id="workModalVideo" controls playsinline preload="metadata" hidden></video>
+                </div>
+                <div class="work-modal-info">
+                    <p class="work-modal-category" id="workModalCategory"></p>
+                    <h2 class="work-modal-title" id="workModalTitle"></h2>
+                    <p class="work-modal-description" id="workModalDescription"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="film-modal" id="filmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="filmModalTitle">
+            <div class="film-modal-backdrop" data-close></div>
+            <div class="film-modal-content" role="document">
+                <button class="film-modal-close" type="button" aria-label="Close film details">×</button>
+                <div class="film-modal-body">
+                    <div class="film-modal-media">
+                        <iframe id="filmModalEmbed" title="Film player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+                        <img id="filmModalPoster" alt="" hidden>
+                    </div>
+                    <div class="film-modal-meta">
+                        <span class="film-modal-year" id="filmModalYear"></span>
+                        <h2 class="film-modal-title" id="filmModalTitle"></h2>
+                        <p class="film-modal-logline" id="filmModalLogline"></p>
+                        <dl class="film-modal-credits" id="filmModalCredits"></dl>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </main>
 
@@ -437,5 +402,155 @@
 
     <script src="assets/js/script.js"></script>
     <script src="assets/js/our-work.js?v=5"></script>
+    <script>
+        (function initWorkModal() {
+            const modal = document.getElementById('workModal');
+            const modalVideo = document.getElementById('workModalVideo');
+            const modalEmbed = document.getElementById('workModalEmbed');
+            const modalTitle = document.getElementById('workModalTitle');
+            const modalCategory = document.getElementById('workModalCategory');
+            const modalDescription = document.getElementById('workModalDescription');
+            const closeButton = modal ? modal.querySelector('.work-modal-close') : null;
+            const cards = document.querySelectorAll('.video-gallery-item');
+
+            if (!modal || !modalVideo || !modalEmbed || cards.length === 0) return;
+
+            function openModal(card) {
+                const videoSrc = card.getAttribute('data-video');
+                const embedSrc = card.getAttribute('data-embed');
+                modalTitle.textContent = card.getAttribute('data-title') || 'Project';
+                modalCategory.textContent = card.getAttribute('data-category') || '';
+                modalDescription.textContent = card.getAttribute('data-description') || '';
+                modalVideo.hidden = true;
+                modalEmbed.hidden = true;
+                modalEmbed.removeAttribute('src');
+                modalVideo.removeAttribute('src');
+
+                if (embedSrc) {
+                    modalEmbed.src = embedSrc;
+                    modalEmbed.hidden = false;
+                } else if (videoSrc) {
+                    modalVideo.src = videoSrc;
+                    modalVideo.load();
+                    modalVideo.hidden = false;
+                }
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+                modalVideo.pause();
+                modalVideo.removeAttribute('src');
+                modalVideo.load();
+                modalVideo.hidden = true;
+                modalEmbed.removeAttribute('src');
+                modalEmbed.hidden = true;
+            }
+
+            cards.forEach(card => {
+                card.addEventListener('click', () => openModal(card));
+            });
+
+            modal.addEventListener('click', (event) => {
+                if (event.target.hasAttribute('data-close') || event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('open')) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
+    <script>
+        (function initFilmModal() {
+            const modal = document.getElementById('filmModal');
+            const modalTitle = document.getElementById('filmModalTitle');
+            const modalYear = document.getElementById('filmModalYear');
+            const modalLogline = document.getElementById('filmModalLogline');
+            const modalCredits = document.getElementById('filmModalCredits');
+            const modalEmbed = document.getElementById('filmModalEmbed');
+            const modalPoster = document.getElementById('filmModalPoster');
+            const closeButton = modal ? modal.querySelector('.film-modal-close') : null;
+
+            if (!modal || !modalTitle || !modalCredits || !modalEmbed || !modalPoster) return;
+
+            function openModal(card) {
+                modalTitle.textContent = card.getAttribute('data-title') || 'Film';
+                modalYear.textContent = card.getAttribute('data-year') || '';
+                modalLogline.textContent = card.getAttribute('data-logline') || '';
+                const credits = [
+                    ["Cast", card.getAttribute('data-cast')],
+                    ["Written", card.getAttribute('data-written')],
+                    ["Directed", card.getAttribute('data-directed')],
+                    ["DOP", card.getAttribute('data-dop')],
+                    ["Production Design", card.getAttribute('data-pd')],
+                    ["Produced", card.getAttribute('data-produced')]
+                ].filter(([, value]) => value);
+                modalCredits.innerHTML = credits.map(([label, value]) => (
+                    `<div class="film-credit"><dt>${label}</dt><dd>${value}</dd></div>`
+                )).join('');
+                const embed = card.getAttribute('data-embed');
+                const poster = card.getAttribute('data-poster');
+                modalEmbed.hidden = true;
+                modalEmbed.removeAttribute('src');
+                modalPoster.hidden = true;
+                modalPoster.removeAttribute('src');
+                if (embed) {
+                    modalEmbed.src = embed;
+                    modalEmbed.hidden = false;
+                } else if (poster) {
+                    modalPoster.src = poster;
+                    modalPoster.alt = card.getAttribute('data-title') || 'Film poster';
+                    modalPoster.hidden = false;
+                }
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+                modalEmbed.removeAttribute('src');
+                modalEmbed.hidden = true;
+                modalPoster.removeAttribute('src');
+                modalPoster.hidden = true;
+                modalCredits.innerHTML = '';
+            }
+
+            document.addEventListener('click', (event) => {
+                const card = event.target.closest('.poster-card');
+                if (card) {
+                    openModal(card);
+                    return;
+                }
+                if (event.target.closest('[data-close]') && modal.classList.contains('open')) {
+                    closeModal();
+                }
+            });
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('open')) {
+                    closeModal();
+                }
+            });
+        })();
+    </script>
 </body>
 </html>

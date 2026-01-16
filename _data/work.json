@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Just Another - Spec Ad",
+    "category": "Commercial",
+    "description": "A bold spot built to showcase creative direction, product storytelling, and high-end cinematic capture.",
+    "video": "https://media.rainscopefilmworks.com/work/work-7.mp4"
+  },
+  {
+    "title": "Performance & Visuals",
+    "category": "Creative",
+    "description": "We capture music the way it feels — not just how it looks.",
+    "preview": "https://media.rainscopefilmworks.com/work/work-2.mp4",
+    "embed": "https://www.youtube.com/embed/7lm48uYkjn4?si=W-vm1akEwd3zDsje"
+  },
+  {
+    "title": "Glorydays Fine Goods",
+    "category": "Social",
+    "description": "Short-form content designed for reach and retention, with tight edits and repeatable formats.",
+    "preview": "https://media.rainscopefilmworks.com/work/work-6.mp4",
+    "embed": "https://www.youtube.com/embed/S8luXxcoKkY?si=uYMul77PW61_O_F3"
+  },
+  {
+    "title": "Interview Documentary",
+    "category": "Corporate",
+    "description": "Documentary-style interview focused on authenticity, clean sound, and straightforward storytelling.",
+    "video": "https://media.rainscopefilmworks.com/work/work-3.mp4"
+  },
+  {
+    "title": "Corporate Story",
+    "category": "Corporate",
+    "description": "A clear, confident corporate video built around leadership messaging and brand purpose.",
+    "video": "https://media.rainscopefilmworks.com/work/work-4.mp4"
+  },
+  {
+    "title": "All City Athletics",
+    "category": "Creative",
+    "description": "We developed this project to show that, despite the challenges of COVID, people continued to seek out ways to work out and stay connected to their routines.",
+    "preview": "https://media.rainscopefilmworks.com/work/work-5.mp4",
+    "embed": "https://www.youtube.com/embed/BcYL6Yyj_80?si=l1QjaBMV0mgaUxS4"
+  },
+  {
+    "title": "No Calls - Eilie",
+    "category": "Music Video",
+    "description": "Fast-paced brand story designed for social and web placements with a polished, energetic finish.",
+    "video": "https://media.rainscopefilmworks.com/work/work-8.mp4"
+  }
+]

@@ -53,6 +53,15 @@
             const animationName = computedStyle.getPropertyValue('animation-name');
             
             // If animation isn't applied, inject keyframes and apply inline as fallback
+            const totalScrollWidth = carousel.scrollWidth;
+            const scrollDistance = Math.round(totalScrollWidth / 2);
+            if (scrollDistance > 0) {
+                const speed = 60; // px per second
+                const duration = Math.max(20, scrollDistance / speed);
+                carousel.style.setProperty('--carousel-scroll-width', `${scrollDistance}px`);
+                carousel.style.setProperty('--carousel-duration', `${duration}s`);
+            }
+
             if (!animationName || animationName === 'none' || animationName.trim() === '') {
                 // Inject the @keyframes if it doesn't exist
                 const styleId = 'infinite-scroll-keyframes';
@@ -66,7 +75,7 @@
                                 transform: translateX(0);
                             }
                             100% {
-                                transform: translateX(-50%);
+                                transform: translateX(calc(-1 * var(--carousel-scroll-width, 50%)));
                             }
                         }
                     `;
@@ -76,7 +85,7 @@
                 
                 // Wait for keyframes to be parsed if we just injected them, then apply animation
                 const applyAnimation = () => {
-                    carousel.style.setProperty('animation', 'infiniteScroll 30s linear infinite', 'important');
+                    carousel.style.setProperty('animation', 'infiniteScroll var(--carousel-duration, 30s) linear infinite', 'important');
                     carousel.style.setProperty('will-change', 'transform', 'important');
                     carousel.offsetHeight; // Force reflow
                 };
