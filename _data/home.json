@@ -1,0 +1,62 @@
+{
+  "hero": {
+    "video": "https://media.rainscopefilmworks.com/hero-videov3.mp4",
+    "tagline": "A CREATIVE PRODUCTION COMPANY SHAPED BY THE PACIFIC NORTHWEST",
+    "ctaPrimary": {
+      "label": "Start Your Project",
+      "href": "#lead-form"
+    },
+    "ctaSecondary": {
+      "label": "Watch Our Reel",
+      "href": "https://youtu.be/5oXAdpbbG5Y"
+    }
+  },
+  "testimonials": [
+    {
+      "name": "Noemi Lopez",
+      "quote": "Very easy to work with! Love the quick responses and was able to get my edit done just like my vision was described. Highly recommend! Thanks again.",
+      "image": "https://media.rainscopefilmworks.com/testimonials/testimonial-1.jpg"
+    },
+    {
+      "name": "Anton Hing",
+      "quote": "I had the opportunity to work with them for a bunch of short films. Not only professional in manner but also in skills. Great people! Come to them with any project and they will assist you with amazing technical and creative knowledge.",
+      "image": "https://media.rainscopefilmworks.com/testimonials/testimonial-2.jpg"
+    },
+    {
+      "name": "Danny Astefan",
+      "quote": "I use Rainscope as a regular rental house and they are nothing short of exceptional. Service is on point, gear is always in perfect condition and they're super kind! Highly recommended going to them for any of their services.",
+      "image": "https://media.rainscopefilmworks.com/testimonials/testimonial-3.jpg"
+    }
+  ],
+  "portfolio": {
+    "title": "Featured Work",
+    "subtitle": "Highlights from our latest projects",
+    "cta": {
+      "label": "Explore Our Portfolio",
+      "href": "our-work.html"
+    },
+    "items": [
+      {
+        "category": "Commercial",
+        "title": "Just Another - Spec Ad",
+        "label": "View Project",
+        "video": "https://media.rainscopefilmworks.com/work/work-7.mp4",
+        "aria": "Commercial video production Vancouver - Creative spec ad showcasing cinematic storytelling and brand marketing"
+      },
+      {
+        "category": "Music Video",
+        "title": "Performance & Visuals",
+        "label": "View Project",
+        "video": "https://media.rainscopefilmworks.com/work/work-2.mp4",
+        "aria": "Concert production services including live music filming, stage lighting, and multi-camera coverage"
+      },
+      {
+        "category": "Social Media",
+        "title": "Gloryday Fine Goods",
+        "label": "View Project",
+        "video": "https://media.rainscopefilmworks.com/work/work-6.mp4",
+        "aria": "Social media content production Vancouver - Creative video for digital marketing and online engagement"
+      }
+    ]
+  }
+}

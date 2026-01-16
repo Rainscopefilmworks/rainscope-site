@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
@@ -505,15 +508,15 @@
         <div class="hero-video-container">
             <!-- Hero video - loads immediately on mobile for better UX -->
             <video id="heroVideo" autoplay muted loop playsinline preload="metadata" aria-label="Vancouver film production company - Pacific Northwest cinematic landscape showcasing creative video production services" role="img">
-                <source src="https://media.rainscopefilmworks.com/hero-videov3.mp4" type="video/mp4">
+                <source src="{{ home.hero.video }}" type="video/mp4">
             </video>
         </div>
         <div class="hero-content">
-            <h1 class="hero-tagline" style="opacity: 1;">A CREATIVE PRODUCTION COMPANY SHAPED BY THE PACIFIC NORTHWEST</h1>
+            <h1 class="hero-tagline" style="opacity: 1;">{{ home.hero.tagline }}</h1>
         </div>
         <div class="hero-buttons">
-            <a href="#lead-form" class="btn-primary btn-primary-filled">Start Your Project</a>
-            <a href="https://youtu.be/5oXAdpbbG5Y" target="_blank" rel="noopener noreferrer" class="btn-primary">Watch Our Reel</a>
+            <a href="{{ home.hero.ctaPrimary.href }}" class="btn-primary btn-primary-filled">{{ home.hero.ctaPrimary.label }}</a>
+            <a href="{{ home.hero.ctaSecondary.href }}" target="_blank" rel="noopener noreferrer" class="btn-primary">{{ home.hero.ctaSecondary.label }}</a>
         </div>
     </section>
 
@@ -600,47 +603,25 @@
     <!-- Portfolio Preview Section -->
     <section class="portfolio-preview" id="work-preview">
         <div class="portfolio-preview-container">
-            <h2 class="section-title scroll-reveal">Featured Work</h2>
-            <p class="portfolio-subtitle scroll-reveal">Highlights from our latest projects</p>
+            <h2 class="section-title scroll-reveal">{{ home.portfolio.title }}</h2>
+            <p class="portfolio-subtitle scroll-reveal">{{ home.portfolio.subtitle }}</p>
             <div class="portfolio-preview-grid">
-                <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Commercial video production Vancouver - Creative spec ad showcasing cinematic storytelling and brand marketing">
-                        <source src="https://media.rainscopefilmworks.com/work/work-7.mp4" type="video/mp4">
+                {% for item in home.portfolio.items %}
+                <a href="{{ home.portfolio.cta.href }}" class="portfolio-preview-item scroll-reveal-scale">
+                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="{{ item.aria }}">
+                        <source src="{{ item.video }}" type="video/mp4">
                     </video>
                     <div class="portfolio-overlay">
                         <div class="portfolio-info">
-                            <span class="portfolio-category">Commercial</span>
-                            <span class="portfolio-title">Creative Spec Ad</span>
-                            <span class="portfolio-label">View Project</span>
+                            <span class="portfolio-category">{{ item.category }}</span>
+                            <span class="portfolio-title">{{ item.title }}</span>
+                            <span class="portfolio-label">{{ item.label }}</span>
                         </div>
                     </div>
                 </a>
-                <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Vancouver wedding videography - Cinematic wedding film featuring emotional bride and groom moments in Pacific Northwest">
-                            <source src="https://media.rainscopefilmworks.com/work/work-1.mp4" type="video/mp4">
-                    </video>
-                    <div class="portfolio-overlay">
-                        <div class="portfolio-info">
-                            <span class="portfolio-category">Wedding</span>
-                            <span class="portfolio-title">Cinematic Wedding Film</span>
-                            <span class="portfolio-label">View Project</span>
-                        </div>
-                    </div>
-                </a>
-                <a href="our-work.html" class="portfolio-preview-item scroll-reveal-scale">
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-label="Social media content production Vancouver - Creative video for digital marketing and online engagement">
-                            <source src="https://media.rainscopefilmworks.com/work/work-6.mp4" type="video/mp4">
-                    </video>
-                    <div class="portfolio-overlay">
-                        <div class="portfolio-info">
-                            <span class="portfolio-category">Creative</span>
-                            <span class="portfolio-title">Social Media Content</span>
-                            <span class="portfolio-label">View Project</span>
-                        </div>
-                    </div>
-                </a>
+                {% endfor %}
             </div>
-            <a href="our-work.html" class="btn-secondary">Explore Our Portfolio</a>
+            <a href="{{ home.portfolio.cta.href }}" class="btn-secondary">{{ home.portfolio.cta.label }}</a>
         </div>
     </section>
 
@@ -672,32 +653,20 @@
     <!-- Testimonials Section -->
     <section class="testimonials" id="testimonials">
         <div class="testimonials-slider">
-            <div class="testimonial-slide active" style="background-image: url('https://media.rainscopefilmworks.com/testimonials/testimonial-1.jpg');">
+            {% for testimonial in home.testimonials %}
+            <div class="testimonial-slide{% if forloop.first %} active{% endif %}" style="background-image: url('{{ testimonial.image }}');">
                 <div class="testimonial-overlay"></div>
                 <div class="testimonial-content">
-                    <blockquote class="testimonial-text">Very easy to work with! Love the quick responses and was able to get my edit done just like my vision was described. Highly recommend! Thanks again.</blockquote>
-                    <p class="testimonial-author">Noemi Lopez</p>
+                    <blockquote class="testimonial-text">{{ testimonial.quote }}</blockquote>
+                    <p class="testimonial-author">{{ testimonial.name }}</p>
                 </div>
             </div>
-            <div class="testimonial-slide" style="background-image: url('https://media.rainscopefilmworks.com/testimonials/testimonial-2.jpg');" loading="lazy">
-                <div class="testimonial-overlay"></div>
-                <div class="testimonial-content">
-                    <blockquote class="testimonial-text">I had the opportunity to work with them for a bunch of short films. Not only professional in manner but also in skills. Great people! Come to them with any project and they will assist you with amazing technical and creative knowledge.</blockquote>
-                    <p class="testimonial-author">Anton Hing</p>
-                </div>
-            </div>
-            <div class="testimonial-slide" style="background-image: url('https://media.rainscopefilmworks.com/testimonials/testimonial-3.jpg');" loading="lazy">
-                <div class="testimonial-overlay"></div>
-                <div class="testimonial-content">
-                    <blockquote class="testimonial-text">I use Rainscope as a regular rental house and they are nothing short of exceptional. Service is on point, gear is always in perfect condition and they're super kind! Highly recommended going to them for any of their services.</blockquote>
-                    <p class="testimonial-author">Danny Astefan</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="testimonial-indicators">
-            <span class="indicator active" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
+            {% for testimonial in home.testimonials %}
+            <span class="indicator{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.index0 }}"></span>
+            {% endfor %}
         </div>
     </section>
 
