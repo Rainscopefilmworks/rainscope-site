@@ -8,7 +8,7 @@
   X-XSS-Protection: 1; mode=block
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(self "https://js.squareup.com")
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://tally.so https://js.squareup.com https://web.squarecdn.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://web.squarecdn.com; img-src 'self' data: https: blob:; media-src 'self' https://media.rainscopefilmworks.com blob:; font-src 'self' data: https://square-fonts-production-f.squarecdn.com https://*.cloudfront.net; connect-src 'self' https://www.google-analytics.com https://rainscope-square-proxy.sweet-queen-15c3.workers.dev https://api.squareup.com https://tally.so https://connect.squarecdn.com https://pci-connect.squareup.com https://*.ingest.sentry.io; frame-src 'self' https://www.google.com https://tally.so https://js.squareup.com https://web.squarecdn.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://tally.so; upgrade-insecure-requests;
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://tally.so https://js.squareup.com https://web.squarecdn.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://web.squarecdn.com; img-src 'self' data: https: blob:; media-src 'self' https://media.rainscopefilmworks.com blob:; font-src 'self' data: https://square-fonts-production-f.squarecdn.com https://*.cloudfront.net; connect-src 'self' https://www.google-analytics.com https://rainscope-square-proxy.sweet-queen-15c3.workers.dev https://api.squareup.com https://tally.so https://connect.squarecdn.com https://pci-connect.squareup.com https://*.ingest.sentry.io; frame-src 'self' https://www.google.com https://tally.so https://js.squareup.com https://web.squarecdn.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://tally.so; upgrade-insecure-requests;
 
 # Cache static assets
 /assets/*
@@ -33,4 +33,3 @@
 # HTML files - no cache (always check for updates)
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
-
