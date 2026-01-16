@@ -60,6 +60,7 @@ yarn.lock
 *.backup
 index-old.html
 our-work-old.html
+rentals-old.html
 
 # R2 Configuration (contains secrets)
 r2-config.json
