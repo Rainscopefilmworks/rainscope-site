@@ -302,6 +302,7 @@
       border:1px solid rgba(255,255,255,0.08);
       max-height:calc(100vh - 120px);
       box-shadow:0 22px 60px rgba(0,0,0,0.35);
+      color: var(--color-text-primary);
     }
     .shop-wrapper .rs-cart-head{
       display:flex;
@@ -337,6 +338,7 @@
       flex-direction:column;
       gap:var(--rs-pad);
       background:rgba(8,18,17,0.75);
+      color: var(--color-text-secondary);
     }
     .shop-wrapper .rs-summary{
       display:flex;
@@ -347,6 +349,12 @@
       border:1px solid rgba(255,255,255,0.08);
       border-radius:var(--rs-radius);
       color:var(--color-text-secondary);
+    }
+    .shop-wrapper .rs-summary div{
+      color: var(--color-text-secondary);
+    }
+    .shop-wrapper .rs-summary strong{
+      color: var(--color-text-primary);
     }
     .shop-wrapper .rs-total{font-size:18px;margin-top:8px;padding-top:8px;border-top:1px solid var(--rs-border)}
     .shop-wrapper .rs-form{
@@ -396,6 +404,7 @@
       transform:none;
     }
     .shop-wrapper .rs-status{font-size:13px;color:var(--rs-muted);text-align:center}
+    .shop-wrapper .rs-status{color:rgba(255,255,255,0.6)}
 
     /* Square Payment Form Styles */
     .shop-wrapper .square-payment-form{
