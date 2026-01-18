@@ -3,7 +3,7 @@
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <!-- Video Portfolio Items from Our Work Page -->
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/work/work-7.mp4</video:thumbnail_loc>
       <video:title>Video Production Showcase - Professional Film Production</video:title>
@@ -17,7 +17,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/videos/work/work-8.mp4</video:thumbnail_loc>
       <video:title>Creative Video Production - Film Project</video:title>
@@ -31,7 +31,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-1.gif</video:thumbnail_loc>
       <video:title>Wedding Video Production - Cinematic Wedding Film</video:title>
@@ -45,7 +45,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-2.gif</video:thumbnail_loc>
       <video:title>Music Video Production - Creative Music Video</video:title>
@@ -59,7 +59,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-6.gif</video:thumbnail_loc>
       <video:title>Creative Video Production Project</video:title>
@@ -73,7 +73,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-3.gif</video:thumbnail_loc>
       <video:title>Church Interview Video Production - Documentary Style</video:title>
@@ -87,7 +87,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-4.gif</video:thumbnail_loc>
       <video:title>Corporate Video Production - Professional Corporate Video</video:title>
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://rainscopefilmworks.com/our-work.html</loc>
+    <loc>https://rainscopefilmworks.com/our-work</loc>
     <video:video>
       <video:thumbnail_loc>https://rainscopefilmworks.com/assets/images/work/work-5.gif</video:thumbnail_loc>
       <video:title>Video Production Showcase - Creative Project</video:title>
