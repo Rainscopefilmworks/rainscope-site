@@ -87,6 +87,210 @@
     }
 })();
 
+// Multi-step Form
+(function() {
+    function initMultiStepForm(form) {
+        const steps = Array.from(form.querySelectorAll('.form-step'));
+        if (!steps.length) return;
+
+        const progressSteps = Array.from(form.querySelectorAll('.form-progress-step'));
+        const nextButton = form.querySelector('.form-next');
+        const backButton = form.querySelector('.form-back');
+        const submitButton = form.querySelector('.form-submit');
+        const statusEl = form.querySelector('.form-status');
+        let currentStepIndex = 0;
+
+        function setStep(index) {
+            steps.forEach((step, stepIndex) => {
+                const isActive = stepIndex === index;
+                step.classList.toggle('is-active', isActive);
+                step.toggleAttribute('hidden', !isActive);
+            });
+
+            progressSteps.forEach((step, stepIndex) => {
+                const isActive = stepIndex === index;
+                step.classList.toggle('is-active', isActive);
+                if (isActive) {
+                    step.setAttribute('aria-current', 'step');
+                } else {
+                    step.removeAttribute('aria-current');
+                }
+            });
+
+            if (backButton) {
+                backButton.hidden = index === 0;
+                backButton.disabled = index === 0;
+            }
+            if (nextButton) {
+                nextButton.hidden = index >= steps.length - 1;
+            }
+            if (submitButton) {
+                submitButton.hidden = index < steps.length - 1;
+            }
+        }
+
+        function validateGroupInputs(step) {
+            let isValid = true;
+            const groupInputs = step.querySelectorAll('[data-required-group]');
+            if (!groupInputs.length) return isValid;
+
+            const groupedInputs = {};
+            groupInputs.forEach((input) => {
+                const key = input.dataset.requiredGroup;
+                if (!groupedInputs[key]) groupedInputs[key] = [];
+                groupedInputs[key].push(input);
+            });
+
+            Object.keys(groupedInputs).forEach((groupName) => {
+                const inputs = groupedInputs[groupName];
+                const hasSelection = inputs.some((input) => input.checked);
+                const errorEl = step.querySelector(`[data-group-error="${groupName}"]`);
+                if (!hasSelection) {
+                    isValid = false;
+                    if (errorEl) {
+                        errorEl.textContent = 'Select at least one option.';
+                    }
+                } else if (errorEl) {
+                    errorEl.textContent = '';
+                }
+            });
+
+            return isValid;
+        }
+
+        function validateStep(index) {
+            const step = steps[index];
+            let isValid = true;
+
+            if (!validateGroupInputs(step)) {
+                isValid = false;
+            }
+
+            const fields = step.querySelectorAll('input, textarea, select');
+            fields.forEach((field) => {
+                if (field.dataset.requiredGroup) return;
+                if (!field.checkValidity()) {
+                    isValid = false;
+                    field.reportValidity();
+                }
+            });
+
+            return isValid;
+        }
+
+        function findFirstInvalidStep() {
+            for (let index = 0; index < steps.length; index++) {
+                const step = steps[index];
+                const groupValid = validateGroupInputs(step);
+                const fields = step.querySelectorAll('input, textarea, select');
+                let fieldValid = true;
+                fields.forEach((field) => {
+                    if (field.dataset.requiredGroup) return;
+                    if (!field.checkValidity()) {
+                        fieldValid = false;
+                    }
+                });
+                if (!groupValid || !fieldValid) {
+                    return index;
+                }
+            }
+            return -1;
+        }
+
+        function setStatus(message, isError) {
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.style.color = isError ? 'var(--color-accent-teal)' : 'var(--color-text-secondary)';
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                if (!validateStep(currentStepIndex)) return;
+                currentStepIndex = Math.min(currentStepIndex + 1, steps.length - 1);
+                setStep(currentStepIndex);
+            });
+        }
+
+        if (backButton) {
+            backButton.addEventListener('click', () => {
+                currentStepIndex = Math.max(currentStepIndex - 1, 0);
+                setStep(currentStepIndex);
+            });
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            setStatus('', false);
+
+            const firstInvalid = findFirstInvalidStep();
+            if (firstInvalid !== -1) {
+                setStep(firstInvalid);
+                validateStep(firstInvalid);
+                return;
+            }
+
+            const endpoint = form.dataset.endpoint;
+            if (!endpoint || endpoint === 'YOUR_APPS_SCRIPT_URL') {
+                setStatus('Form endpoint is not configured yet.', true);
+                return;
+            }
+
+            const formData = new FormData(form);
+            function pad2(value) {
+                return String(value).padStart(2, '0');
+            }
+
+            function formatTimestamp(date) {
+                const year = date.getFullYear();
+                const month = pad2(date.getMonth() + 1);
+                const day = pad2(date.getDate());
+                const hours = pad2(date.getHours());
+                const minutes = pad2(date.getMinutes());
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            }
+
+            formData.append('source', window.location.pathname || 'unknown');
+            formData.append('submitted_at', formatTimestamp(new Date()));
+
+            if (submitButton) submitButton.disabled = true;
+            if (nextButton) nextButton.disabled = true;
+            if (backButton) backButton.disabled = true;
+            setStatus('Sending...', false);
+
+            try {
+                await fetch(endpoint, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData,
+                });
+
+                form.reset();
+                currentStepIndex = 0;
+                setStep(currentStepIndex);
+                setStatus('Thanks! We will be in touch shortly.', false);
+            } catch (error) {
+                setStatus('Something went wrong. Please try again.', true);
+            } finally {
+                if (submitButton) submitButton.disabled = false;
+                if (nextButton) nextButton.disabled = false;
+                if (backButton) backButton.disabled = false;
+            }
+        });
+
+        setStep(currentStepIndex);
+    }
+
+    function initForms() {
+        document.querySelectorAll('.multi-step-form').forEach(initMultiStepForm);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initForms);
+    } else {
+        initForms();
+    }
+})();
+
 // Accordion functionality
 // Initialize immediately (works even if script loads async late)
 (function initAccordion() {

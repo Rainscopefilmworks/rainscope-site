@@ -74,7 +74,6 @@ showSkipLink: true
     <link rel="preconnect" href="https://www.googletagmanager.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://tally.so">
     <link rel="dns-prefetch" href="https://maps.googleapis.com">
     <!-- Inter Variable Font - 2026 Typography Enhancement -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -659,7 +658,92 @@ showSkipLink: true
                         <h2 class="contact-form-title">Start your project</h2>
                         <p class="portfolio-subtitle" style="text-align: left;">Tell us what you are making and we will follow up quickly.</p>
                         <div class="contact-form-container">
-                            <iframe data-tally-src="https://tally.so/embed/3Xpp6z?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="177" frameborder="0" marginheight="0" marginwidth="0" title="Start your project"></iframe>
+                            <form class="multi-step-form" data-multi-step data-endpoint="https://script.google.com/macros/s/AKfycbzMvRqqR_oA5YBljGVrkbpl3EFjQljEu-_uHaHwIJdQPdFw_jWvrxznR7ik-Lu_dURkdw/exec">
+                                <div class="form-step is-active" data-step="1">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 1 of 4</p>
+                                        <h3 class="form-step-title">Tell us your name</h3>
+                                    </div>
+                                    <div class="form-grid single">
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-name">Name *</label>
+                                            <input class="form-input" id="lead-name" name="name" type="text" autocomplete="name" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-step" data-step="2">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 2 of 4</p>
+                                        <h3 class="form-step-title">What do you need help with?</h3>
+                                        <p class="form-helper">Select all that apply.</p>
+                                    </div>
+                                    <div class="checkbox-grid">
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Video Production" data-required-group="services">
+                                            <span>Video Production</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Post Production" data-required-group="services">
+                                            <span>Post Production</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Photos or Design" data-required-group="services">
+                                            <span>Photos or Design</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Rental" data-required-group="services">
+                                            <span>Rental</span>
+                                        </label>
+                                    </div>
+                                    <p class="form-error" data-group-error="services" aria-live="polite"></p>
+                                </div>
+                                <div class="form-step" data-step="3">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 3 of 4</p>
+                                        <h3 class="form-step-title">Share project details</h3>
+                                    </div>
+                                    <div class="form-grid">
+                                        <div class="form-field form-field-full">
+                                            <label class="form-label" for="lead-details">Can you share more about your project? *</label>
+                                            <textarea class="form-textarea" id="lead-details" name="project_details" required></textarea>
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-website">Website to visit</label>
+                                            <input class="form-input" id="lead-website" name="project_website" type="url" placeholder="https://">
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-budget">Budget in mind?</label>
+                                            <input class="form-input" id="lead-budget" name="project_budget" type="text" placeholder="e.g., 5,000-10,000">
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-deadline">Deadline</label>
+                                            <input class="form-input" id="lead-deadline" name="project_deadline" type="date">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-step" data-step="4">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 4 of 4</p>
+                                        <h3 class="form-step-title">How can we contact you?</h3>
+                                    </div>
+                                    <div class="form-grid">
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-email">Email *</label>
+                                            <input class="form-input" id="lead-email" name="email" type="email" autocomplete="email" required>
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="lead-phone">Phone</label>
+                                            <input class="form-input" id="lead-phone" name="phone" type="tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button class="form-btn form-back" type="button">Back</button>
+                                    <button class="form-btn form-next" type="button">Next</button>
+                                    <button class="form-btn form-submit" type="submit">Send</button>
+                                </div>
+                                <p class="form-status" role="status" aria-live="polite"></p>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -704,19 +788,5 @@ showSkipLink: true
         }, 2000);
     </script>
     <script src="assets/js/script.js?v=13" async></script>
-    <!-- Load Tally form lazily -->
-    <script>
-      // Load Tally form after page is interactive
-      function loadTally() {
-        var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadTally, 1500);
-        });
-      } else {
-        setTimeout(loadTally, 1500);
-      }
-    </script>
 </body>
 </html>

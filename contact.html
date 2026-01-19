@@ -44,8 +44,6 @@ nav: contact
     <!-- Resource Hints -->
     <link rel="preconnect" href="https://www.googletagmanager.com">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-    <link rel="preconnect" href="https://tally.so">
-    <link rel="dns-prefetch" href="https://tally.so">
     <link rel="preconnect" href="https://www.google.com">
     <link rel="dns-prefetch" href="https://www.google.com">
     
@@ -178,7 +176,92 @@ nav: contact
                     <div class="contact-form-wrapper">
                         <h2 class="contact-form-title">Contact us</h2>
                         <div class="contact-form-container">
-                            <iframe data-tally-src="https://tally.so/embed/3Xpp6z?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="177" frameborder="0" marginheight="0" marginwidth="0" title="Contact us!"></iframe>
+                            <form class="multi-step-form" data-multi-step data-endpoint="https://script.google.com/macros/s/AKfycbzMvRqqR_oA5YBljGVrkbpl3EFjQljEu-_uHaHwIJdQPdFw_jWvrxznR7ik-Lu_dURkdw/exec">
+                                <div class="form-step is-active" data-step="1">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 1 of 4</p>
+                                        <h3 class="form-step-title">Tell us your name</h3>
+                                    </div>
+                                    <div class="form-grid single">
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-name">Name *</label>
+                                            <input class="form-input" id="contact-name" name="name" type="text" autocomplete="name" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-step" data-step="2">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 2 of 4</p>
+                                        <h3 class="form-step-title">What do you need help with?</h3>
+                                        <p class="form-helper">Select all that apply.</p>
+                                    </div>
+                                    <div class="checkbox-grid">
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Video Production" data-required-group="services">
+                                            <span>Video Production</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Post Production" data-required-group="services">
+                                            <span>Post Production</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Photos or Design" data-required-group="services">
+                                            <span>Photos or Design</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" name="services[]" value="Rental" data-required-group="services">
+                                            <span>Rental</span>
+                                        </label>
+                                    </div>
+                                    <p class="form-error" data-group-error="services" aria-live="polite"></p>
+                                </div>
+                                <div class="form-step" data-step="3">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 3 of 4</p>
+                                        <h3 class="form-step-title">Share project details</h3>
+                                    </div>
+                                    <div class="form-grid">
+                                        <div class="form-field form-field-full">
+                                            <label class="form-label" for="contact-details">Can you share more about your project? *</label>
+                                            <textarea class="form-textarea" id="contact-details" name="project_details" required></textarea>
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-website">Website to visit</label>
+                                            <input class="form-input" id="contact-website" name="project_website" type="url" placeholder="https://">
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-budget">Budget in mind?</label>
+                                            <input class="form-input" id="contact-budget" name="project_budget" type="text" placeholder="e.g., 5,000-10,000">
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-deadline">Deadline</label>
+                                            <input class="form-input" id="contact-deadline" name="project_deadline" type="date">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-step" data-step="4">
+                                    <div class="form-step-header">
+                                        <p class="form-step-kicker">Step 4 of 4</p>
+                                        <h3 class="form-step-title">How can we contact you?</h3>
+                                    </div>
+                                    <div class="form-grid">
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-email">Email *</label>
+                                            <input class="form-input" id="contact-email" name="email" type="email" autocomplete="email" required>
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-phone">Phone</label>
+                                            <input class="form-input" id="contact-phone" name="phone" type="tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button class="form-btn form-back" type="button">Back</button>
+                                    <button class="form-btn form-next" type="button">Next</button>
+                                    <button class="form-btn form-submit" type="submit">Send</button>
+                                </div>
+                                <p class="form-status" role="status" aria-live="polite"></p>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -201,7 +284,5 @@ nav: contact
     {% include "footer.njk" %}
 
     <script src="assets/js/script.js"></script>
-    <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
 </body>
 </html>
-
