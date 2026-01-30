@@ -24,4 +24,5 @@
 
 # === Fallback for Any Old Rentals Subpage ===
 
-/rentals/*       /rentals/    301
+/rentals/       /rentals/    200
+/rentals/*      /rentals/    301
