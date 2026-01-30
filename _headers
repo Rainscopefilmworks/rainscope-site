@@ -17,6 +17,9 @@
 /README/*
   X-Robots-Tag: noindex, nofollow
 
+/pricing/*
+  X-Robots-Tag: noindex, nofollow
+
 # Cache static assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

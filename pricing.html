@@ -1,0 +1,381 @@
+---
+layout: null
+nav: none
+showSkipLink: true
+seo:
+  title: "Pricing - Rainscope Filmworks"
+  description: "Private pricing overview for Rainscope Filmworks offerings."
+  canonical: "https://rainscopefilmworks.com/pricing/"
+  robots: "noindex, nofollow"
+  googlebot: "noindex, nofollow"
+  ogTitle: "Pricing - Rainscope Filmworks"
+  ogDescription: "Private pricing overview for Rainscope Filmworks offerings."
+  image: "https://media.rainscopefilmworks.com/logo.png"
+  imageWidth: 1200
+  imageHeight: 630
+  imageAlt: "Rainscope Filmworks"
+  twitterTitle: "Pricing - Rainscope Filmworks"
+  twitterDescription: "Private pricing overview for Rainscope Filmworks offerings."
+---
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include "seo-head.njk" %}
+
+    <link rel="icon" type="image/png" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
+
+    <link rel="stylesheet" href="assets/css/styles.css?v=21">
+
+    <style>
+        .pricing-page {
+            margin-top: var(--header-height);
+            padding: 0 0 clamp(3rem, 6vw, 5rem);
+            background: radial-gradient(circle at top, rgba(74, 124, 89, 0.25), rgba(15, 44, 41, 0.85) 45%, var(--color-surface) 75%);
+            color: var(--color-text-primary);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .pricing-hero {
+            padding: clamp(3rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3rem);
+            border-bottom: 1px solid var(--color-border);
+            background: linear-gradient(135deg, rgba(15, 44, 41, 0.9), rgba(23, 54, 51, 0.85));
+        }
+
+        .pricing-container {
+            width: min(1200px, 92vw);
+            margin: 0 auto;
+        }
+
+        .pricing-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1.5rem;
+        }
+
+        .pricing-title {
+            font-size: clamp(2.4rem, 4vw, 3.4rem);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .pricing-subtitle {
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+            color: var(--color-text-tertiary);
+            max-width: 60ch;
+            line-height: 1.6;
+        }
+
+        .pricing-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .pricing-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(15, 44, 41, 0.7);
+            color: var(--color-text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .pricing-section {
+            padding-top: clamp(2rem, 4vw, 3rem);
+        }
+
+        .pricing-table-wrap {
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            background: var(--color-surface-elevated);
+            box-shadow: var(--shadow-colored-forest);
+        }
+
+        .pricing-table-scroll {
+            overflow-x: auto;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+        }
+
+        .pricing-table thead {
+            background: var(--color-primary-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            text-align: left;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--color-border-light);
+            vertical-align: top;
+            font-size: 0.95rem;
+        }
+
+        .pricing-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+        }
+
+        .pricing-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .pricing-table tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .pricing-table tbody tr.pricing-group {
+            background: rgba(15, 44, 41, 0.9);
+        }
+
+        .pricing-table tbody tr.pricing-group:hover {
+            background: rgba(15, 44, 41, 0.9);
+        }
+
+        .pricing-group-cell {
+            padding: 0.85rem 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.72rem;
+            color: var(--color-text-tertiary);
+        }
+
+        .pricing-table tbody tr:hover {
+            background: rgba(74, 124, 89, 0.15);
+        }
+
+        .pricing-category {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(143, 188, 143, 0.2);
+            color: var(--color-text-secondary);
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .pricing-rate {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(74, 124, 89, 0.2);
+            color: var(--color-text-secondary);
+            font-size: 0.82rem;
+        }
+
+        .pricing-muted {
+            color: var(--color-text-muted);
+        }
+
+        .pricing-footer {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--color-text-tertiary);
+            text-align: right;
+        }
+
+        @media (max-width: 720px) {
+            .pricing-title {
+                text-transform: none;
+            }
+
+            .pricing-table th,
+            .pricing-table td {
+                padding: 0.8rem 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include "header.njk" %}
+
+    <main id="main-content" class="pricing-page">
+        <section class="pricing-hero">
+            <div class="pricing-container">
+                <header class="pricing-header">
+                    <div>
+                        <h1 class="pricing-title">Pricing Overview</h1>
+                        <p class="pricing-subtitle">Private pricing snapshot for quick client review. Share the link only with people who need access.</p>
+                    </div>
+                    <div class="pricing-badges">
+                        <span class="pricing-badge">Half-day Adjustments Available</span>
+                    </div>
+                </header>
+            </div>
+        </section>
+
+        <section class="pricing-section">
+            <div class="pricing-container">
+                <div class="pricing-table-wrap">
+                    <div class="pricing-table-scroll">
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Offering</th>
+                                    <th>Category</th>
+                                    <th>Price range</th>
+                                    <th>Rate type</th>
+                                    <th>Day count</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="pricing-group">
+                                    <td class="pricing-group-cell" colspan="6">Crew</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 1 Crew</td>
+                                    <td><span class="pricing-category">Crew</span></td>
+                                    <td>$600.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>10 Hour Day</td>
+                                    <td>Highest Level Crew ie, Director, Dop, Producer</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 2 Crew</td>
+                                    <td><span class="pricing-category">Crew</span></td>
+                                    <td>$450.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>12 Hour Day</td>
+                                    <td>Medium Level Crew Ie, Key grip, Gaffer, 1st AC</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 3 Crew</td>
+                                    <td><span class="pricing-category">Crew</span></td>
+                                    <td>$350.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>12 Hour Day</td>
+                                    <td>Low Level Crew ie, 2nd Ac ,Swings, Assisants</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 4 Crew</td>
+                                    <td><span class="pricing-category">Crew</span></td>
+                                    <td>$275.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>12 Hour Day</td>
+                                    <td>PAs</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 0 Crew</td>
+                                    <td><span class="pricing-category">Crew</span></td>
+                                    <td class="pricing-muted">TBD</td>
+                                    <td><span class="pricing-rate">Contract</span></td>
+                                    <td class="pricing-muted"></td>
+                                    <td>Out sourced Crew member ie, Drone op, technical staff that is at a higher rate</td>
+                                </tr>
+                                <tr class="pricing-group">
+                                    <td class="pricing-group-cell" colspan="6">Gear &amp; Equipment</td>
+                                </tr>
+                                <tr>
+                                    <td>Teir 0 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$500.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>One Camera, on camera audio.</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 1 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$1,500.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>Think very simple shoot no moving parts But would include lighting, IE talking head, Instrucional video,Simple Product video</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 2 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$2,000.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>This is adding more lights more cameras maybe a dana dolly, Still simple but we are adding in more parts</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 3 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$3,000.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>This would be multiple interveiws in one day or a simple commerical.</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 4 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$5,000.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>Expanded multi-camera package with more lighting, grip support, and a fuller crew gear load for higher production value shoots.</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 5 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$10,000.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>Large-scale kit build with premium camera package, advanced lighting, and specialty support gear for complex productions.</td>
+                                </tr>
+                                <tr>
+                                    <td>Tier 6 Gear Package</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$15,000.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>Top-tier production package with full lighting and camera support, specialty rigs, and high-end gear coverage for flagship shoots.</td>
+                                </tr>
+                                <tr>
+                                    <td>Truck Rental</td>
+                                    <td><span class="pricing-category">Equipment</span></td>
+                                    <td>$300.00</td>
+                                    <td><span class="pricing-rate">Day</span></td>
+                                    <td>N/A</td>
+                                    <td>Depends on Scale of Show</td>
+                                </tr>
+                                <tr class="pricing-group">
+                                    <td class="pricing-group-cell" colspan="6">Service</td>
+                                </tr>
+                                <tr>
+                                    <td>Post Production Fee</td>
+                                    <td><span class="pricing-category">Service</span></td>
+                                    <td>Per Project</td>
+                                    <td><span class="pricing-rate">Contract</span></td>
+                                    <td>N/A</td>
+                                    <td>This is dictated by Deliverables But expect 500-2000+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <p class="pricing-footer">Rates are flexible based on scope and deliverables.</p>
+            </div>
+        </section>
+    </main>
+
+    {% include "footer.njk" %}
+</body>
+</html>

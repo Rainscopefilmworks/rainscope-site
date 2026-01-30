@@ -3,6 +3,7 @@ User-agent: *
 Allow: /
 Disallow: /docs/
 Disallow: /README/
+Disallow: /pricing/
 
 # Sitemaps
 Sitemap: https://rainscopefilmworks.com/sitemap.xml
