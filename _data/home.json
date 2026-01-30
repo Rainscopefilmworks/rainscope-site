@@ -33,7 +33,7 @@
     "subtitle": "Highlights from our latest projects",
     "cta": {
       "label": "Explore Our Portfolio",
-      "href": "our-work.html"
+      "href": "/our-work/"
     },
     "items": [
       {

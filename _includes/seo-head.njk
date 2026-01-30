@@ -1,0 +1,28 @@
+{% set seo = seo or {} %}
+{% set site = site or {} %}
+
+<title>{{ seo.title }}</title>
+{% if seo.description %}<meta name="description" content="{{ seo.description }}">{% endif %}
+{% if seo.keywords %}<meta name="keywords" content="{{ seo.keywords }}">{% endif %}
+{% if seo.author or site.name %}<meta name="author" content="{{ seo.author or site.name }}">{% endif %}
+<meta name="robots" content="{{ seo.robots or 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
+{% if seo.googlebot %}<meta name="googlebot" content="{{ seo.googlebot }}">{% endif %}
+{% if seo.canonical %}<link rel="canonical" href="{{ seo.canonical }}">{% endif %}
+
+<meta property="og:type" content="{{ seo.ogType or 'website' }}">
+{% if seo.canonical %}<meta property="og:url" content="{{ seo.canonical }}">{% endif %}
+{% if seo.title %}<meta property="og:title" content="{{ seo.ogTitle or seo.title }}">{% endif %}
+{% if seo.description %}<meta property="og:description" content="{{ seo.ogDescription or seo.description }}">{% endif %}
+<meta property="og:image" content="{{ seo.image or site.defaultImage }}">
+{% if seo.imageWidth %}<meta property="og:image:width" content="{{ seo.imageWidth }}">{% endif %}
+{% if seo.imageHeight %}<meta property="og:image:height" content="{{ seo.imageHeight }}">{% endif %}
+{% if seo.imageAlt %}<meta property="og:image:alt" content="{{ seo.imageAlt }}">{% endif %}
+{% if site.locale %}<meta property="og:locale" content="{{ site.locale }}">{% endif %}
+{% if site.name %}<meta property="og:site_name" content="{{ site.name }}">{% endif %}
+
+<meta name="twitter:card" content="{{ seo.twitterCard or site.twitterCard or 'summary_large_image' }}">
+{% if seo.canonical %}<meta name="twitter:url" content="{{ seo.canonical }}">{% endif %}
+{% if seo.title %}<meta name="twitter:title" content="{{ seo.twitterTitle or seo.title }}">{% endif %}
+{% if seo.description %}<meta name="twitter:description" content="{{ seo.twitterDescription or seo.description }}">{% endif %}
+<meta name="twitter:image" content="{{ seo.image or site.defaultImage }}">
+{% if seo.imageAlt %}<meta name="twitter:image:alt" content="{{ seo.imageAlt }}">{% endif %}

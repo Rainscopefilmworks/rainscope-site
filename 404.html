@@ -1,15 +1,26 @@
 ---
 nav: none
+seo:
+  title: "404 - Page Not Found | Rainscope Filmworks"
+  description: "The page you're looking for doesn't exist. Return to Rainscope Filmworks homepage."
+  canonical: "https://rainscopefilmworks.com/404/"
+  robots: "noindex, follow"
+  googlebot: "noindex, follow"
+  ogTitle: "404 - Page Not Found | Rainscope Filmworks"
+  ogDescription: "The page you're looking for doesn't exist. Return to Rainscope Filmworks homepage."
+  image: "https://media.rainscopefilmworks.com/logo.png"
+  imageWidth: 1200
+  imageHeight: 630
+  imageAlt: "Rainscope Filmworks"
+  twitterTitle: "404 - Page Not Found | Rainscope Filmworks"
+  twitterDescription: "The page you're looking for doesn't exist. Return to Rainscope Filmworks homepage."
 ---
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | Rainscope Filmworks</title>
-    <meta name="description" content="The page you're looking for doesn't exist. Return to Rainscope Filmworks homepage.">
-    <meta name="robots" content="noindex, follow">
-    <link rel="canonical" href="https://rainscopefilmworks.com/404.html">
+    {% include "seo-head.njk" %}
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/favicon-32x32.png">
@@ -79,8 +90,8 @@ nav: none
                 Let's get you back on track.
             </p>
             <div class="error-actions">
-                <a href="index.html" class="btn-primary btn-primary-filled">Go Home</a>
-                <a href="contact.html" class="btn-primary">Contact Us</a>
+                <a href="/" class="btn-primary btn-primary-filled">Go Home</a>
+                <a href="/contact/" class="btn-primary">Contact Us</a>
             </div>
         </div>
     </main>
@@ -89,4 +100,3 @@ nav: none
     <script src="assets/js/script.js?v=21"></script>
 </body>
 </html>
-

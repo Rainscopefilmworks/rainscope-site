@@ -1,7 +1,9 @@
 User-agent: *
+# Updated: 2026-01-30
 Allow: /
+Disallow: /docs/
+Disallow: /README/
 
 # Sitemaps
 Sitemap: https://rainscopefilmworks.com/sitemap.xml
 Sitemap: https://rainscopefilmworks.com/video-sitemap.xml
-

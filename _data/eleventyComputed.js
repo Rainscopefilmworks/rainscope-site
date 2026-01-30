@@ -4,7 +4,11 @@ module.exports = {
       return data.permalink;
     }
     if (data.page && data.page.inputPath && data.page.inputPath.endsWith(".html")) {
-      return data.page.inputPath.replace(/^\.\//, "");
+      const stem = data.page.filePathStem;
+      if (stem === "/index") {
+        return "index.html";
+      }
+      return `${stem}/index.html`;
     }
     return undefined;
   }

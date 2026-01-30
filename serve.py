@@ -31,11 +31,11 @@ def main():
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         url = f"http://localhost:{PORT}"
         print(f"Server running at {url}")
-        print(f"Open {url}/rentals.html in your browser")
+        print(f"Open {url}/rentals/ in your browser")
         print("\nPress Ctrl+C to stop the server")
         
         try:
-            webbrowser.open(f"{url}/rentals.html")
+            webbrowser.open(f"{url}/rentals/")
         except:
             pass
         
@@ -46,4 +46,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -6,12 +6,12 @@ A modern, responsive website for Rainscope Filmworks - A Creative Production Com
 
 ```
 rainscope-site/
-├── index.html              # Main HTML file
-├── rentals.html            # Rentals page with catalog integration
-├── shop.html               # E-commerce shop page
-├── our-work.html           # Our work page with infinite carousel
-├── our-team.html           # Our team page
-├── contact.html            # Contact page
+├── index.html              # Main HTML file (outputs clean URL)
+├── rentals.html            # Rentals page with catalog integration (outputs clean URL)
+├── shop.html               # E-commerce shop page (outputs clean URL)
+├── our-work.html           # Our work page with infinite carousel (outputs clean URL)
+├── our-team.html           # Our team page (outputs clean URL)
+├── contact.html            # Contact page (outputs clean URL)
 ├── serve.py                # Local development server script
 ├── optimize.js             # Image and video optimization script
 ├── _headers                # Cloudflare Pages headers (security, caching, CSP)
@@ -124,7 +124,7 @@ rainscope-site/
 python3 serve.py
 ```
 
-This will automatically open `http://localhost:8000/rentals.html` in your browser.
+This will automatically open `http://localhost:8000/rentals/` in your browser.
 
 ### Option 2: Use Python's built-in server
 
