@@ -1330,7 +1330,7 @@ seo:
             const pjson = p ? JSON.stringify(p).replace(/"/g,'&quot;') : "";
             const priceTxt = p ? (p.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"}) : "";
             const inv = inventoryCache[v.id] || {quantity: 0};
-            const invText = inv.quantity > 0 ? ` (${inv.quantity} in stock)` : " (Out of stock)";
+            const invText = inv.quantity > 0 ? ` (${inv.quantity} in stock)` : " (Available on request)";
             const varName = escapeHTML(d.name||"Default");
             const safePriceTxt = escapeHTML(priceTxt || "");
             return `<option value="${escapeHTML(v.id)}" data-price="${pjson}" data-inventory="${inv.quantity}">${varName}${safePriceTxt? " — "+safePriceTxt:""}${escapeHTML(invText)}</option>`;
@@ -1340,7 +1340,7 @@ seo:
           const firstInv = inventoryCache[first?.id] || {quantity: 0};
           const firstIsRequest = firstInv.quantity === 0;
           const invClass = firstInv.quantity === 0 ? "out-of-stock" : firstInv.quantity <= 3 ? "low-stock" : "in-stock";
-          const invText = firstInv.quantity === 0 ? "Out of stock" : firstInv.quantity <= 3 ? `Low stock (${firstInv.quantity})` : `In stock (${firstInv.quantity})`;
+          const invText = firstInv.quantity === 0 ? "Available on request" : firstInv.quantity <= 3 ? `Low stock (${firstInv.quantity})` : `In stock (${firstInv.quantity})`;
 
           const priceText = firstPrice ? escapeHTML((firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})) : "";
           const safeInvText = escapeHTML(invText);
@@ -1381,7 +1381,7 @@ seo:
             }
             if(invEl) {
               const invClass = invQty === 0 ? "out-of-stock" : invQty <= 3 ? "low-stock" : "in-stock";
-              const invText = invQty === 0 ? "Out of stock" : invQty <= 3 ? `Low stock (${invQty})` : `In stock (${invQty})`;
+              const invText = invQty === 0 ? "Available on request" : invQty <= 3 ? `Low stock (${invQty})` : `In stock (${invQty})`;
               invEl.className = `rs-inventory ${invClass}`;
               invEl.textContent = invText;
             }
