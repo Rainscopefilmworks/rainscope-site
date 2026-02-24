@@ -744,8 +744,8 @@ seo:
       const DEBUG_MODE = false;
       // Temporary: set to true to show all items regardless of category (for debugging)
       const DEBUG_SHOW_ALL_CATEGORIES = false;
-      // Temporary: set to true to show items even with 0 inventory (for debugging)
-      const DEBUG_SHOW_ZERO_INVENTORY = false;
+      // Keep items visible even when all variations are out of stock
+      const SHOW_OUT_OF_STOCK_ITEMS = true;
 
       // DOM
       const $cats = document.getElementById("rs-cats-list");
@@ -968,7 +968,7 @@ seo:
           <div class="rs-line">
             <div>
               <div>${l.name}</div>
-              <div style="font-size:12px;color:#6b7280">${l.priceMoney? money(priceNum(l.priceMoney)):"—"}</div>
+              <div style="font-size:12px;color:#6b7280">${l.priceMoney? money(priceNum(l.priceMoney)):"—"}${l.onRequest ? " • On request" : ""}</div>
             </div>
             <input type="number" min="1" max="${l.maxQty || 999}" data-i="${i}" value="${l.qty}">
             <button class="rs-remove" data-rm="${i}">&times;</button>
@@ -1018,18 +1018,21 @@ seo:
         }
       }
 
-      function addToCart(variationId, name, priceMoney, maxQty){
+      function addToCart(variationId, name, priceMoney, maxQty, onRequest = false){
         const line = cart.find(l=>l.variationId===variationId);
         if(line) {
-          const newQty = Math.min((+line.qty||1)+1, maxQty || 999);
+          line.maxQty = Math.max(parseInt(line.maxQty || "0", 10), maxQty || 999);
+          const lineMaxQty = line.maxQty || 999;
+          const newQty = Math.min((+line.qty||1)+1, lineMaxQty);
           if(newQty > (+line.qty||1)) {
             line.qty = String(newQty);
+            line.onRequest = Boolean(line.onRequest || onRequest);
             saveCart(); renderCart(); showToast();
           } else {
             showToast("Maximum quantity reached");
           }
         } else {
-          cart.push({variationId,name,priceMoney,qty:"1",maxQty});
+          cart.push({variationId,name,priceMoney,qty:"1",maxQty,onRequest: Boolean(onRequest)});
           saveCart(); renderCart(); showToast();
         }
       }
@@ -1077,9 +1080,11 @@ seo:
               return false;
             }
             const catIds = itemCatIds(it);
+            let normalizedNames = [];
+            let categoryNames = [];
             if(catIds.length){
-              const categoryNames = catIds.map(id => nameById[id]).filter(Boolean);
-              const normalizedNames = categoryNames.map(normalize);
+              categoryNames = catIds.map(id => nameById[id]).filter(Boolean);
+              normalizedNames = categoryNames.map(normalize);
               if(normalizedNames.some(norm => excludeSet.has(norm))) {
                 console.log(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
                 return false;
@@ -1101,6 +1106,11 @@ seo:
             
             // Location filtering
             if (!DEBUG_MODE) {
+              const isShopCategoryItem = normalizedNames.some(norm => shopSet.has(norm));
+              if (isShopCategoryItem) {
+                console.log(`Item ${it.item_data?.name} included: shop category bypasses location filter`);
+                return true;
+              }
               const locs=it.present_at_location_ids||it.item_data?.present_at_location_ids||[];
               const absent=it.absent_at_location_ids||it.item_data?.absent_at_location_ids||[];
               if(absent.includes(LOCATION_ID)) {
@@ -1175,20 +1185,18 @@ seo:
                 });
                 
                 if (!hasStock) {
-                  if (DEBUG_SHOW_ZERO_INVENTORY) {
-                    console.log(`DEBUG: Including item ${item.item_data?.name} with 0 inventory (would normally be filtered)`);
+                  if (SHOW_OUT_OF_STOCK_ITEMS) {
                     return true;
-                  } else {
-                    console.log(`Item ${item.item_data?.name} filtered: no stock available`);
-                    return false;
                   }
+                  console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+                  return false;
                 }
                 return hasStock;
               });
               console.log(`After inventory filtering: ${items.length} items remain (from ${itemsBeforeInventory})`);
               
               // If all items filtered out by inventory, show message
-              if (items.length === 0 && itemsBeforeInventory > 0 && !DEBUG_SHOW_ZERO_INVENTORY) {
+              if (items.length === 0 && itemsBeforeInventory > 0 && !SHOW_OUT_OF_STOCK_ITEMS) {
                 console.warn("⚠️ All items filtered out due to zero inventory");
                 if ($grid) {
                   $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
@@ -1330,6 +1338,7 @@ seo:
 
           const firstPrice = first?.item_variation_data?.price_money || null;
           const firstInv = inventoryCache[first?.id] || {quantity: 0};
+          const firstIsRequest = firstInv.quantity === 0;
           const invClass = firstInv.quantity === 0 ? "out-of-stock" : firstInv.quantity <= 3 ? "low-stock" : "in-stock";
           const invText = firstInv.quantity === 0 ? "Out of stock" : firstInv.quantity <= 3 ? `Low stock (${firstInv.quantity})` : `In stock (${firstInv.quantity})`;
 
@@ -1345,7 +1354,7 @@ seo:
                 <div class="rs-inventory ${invClass}">${safeInvText}</div>
                 <div class="rs-row">
                   <div class="rs-price" data-price-for="${escapeHTML(item.id)}">${priceText}</div>
-                  <button class="rs-add" data-add="${escapeHTML(item.id)}" ${firstInv.quantity === 0 ? "disabled" : ""}>Add</button>
+                  <button class="rs-add" data-add="${escapeHTML(item.id)}" data-max-qty="${firstIsRequest ? "999" : String(Math.max(1, firstInv.quantity))}" data-on-request="${firstIsRequest ? "true" : "false"}">${firstIsRequest ? "Request" : "Add"}</button>
                 </div>
               </div>
             </div>`;
@@ -1364,8 +1373,11 @@ seo:
             
             if(el) el.textContent = priceObj ? (priceObj.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"}) : "";
             if(addBtn) {
-              addBtn.disabled = invQty === 0;
-              addBtn.dataset.maxQty = invQty;
+              const isRequest = invQty === 0;
+              addBtn.disabled = false;
+              addBtn.dataset.maxQty = isRequest ? "999" : String(Math.max(1, invQty));
+              addBtn.dataset.onRequest = isRequest ? "true" : "false";
+              addBtn.textContent = isRequest ? "Request" : "Add";
             }
             if(invEl) {
               const invClass = invQty === 0 ? "out-of-stock" : invQty <= 3 ? "low-stock" : "in-stock";
@@ -1386,87 +1398,144 @@ seo:
             const name=`${item.item_data?.name||"Item"} — ${(v?.item_variation_data?.name)||"Default"}`;
             const p=v?.item_variation_data?.price_money||null;
             const maxQty = parseInt(btn.dataset.maxQty || "999", 10);
-            addToCart(varId,name,p,maxQty);
+            const onRequest = btn.dataset.onRequest === "true";
+            addToCart(varId,name,p,maxQty,onRequest);
           };
         });
       }
 
-      // Process purchase
-      async function processPurchase(sourceId){
+      function getCheckoutFormData() {
+        const given_name = document.getElementById("first").value.trim();
+        const family_name = document.getElementById("last").value.trim();
+        const email_address = document.getElementById("email").value.trim();
+        const phone_number = document.getElementById("phone").value.trim() || undefined;
+
+        if (!given_name || !email_address) {
+          alert("First name and email are required.");
+          return null;
+        }
+        if (!cart.length) {
+          alert("Add at least one item.");
+          return null;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email_address)) {
+          alert("Please enter a valid email address.");
+          return null;
+        }
+        if (given_name.length > 100 || family_name.length > 100) {
+          alert("Name fields are too long.");
+          return null;
+        }
+        if (phone_number && phone_number.length > 20) {
+          alert("Phone number is too long.");
+          return null;
+        }
+        return { given_name, family_name, email_address, phone_number };
+      }
+
+      function resetCheckoutState() {
+        cart.length = 0;
+        saveCart();
+        renderCart();
+        document.getElementById("first").value = "";
+        document.getElementById("last").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+        closeCart();
+      }
+
+      async function createOrGetCustomer(formData) {
+        const response = await fetch(`${PROXY_BASE}/api/customer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        return response.json();
+      }
+
+      async function processOrderRequest() {
         const setStatus = m => { if ($status) $status.textContent = m; };
-
         try {
-          // Security: Get and validate form inputs
-          const given_name   = document.getElementById("first").value.trim();
-          const family_name  = document.getElementById("last").value.trim();
-          const email_address= document.getElementById("email").value.trim();
-          const phone_number = document.getElementById("phone").value.trim() || undefined;
-
-          // Input validation
-          if (!given_name || !email_address) { 
-            alert("First name and email are required."); 
-            $submit.disabled = false;
-            return; 
-          }
-          if (!cart.length) { 
-            alert("Add at least one item."); 
-            $submit.disabled = false;
-            return; 
-          }
-          
-          // Security: Validate email format
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(email_address)) {
-            alert("Please enter a valid email address.");
-            $submit.disabled = false;
-            return;
-          }
-          
-          // Security: Validate name length and characters (prevent injection)
-          if (given_name.length > 100 || family_name.length > 100) {
-            alert("Name fields are too long.");
-            $submit.disabled = false;
-            return;
-          }
-          
-          // Security: Validate phone number format if provided
-          if (phone_number && phone_number.length > 20) {
-            alert("Phone number is too long.");
-            $submit.disabled = false;
-            return; 
-          }
+          const form = getCheckoutFormData();
+          if (!form) return;
 
           setStatus("Creating customer…");
-          const cust = await fetch(`${PROXY_BASE}/api/customer`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ given_name, family_name, email_address, phone_number })
-          }).then(r => r.json());
-
+          const cust = await createOrGetCustomer(form);
           if (!cust?.customer_id) {
-            alert("Purchase failed: could not create/find customer.");
+            alert("Order request failed: could not create/find customer.");
             setStatus("");
-            $submit.disabled = false;
             return;
           }
 
           const line_items = cart.map(l => ({
             catalog_object_id: l.variationId,
-            quantity: String(l.qty)
+            quantity: String(l.qty),
           }));
 
-          // Calculate cart total before attempting payment
+          setStatus("Creating order request…");
+          const res = await fetch(`${PROXY_BASE}/api/estimate`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customer_id: cust.customer_id,
+              location_id: LOCATION_ID,
+              line_items,
+              note: "Shop order request (includes on-request items).",
+              publish: false,
+            }),
+          });
+          const data = await res.json();
+
+          if (!res.ok || !data?.ok) {
+            const errorMsg = data?.error || `HTTP ${res.status}`;
+            alert("Order request failed:\n" + errorMsg + "\n\nCheck the browser console for more details.");
+            console.error("Order request error:", { status: res.status, data, line_items });
+            setStatus("");
+            return;
+          }
+
+          setStatus("Order request created!");
+          alert("Order request created successfully. We'll confirm availability and follow up shortly.");
+          resetCheckoutState();
+          setStatus("");
+        } catch (err) {
+          console.error("Order request error:", err);
+          alert("Order request failed: " + (err?.message || "Unknown error"));
+          setStatus("");
+        } finally {
+          $submit.disabled = false;
+        }
+      }
+
+      // Process purchase
+      async function processPurchase(sourceId){
+        const setStatus = m => { if ($status) $status.textContent = m; };
+        try {
+          const form = getCheckoutFormData();
+          if (!form) return;
+
+          setStatus("Creating customer…");
+          const cust = await createOrGetCustomer(form);
+          if (!cust?.customer_id) {
+            alert("Purchase failed: could not create/find customer.");
+            setStatus("");
+            return;
+          }
+
+          const line_items = cart.map(l => ({
+            catalog_object_id: l.variationId,
+            quantity: String(l.qty),
+          }));
+
           const cartTotal = cart.reduce((sum, l) => {
             const price = priceNum(l.priceMoney);
             const qty = Math.max(1, parseInt(l.qty || "1", 10));
             return sum + (price * qty);
           }, 0);
-
-          // Square doesn't allow $0 payments - check before processing
           if (cartTotal <= 0) {
             alert("Cannot process payment: Order total must be greater than $0.00.\n\nIf you're testing with free items, please add a paid item to your cart.");
             setStatus("");
-            $submit.disabled = false;
             return;
           }
 
@@ -1479,80 +1548,68 @@ seo:
               location_id: LOCATION_ID,
               line_items,
               source_id: sourceId,
-              // Pass customer info explicitly for receipt
-              customer_email: email_address,
-              customer_name: `${given_name}${family_name ? ' ' + family_name : ''}`.trim(),
-              // Request email receipt
+              customer_email: form.email_address,
+              customer_name: `${form.given_name}${form.family_name ? " " + form.family_name : ""}`.trim(),
               delivery_method: "EMAIL",
             })
           });
-
           const data = await res.json();
 
           if (!res.ok || !data?.ok) {
             const errorMsg = data?.error || `HTTP ${res.status}`;
-            console.error("Purchase error response:", {
-              status: res.status,
-              statusText: res.statusText,
-              data,
-              lineItems: line_items
-            });
-            if(data?.insufficient_inventory) {
+            console.error("Purchase error response:", { status: res.status, statusText: res.statusText, data, lineItems: line_items });
+            if (data?.insufficient_inventory) {
               alert("Purchase failed: " + errorMsg + "\n\nSome items may have sold out. Please refresh and try again.");
             } else {
               alert("Purchase failed:\n" + errorMsg + "\n\nCheck the browser console for more details.");
             }
             setStatus("");
-            $submit.disabled = false;
             return;
           }
 
           setStatus("Purchase successful!");
-          alert("Thank you for your purchase! Your order has been processed. A receipt will be emailed to " + email_address + ".");
-          
-          // Clear cart
-          cart.length = 0;
-          saveCart();
-          renderCart();
-          
-          // Reset form
-          document.getElementById("first").value = "";
-          document.getElementById("last").value = "";
-          document.getElementById("email").value = "";
-          document.getElementById("phone").value = "";
-          
-          closeCart();
+          alert("Thank you for your purchase! Your order has been processed. A receipt will be emailed to " + form.email_address + ".");
+          resetCheckoutState();
           setStatus("");
         } catch (err) {
           console.error("Purchase error:", err);
           alert("Purchase failed: " + (err?.message || "Unknown error"));
           setStatus("");
+        } finally {
           $submit.disabled = false;
         }
       }
 
       // Submit handler
       $submit.onclick = async function(){
-        if(!payments) {
-          alert("Payment form not configured. Please set APPLICATION_ID in the code.");
-          return;
-        }
-        
         if(!cart.length) {
           alert("Add at least one item to cart.");
           return;
         }
-        
+
+        const hasOnRequestItems = cart.some(line => line.onRequest);
+        if (hasOnRequestItems) {
+          $submit.disabled = true;
+          $status.textContent = "Creating order request...";
+          await processOrderRequest();
+          return;
+        }
+
+        if(!payments) {
+          alert("Payment form not configured. Please set APPLICATION_ID in the code.");
+          return;
+        }
+
         $submit.disabled = true;
         $status.textContent = "Requesting payment token...";
-        
+
         try {
           // New Square Web Payments SDK v1 API
           if (card && typeof card.tokenize === 'function') {
             const result = await card.tokenize();
             if (result.status === 'OK') {
               // Process payment with token
-              processPurchase(result.token);
+              await processPurchase(result.token);
             } else {
               // Handle tokenization errors
               const errorMsg = result.errors?.[0]?.message || 'Payment tokenization failed';
