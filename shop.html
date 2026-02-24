@@ -1472,6 +1472,8 @@ seo:
             catalog_object_id: l.variationId,
             quantity: String(l.qty),
           }));
+          const now = new Date();
+          const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
           setStatus("Creating order request…");
           const res = await fetch(`${PROXY_BASE}/api/estimate`, {
@@ -1483,6 +1485,7 @@ seo:
               line_items,
               note: "Shop order request (includes on-request items).",
               publish: false,
+              start_date: startDate,
             }),
           });
           const data = await res.json();

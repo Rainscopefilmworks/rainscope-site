@@ -135,9 +135,13 @@ export default {
           throw new Error("Square did not return an order id.");
         }
 
+        const dueDate = /^\d{4}-\d{2}-\d{2}$/.test(start_date || "")
+          ? start_date
+          : new Date().toISOString().slice(0, 10);
+
         // 2) Create the Invoice
         // - accepted_payment_methods -> card only
-        // - payment_requests -> BALANCE with due_date (if provided)
+        // - payment_requests -> BALANCE with due_date (required by Square)
         // - sale_or_service_date -> service date (if provided)
         const invoiceBody = {
           invoice: {
@@ -148,16 +152,12 @@ export default {
             accepted_payment_methods: { card: true }, // ONLY card
             description: note || undefined,
             // Use payment_requests to set due date (Square disallows invoice.due_date directly)
-            ...(start_date
-              ? {
-                  payment_requests: [
-                    {
-                      request_type: "BALANCE",
-                      due_date: start_date, // yyyy-mm-dd
-                    },
-                  ],
-                }
-              : {}),
+            payment_requests: [
+              {
+                request_type: "BALANCE",
+                due_date: dueDate, // yyyy-mm-dd
+              },
+            ],
             // Set service date (first billable day)
             ...(service_date ? { sale_or_service_date: service_date } : {}),
           },
