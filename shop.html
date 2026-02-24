@@ -434,7 +434,8 @@ seo:
     }
     .shop-wrapper #card-container iframe{
       color-scheme: dark;
-      filter:none;
+      /* Square iframe is light-themed by default; invert for a dark-on-site visual match. */
+      filter:invert(0.94) hue-rotate(180deg) saturate(1.05) contrast(1.03);
       border-radius:6px;
     }
     /* Keep Square validation/help text readable on dark backgrounds */
@@ -887,7 +888,7 @@ seo:
               color: "rgba(17,24,39,0.55)",
             },
             ".message-text": {
-              color: "#ffffff",
+              color: "#111827",
             },
           },
         };
