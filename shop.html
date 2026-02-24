@@ -411,7 +411,7 @@ seo:
       transform:none;
     }
     .shop-wrapper .rs-status{font-size:13px;color:var(--rs-muted);text-align:center}
-    .shop-wrapper .rs-status{color:rgba(255,255,255,0.6)}
+    .shop-wrapper .rs-status{color:rgba(255,255,255,0.88);min-height:18px}
     .shop-wrapper .rs-status.is-error{color:#fca5a5}
     .shop-wrapper .rs-status.is-success{color:#86efac}
     .shop-wrapper .rs-cart-actions .rs-btn-primary{width:100%}
@@ -441,8 +441,7 @@ seo:
     }
     .shop-wrapper #card-container iframe{
       color-scheme: dark;
-      /* Square iframe is light-themed by default; invert for a dark-on-site visual match. */
-      filter:invert(0.94) hue-rotate(180deg) saturate(1.05) contrast(1.03);
+      filter:none;
       border-radius:6px;
     }
     /* Keep Square validation/help text readable on dark backgrounds */
@@ -575,6 +574,9 @@ seo:
       flex-direction:column;
       gap:14px;
       align-items:flex-start;
+    }
+    .shop-wrapper .rs-checkout-result[hidden]{
+      display:none !important;
     }
     .shop-wrapper .rs-checkout-result h3{
       margin:0;
@@ -1047,7 +1049,7 @@ seo:
               color: "rgba(17,24,39,0.55)",
             },
             ".message-text": {
-              color: "#111827",
+              color: "#f3f4f6",
             },
           },
         };
