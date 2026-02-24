@@ -250,11 +250,11 @@ export default {
       // --- Purchase: create Order -> process Payment (for shop items) ---
       // Body: { customer_id, location_id, line_items[], taxes?, note?, source_id, idempotency_key, customer_email?, customer_name?, on_request_variation_ids? }
       // source_id: payment token from Square payment form
-      // customer_email: explicitly passed email (ensures receipt is sent to correct address)
+      // customer_email: explicitly passed email (used as buyer_email_address for receipts)
       // customer_name: explicitly passed name (for reference)
       // on_request_variation_ids: optional list of variation IDs that should bypass inventory enforcement
       // Returns: { ok: true, order_id, payment_id, status }
-      // Note: Square automatically sends payment receipts when payment is processed
+      // Note: Square sends email receipts when buyer_email_address is provided on the payment
       if (url.pathname === "/api/purchase" && method === "POST") {
         const {
           customer_id,
@@ -388,6 +388,8 @@ export default {
 
         // 4) Process payment
         const paymentIdempotencyKey = idempotency_key || cryptoRandomId();
+        const buyerEmailAddress = (typeof customer_email === "string" ? customer_email.trim() : "");
+        const hasBuyerEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmailAddress);
         let paymentRes;
         try {
           paymentRes = await square(env, "POST", "/v2/payments", {
@@ -395,6 +397,8 @@ export default {
             idempotency_key: paymentIdempotencyKey,
             amount_money: totalMoney,
             order_id: orderId,
+            customer_id,
+            ...(hasBuyerEmail ? { buyer_email_address: buyerEmailAddress } : {}),
           });
         } catch (paymentErr) {
           const firstErr = Array.isArray(paymentErr?.square_errors) ? paymentErr.square_errors[0] : null;
@@ -426,8 +430,6 @@ export default {
         }
 
         // Check payment status
-        // Square automatically sends payment receipts via email when payment is processed
-        // The receipt is sent to the email address associated with the customer record
         if (payment.status === "APPROVED" || payment.status === "COMPLETED") {
           return cors(
             env,
@@ -437,6 +439,7 @@ export default {
               payment_id: payment.id,
               status: payment.status,
               receipt_url: payment.receipt_url,
+              receipt_email: hasBuyerEmail ? buyerEmailAddress : null,
             }),
             req
           );
