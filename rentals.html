@@ -444,6 +444,15 @@ seo:
       color:#131417;
       transition:all 0.3s ease;
     }
+    .rentals-wrapper .rs-single-variant{
+      width:100%;
+      padding:.55rem .7rem;
+      border:1px solid #e6e7ea;
+      border-radius:10px;
+      background:#f7f8fa;
+      color:#5d6673;
+      font-size:12px;
+    }
     .rentals-wrapper .rs-variant:focus{
       outline:none;
       border-color:#2B3E5E;
@@ -1054,6 +1063,12 @@ seo:
      color: var(--color-text-primary);
    }
 
+   .rentals-wrapper .rs-single-variant {
+     background: rgba(8, 18, 17, 0.45);
+     border-color: rgba(255, 255, 255, 0.08);
+     color: rgba(255, 255, 255, 0.7);
+   }
+
    .rentals-wrapper .rs-variant:focus {
      border-color: var(--color-accent-forest);
      box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2);
@@ -1100,6 +1115,16 @@ seo:
    .rentals-wrapper .rs-form input::placeholder,
    .rentals-wrapper .rs-form textarea::placeholder {
      color: rgba(255, 255, 255, 0.6);
+   }
+
+   .rentals-wrapper .rs-form input[type="date"] {
+     color-scheme: dark;
+   }
+
+   .rentals-wrapper .rs-form input[type="date"]::-webkit-calendar-picker-indicator {
+     filter: invert(1) brightness(1.25);
+     opacity: 0.92;
+     cursor: pointer;
    }
 
    .rentals-wrapper .rs-summary div,
@@ -1727,6 +1752,7 @@ seo:
         $grid.innerHTML = list.map(item=>{
           const vars=item.item_data?.variations||[];
           const first=vars[0];
+          const hasMultipleVariants = vars.length > 1;
           const imgId=item.item_data?.image_ids?.[0];
           const img=imgId?(imagesById[imgId]?.image_data?.url||""):"";
           const title=escapeHTML(item.item_data?.name||"Item");
@@ -1745,6 +1771,10 @@ seo:
           }).join("");
 
           const firstPrice = first?.item_variation_data?.price_money || null;
+          const firstVariationName = escapeHTML(first?.item_variation_data?.name || "Default");
+          const singleVariantLabel = !hasMultipleVariants && firstVariationName !== "Default"
+            ? `<div class="rs-single-variant">${firstVariationName}</div>`
+            : "";
           const priceText = firstPrice ? escapeHTML((firstPrice.amount/100).toLocaleString(undefined,{style:"currency",currency:"CAD"})+" / day") : "";
 
           return `
@@ -1752,10 +1782,10 @@ seo:
               ${safeImg? `<img class="rs-img" loading="lazy" src="${safeImg}" alt="${title}">` : `<div class="rs-img"></div>`}
               <div class="rs-body">
                 <div class="rs-title">${title}</div>
-                <select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>
+                ${hasMultipleVariants ? `<select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>` : singleVariantLabel}
                 <div class="rs-row">
                   <div class="rs-price" data-price-for="${escapeHTML(item.id)}">${priceText}</div>
-                  <button class="rs-add" data-add="${escapeHTML(item.id)}">Add</button>
+                  <button class="rs-add" data-add="${escapeHTML(item.id)}" data-variation-id="${escapeHTML(first?.id || "")}">Add</button>
                 </div>
               </div>
             </div>`;
@@ -1776,11 +1806,12 @@ seo:
             const itemId=btn.getAttribute("data-add");
             const item=items.find(i=>i.id===itemId);
             const sel=$grid.querySelector(`.rs-variant[data-item="${itemId}"]`);
-            const varId=sel.value;
-            const v=(item.item_data?.variations||[]).find(x=>x.id===varId);
+            const varId=sel?.value || btn.getAttribute("data-variation-id");
+            const v=(item.item_data?.variations||[]).find(x=>x.id===varId) || (item.item_data?.variations||[])[0];
+            if (!v?.id) return;
             const name=`${item.item_data?.name||"Item"} — ${(v?.item_variation_data?.name)||"Default"}`;
             const p=v?.item_variation_data?.price_money||null;
-            addToCart(varId,name,p);
+            addToCart(v.id,name,p);
           };
         });
       }

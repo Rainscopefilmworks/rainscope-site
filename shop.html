@@ -272,6 +272,16 @@ seo:
     .shop-wrapper .rs-title{font-weight:600;font-size:15px;margin-bottom:4px}
     .shop-wrapper .rs-variant{width:100%;padding:6px;border:1px solid var(--rs-border);border-radius:6px;font:inherit;margin-bottom:4px}
     .shop-wrapper .rs-variant{background:rgba(8,18,17,0.6);border-color:rgba(255,255,255,0.12);color:var(--color-text-primary)}
+    .shop-wrapper .rs-single-variant{
+      width:100%;
+      padding:6px 8px;
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:6px;
+      margin-bottom:4px;
+      background:rgba(8,18,17,0.45);
+      color:rgba(255,255,255,0.7);
+      font-size:12px;
+    }
     .shop-wrapper .rs-row{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
     .shop-wrapper .rs-price{font-weight:600;color:var(--color-accent-sage);font-size:16px}
     .shop-wrapper .rs-inventory{
@@ -1598,6 +1608,7 @@ seo:
         $grid.innerHTML = list.map(item=>{
           const vars=item.item_data?.variations||[];
           const first=vars[0];
+          const hasMultipleVariants = vars.length > 1;
           const imgId=item.item_data?.image_ids?.[0];
           const img=imgId?(imagesById[imgId]?.image_data?.url||""):"";
           const title=escapeHTML(item.item_data?.name||"Item");
@@ -1618,6 +1629,10 @@ seo:
           }).join("");
 
           const firstPrice = first?.item_variation_data?.price_money || null;
+          const firstVariationName = escapeHTML(first?.item_variation_data?.name || "Default");
+          const singleVariantLabel = !hasMultipleVariants && firstVariationName !== "Default"
+            ? `<div class="rs-single-variant">${firstVariationName}</div>`
+            : "";
           const firstInv = inventoryCache[first?.id] || {quantity: 0};
           const firstIsRequest = firstInv.quantity === 0;
           const invClass = firstInv.quantity === 0 ? "out-of-stock" : firstInv.quantity <= 3 ? "low-stock" : "in-stock";
@@ -1631,11 +1646,11 @@ seo:
               ${safeImg? `<img class="rs-img" loading="lazy" src="${safeImg}" alt="${title}">` : `<div class="rs-img"></div>`}
               <div class="rs-body">
                 <div class="rs-title">${title}</div>
-                <select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>
+                ${hasMultipleVariants ? `<select class="rs-variant" data-item="${escapeHTML(item.id)}">${opts}</select>` : singleVariantLabel}
                 <div class="rs-inventory ${invClass}">${safeInvText}</div>
                 <div class="rs-row">
                   <div class="rs-price" data-price-for="${escapeHTML(item.id)}">${priceText}</div>
-                  <button class="rs-add" data-add="${escapeHTML(item.id)}" data-max-qty="${firstIsRequest ? "999" : String(Math.max(1, firstInv.quantity))}" data-on-request="${firstIsRequest ? "true" : "false"}">${firstIsRequest ? "Request" : "Add"}</button>
+                  <button class="rs-add" data-add="${escapeHTML(item.id)}" data-variation-id="${escapeHTML(first?.id || "")}" data-max-qty="${firstIsRequest ? "999" : String(Math.max(1, firstInv.quantity))}" data-on-request="${firstIsRequest ? "true" : "false"}">${firstIsRequest ? "Request" : "Add"}</button>
                 </div>
               </div>
             </div>`;
@@ -1674,13 +1689,14 @@ seo:
             const itemId=btn.getAttribute("data-add");
             const item=items.find(i=>i.id===itemId);
             const sel=$grid.querySelector(`.rs-variant[data-item="${itemId}"]`);
-            const varId=sel.value;
-            const v=(item.item_data?.variations||[]).find(x=>x.id===varId);
+            const varId=sel?.value || btn.getAttribute("data-variation-id");
+            const v=(item.item_data?.variations||[]).find(x=>x.id===varId) || (item.item_data?.variations||[])[0];
+            if (!v?.id) return;
             const name=`${item.item_data?.name||"Item"} — ${(v?.item_variation_data?.name)||"Default"}`;
             const p=v?.item_variation_data?.price_money||null;
             const maxQty = parseInt(btn.dataset.maxQty || "999", 10);
             const onRequest = btn.dataset.onRequest === "true";
-            addToCart(varId,name,p,maxQty,onRequest);
+            addToCart(v.id,name,p,maxQty,onRequest);
           };
         });
       }
