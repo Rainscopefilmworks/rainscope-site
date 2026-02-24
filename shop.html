@@ -434,7 +434,7 @@ seo:
     }
     .shop-wrapper #card-container iframe{
       color-scheme: dark;
-      filter: invert(0.9) hue-rotate(180deg) saturate(1.2);
+      filter:none;
       border-radius:6px;
     }
     /* Keep Square validation/help text readable on dark backgrounds */
@@ -867,7 +867,46 @@ seo:
         payments = Square.payments(APPLICATION_ID, LOCATION_ID);
         
         // Create and attach card payment method
-        card = await payments.card();
+        // Use SDK card styles so validation text (e.g., postal code) is readable on dark UI.
+        const cardStyleOptions = {
+          style: {
+            ".input-container": {
+              borderColor: "rgba(255,255,255,0.12)",
+              backgroundColor: "#081211",
+            },
+            ".input-container.is-focus": {
+              borderColor: "#2B3E5E",
+            },
+            ".input-container.is-error": {
+              borderColor: "#ef4444",
+            },
+            "input": {
+              color: "#ffffff",
+              backgroundColor: "#081211",
+            },
+            "input::placeholder": {
+              color: "rgba(255,255,255,0.6)",
+            },
+            ".message-text": {
+              color: "#ffffff",
+            },
+            ".message-text.is-error": {
+              color: "#ffffff",
+            },
+            ".message-icon": {
+              color: "#ffffff",
+            },
+            ".message-icon.is-error": {
+              color: "#ffffff",
+            },
+          },
+        };
+        try {
+          card = await payments.card(cardStyleOptions);
+        } catch (styleError) {
+          console.warn("Styled card initialization failed; falling back to default card style.", styleError);
+          card = await payments.card();
+        }
         await card.attach('#card-container');
         
         console.log('Square Web Payments SDK v1 initialized successfully');
@@ -1534,7 +1573,7 @@ seo:
           }
 
           setStatus("Purchase successful!");
-          alert("Thank you for your purchase! Your order has been processed. A receipt will be emailed to " + form.email_address + ".");
+          alert(`Payment received. Order created${data?.order_id ? ` (ID: ${data.order_id})` : ""} and marked for fulfillment. We'll contact you to schedule pickup.`);
           resetCheckoutState();
           setStatus("");
         } catch (err) {

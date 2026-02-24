@@ -356,8 +356,29 @@ export default {
         }
 
         // 3) Create the Order
+        // Add a pickup fulfillment in PROPOSED state so paid shop orders remain open
+        // until pickup is scheduled and fulfillment is completed internally.
+        const pickupFulfillment = {
+          type: "PICKUP",
+          state: "PROPOSED",
+          pickup_details: {
+            schedule_type: "ASAP",
+            recipient: {
+              display_name: customer_name || "Customer",
+              ...(customer_email ? { email_address: customer_email } : {}),
+            },
+            note: "Paid order awaiting pickup scheduling and fulfillment.",
+          },
+        };
         const orderRes = await square(env, "POST", "/v2/orders", {
-          order: { location_id, customer_id, line_items, taxes },
+          order: {
+            location_id,
+            customer_id,
+            line_items,
+            taxes,
+            ...(note ? { note } : {}),
+            fulfillments: [pickupFulfillment],
+          },
         });
 
         const orderId = orderRes?.order?.id;
