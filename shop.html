@@ -437,6 +437,19 @@ seo:
       filter: invert(0.9) hue-rotate(180deg) saturate(1.2);
       border-radius:6px;
     }
+    /* Keep Square validation/help text readable on dark backgrounds */
+    .shop-wrapper #card-container{
+      color:#fff;
+    }
+    .shop-wrapper #card-container [role="alert"],
+    .shop-wrapper #card-container [aria-live],
+    .shop-wrapper #card-container .message-text,
+    .shop-wrapper #card-container .sq-message,
+    .shop-wrapper #card-container .sq-error-message,
+    .shop-wrapper #card-container .sq-field-message,
+    .shop-wrapper #card-container .sq-input-message{
+      color:#fff !important;
+    }
     /* Legacy SqPaymentForm styles (for backwards compatibility) */
     .shop-wrapper #card-container > div{
       padding:var(--rs-pad);
@@ -1509,7 +1522,9 @@ seo:
           if (!res.ok || !data?.ok) {
             const errorMsg = data?.error || `HTTP ${res.status}`;
             console.error("Purchase error response:", { status: res.status, statusText: res.statusText, data, lineItems: line_items });
-            if (data?.insufficient_inventory) {
+            if (data?.payment_declined) {
+              alert("Purchase failed: " + errorMsg);
+            } else if (data?.insufficient_inventory) {
               alert("Purchase failed: " + errorMsg + "\n\nSome items may have sold out. Please refresh and try again.");
             } else {
               alert("Purchase failed:\n" + errorMsg + "\n\nCheck the browser console for more details.");

@@ -367,12 +367,37 @@ export default {
 
         // 4) Process payment
         const paymentIdempotencyKey = idempotency_key || cryptoRandomId();
-        const paymentRes = await square(env, "POST", "/v2/payments", {
-          source_id,
-          idempotency_key: paymentIdempotencyKey,
-          amount_money: totalMoney,
-          order_id: orderId,
-        });
+        let paymentRes;
+        try {
+          paymentRes = await square(env, "POST", "/v2/payments", {
+            source_id,
+            idempotency_key: paymentIdempotencyKey,
+            amount_money: totalMoney,
+            order_id: orderId,
+          });
+        } catch (paymentErr) {
+          const firstErr = Array.isArray(paymentErr?.square_errors) ? paymentErr.square_errors[0] : null;
+          const squareCode = firstErr?.code || null;
+          const squareCategory = firstErr?.category || null;
+          const isDeclined = squareCategory === "PAYMENT_METHOD_ERROR" || /DECLINE/i.test(squareCode || "");
+          const userMessage = isDeclined
+            ? "Card was declined. Please try another card or contact your bank."
+            : "Unable to process payment right now. Please try again.";
+
+          return cors(
+            env,
+            json(
+              {
+                ok: false,
+                error: userMessage,
+                payment_declined: isDeclined,
+                square_code: squareCode,
+              },
+              isDeclined ? 402 : 502
+            ),
+            req
+          );
+        }
 
         const payment = paymentRes?.payment;
         if (!payment?.id) {
@@ -395,6 +420,7 @@ export default {
             req
           );
         } else {
+          const statusCode = /DECLINED|FAILED|CANCELED/i.test(payment.status || "") ? 402 : 400;
           return cors(
             env,
             json({
@@ -402,8 +428,9 @@ export default {
               order_id: orderId,
               payment_id: payment.id,
               status: payment.status,
-              error: payment.status_detail || "Payment not approved",
-            }, 400),
+              error: "Payment was not approved. Please try another card.",
+              payment_declined: statusCode === 402,
+            }, statusCode),
             req
           );
         }
@@ -472,7 +499,17 @@ async function square(env, method, path, body) {
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Square ${method} ${path}: ${res.status} ${text}`);
+    let parsed = null;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = null;
+    }
+    const err = new Error(`Square ${method} ${path}: ${res.status}`);
+    err.status = res.status;
+    err.square_errors = Array.isArray(parsed?.errors) ? parsed.errors : [];
+    err.square_response = parsed;
+    throw err;
   }
   return res.json();
 }
