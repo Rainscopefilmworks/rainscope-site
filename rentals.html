@@ -1349,7 +1349,7 @@ seo:
       (async () => {
       const PROXY_BASE  = "https://rainscope-square-proxy.sweet-queen-15c3.workers.dev";
       const LOCATION_ID = "L5CDX7TRVDN0C";
-      const EXCLUDE_CATEGORY_NAMES = ["labour","services","service","A tile on the streets","hidden","StuckOnSet","Locations (EX)","Tape","Crafty/Catering"];
+      const EXCLUDE_CATEGORY_NAMES = ["labour","services","service","A tile on the streets","hidden","StuckOnSet","Locations (EX)","Location (EX)","Tape","Crafty/Catering"];
       const normalize = s => (s||"").toLowerCase().replace(/&/g," and ").replace(/[^a-z0-9]+/g," ").replace(/\s+/g," ").trim();
       const excludeSet = new Set(EXCLUDE_CATEGORY_NAMES.map(normalize));
       
@@ -1458,9 +1458,29 @@ seo:
         setTimeout(()=>{ $toast.classList.remove("show"); setTimeout(()=> $toast.hidden=true, 200); }, 1200);
       }
 
-      function itemCatId(it){ return it?.item_data?.category_id
-        || it?.item_data?.reporting_category?.id
-        || (it?.item_data?.categories?.[0]?.id ?? null); }
+      function itemCatIds(it){
+        const ids = [];
+        const categoryId = it?.item_data?.category_id;
+        const reportingCategoryId = it?.item_data?.reporting_category?.id;
+        if (categoryId) ids.push(categoryId);
+        if (reportingCategoryId) ids.push(reportingCategoryId);
+        const extraIds = Array.isArray(it?.item_data?.categories)
+          ? it.item_data.categories.map(c => c?.id).filter(Boolean)
+          : [];
+        ids.push(...extraIds);
+        return [...new Set(ids)];
+      }
+
+      function itemCatId(it){
+        return itemCatIds(it)[0] || null;
+      }
+
+      function displayCategoryId(it, nameById){
+        const ids = itemCatIds(it);
+        if (!ids.length) return null;
+        const nonExcluded = ids.find(id => !excludeSet.has(normalize(nameById[id] || "")));
+        return nonExcluded || ids[0];
+      }
 
       function updateBadges(){
         const units = cart.reduce((n,l)=> n + Math.max(1,parseInt(l.qty||"1",10)), 0);
@@ -1573,11 +1593,12 @@ seo:
               console.log(`Item ${it.item_data?.name} filtered: product_type is ${pt}`);
               return false;
             }
-            const cid=itemCatId(it);
-            if(cid){
-              const norm=normalize(nameById[cid]||"");
-              if(excludeSet.has(norm)) {
-                console.log(`Item ${it.item_data?.name} filtered: category "${nameById[cid]}" is excluded`);
+            const catIds = itemCatIds(it);
+            if(catIds.length){
+              const categoryNames = catIds.map(id => nameById[id]).filter(Boolean);
+              const normalizedNames = categoryNames.map(normalize);
+              if(normalizedNames.some(norm => excludeSet.has(norm))) {
+                console.log(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
                 return false;
               }
             }
@@ -1609,10 +1630,8 @@ seo:
 
           const counts=new Map(); let unassigned=0;
           for(const it of items){
-            const cid=itemCatId(it);
+            const cid = displayCategoryId(it, nameById);
             if(cid){
-              const norm=normalize(nameById[cid]||"");
-              if(excludeSet.has(norm)) continue;
               counts.set(cid,(counts.get(cid)||0)+1);
             } else unassigned++;
           }
@@ -1665,8 +1684,9 @@ seo:
 
       function inCat(it){
         if(activeCat==="all") return true;
-        if(activeCat==="__unassigned") return !itemCatId(it);
-        return itemCatId(it)===activeCat;
+        const ids = itemCatIds(it);
+        if(activeCat==="__unassigned") return ids.length===0;
+        return ids.includes(activeCat);
       }
 
       function renderGrid(){
