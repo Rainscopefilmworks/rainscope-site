@@ -1,0 +1,65 @@
+{
+  "pageTitle": "MEET THE TEAM",
+  "schema": {
+    "name": "Our Team",
+    "description": "Meet the talented team at Rainscope Filmworks. Our experienced filmmakers, directors, and creative professionals bring your vision to life.",
+    "url": "https://rainscopefilmworks.com/our-team/"
+  },
+  "cta": {
+    "text": "Ready to start your project with our team?",
+    "label": "Contact Us",
+    "href": "/contact/"
+  },
+  "members": [
+    {
+      "name": "Jackson Lee",
+      "title": "Co-Owner",
+      "bio": "Jackson brings creative vision and strategic leadership to every project. With a passion for storytelling and deep understanding of the Pacific Northwest film industry, he ensures every production meets the highest standards of quality and creativity.",
+      "image": "https://media.rainscopefilmworks.com/team/jackson-lee2.jpg",
+      "expertise": [
+        "Creative Direction",
+        "Project Management"
+      ]
+    },
+    {
+      "name": "Cristian Oriak",
+      "title": "Co-Owner",
+      "bio": "Cristian is a master of visual storytelling, bringing cinematic quality to every frame. His expertise in lighting, composition, and camera movement creates visually stunning narratives that captivate audiences.",
+      "image": "https://media.rainscopefilmworks.com/team/cristian-oriak2.jpg",
+      "expertise": [
+        "Cinematography",
+        "Lighting Design"
+      ]
+    },
+    {
+      "name": "Lava Sood",
+      "title": "Director Of Post And Photography",
+      "bio": "Lava transforms raw footage into polished masterpieces through expert editing, color grading, and post-production techniques. With an eye for detail and creative flair, every project receives the finishing touches it deserves.",
+      "image": "https://media.rainscopefilmworks.com/team/lava-sood2.jpg",
+      "expertise": [
+        "Video Editing",
+        "Color Grading"
+      ]
+    },
+    {
+      "name": "Hans Potter",
+      "title": "Sales",
+      "bio": "Hans connects clients with the perfect production solutions, ensuring smooth communication and seamless project coordination from initial inquiry to final delivery.",
+      "image": "https://media.rainscopefilmworks.com/team/hans-potter.jpg",
+      "expertise": [
+        "Client Relations",
+        "Project Coordination"
+      ]
+    },
+    {
+      "name": "Malka Martz-Oberlander",
+      "title": "Social Media Strategist",
+      "bio": "Malka manages our social media presence, creating engaging content and building strong connections with our audience across all platforms.",
+      "image": "https://media.rainscopefilmworks.com/team/malka-martz-oberlander.jpg",
+      "expertise": [
+        "Social Media Strategy",
+        "Content Creation"
+      ]
+    }
+  ]
+}

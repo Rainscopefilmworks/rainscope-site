@@ -75,33 +75,20 @@ seo:
     {
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      "name": "Our Team",
-      "description": "Meet the talented team at Rainscope Filmworks. Our experienced filmmakers, directors, and creative professionals bring your vision to life.",
-      "url": "https://rainscopefilmworks.com/our-team/",
+      "name": "{{ team.schema.name }}",
+      "description": "{{ team.schema.description }}",
+      "url": "{{ team.schema.url }}",
       "mainEntity": {
         "@type": "Organization",
         "name": "Rainscope Filmworks",
         "employee": [
+{% for member in team.members %}
           {
             "@type": "Person",
-            "name": "Jackson Lee",
-            "jobTitle": "Co-Owner"
-          },
-          {
-            "@type": "Person",
-            "name": "Cristian Oriak",
-            "jobTitle": "Co-Owner"
-          },
-          {
-            "@type": "Person",
-            "name": "Lava Sood",
-            "jobTitle": "Director Of Post And Photography"
-          },
-          {
-            "@type": "Person",
-            "name": "Hans Potter",
-            "jobTitle": "Sales"
-          }
+            "name": "{{ member.name }}",
+            "jobTitle": "{{ member.title }}"
+          }{% if not loop.last %},{% endif %}
+{% endfor %}
         ]
       },
       "breadcrumb": {
@@ -130,61 +117,30 @@ seo:
     <!-- Main Content -->
     <main id="main-content" class="page-content team-page">
         <div class="team-container">
-            <h1 class="team-title">MEET THE TEAM</h1>
+            <h1 class="team-title">{{ team.pageTitle }}</h1>
             
             <div class="team-grid">
+                {% for member in team.members %}
                 <div class="team-member">
                     <div class="team-member-image">
-                        <img src="https://media.rainscopefilmworks.com/team/jackson-lee2.jpg" alt="Jackson Lee" loading="lazy">
+                        <img src="{{ member.image }}" alt="{{ member.name }}" loading="lazy">
                     </div>
-                    <h3 class="team-member-name">Jackson Lee</h3>
-                    <p class="team-member-title">Co-Owner</p>
-                    <p class="team-member-bio">Jackson brings creative vision and strategic leadership to every project. With a passion for storytelling and deep understanding of the Pacific Northwest film industry, he ensures every production meets the highest standards of quality and creativity.</p>
-                    <div class="team-member-expertise">
-                        <span class="expertise-tag">Creative Direction</span>
-                        <span class="expertise-tag">Project Management</span>
+                    <div class="team-member-meta">
+                        <h3 class="team-member-name">{{ member.name }}</h3>
+                        <p class="team-member-title">{{ member.title }}</p>
                     </div>
                 </div>
-                
-                <div class="team-member">
-                    <div class="team-member-image">
-                        <img src="https://media.rainscopefilmworks.com/team/cristian-oriak2.jpg" alt="Cristian Oriak" loading="lazy">
-                    </div>
-                    <h3 class="team-member-name">Cristian Oriak</h3>
-                    <p class="team-member-title">Co-Owner</p>
-                    <p class="team-member-bio">Cristian is a master of visual storytelling, bringing cinematic quality to every frame. His expertise in lighting, composition, and camera movement creates visually stunning narratives that captivate audiences.</p>
-                    <div class="team-member-expertise">
-                        <span class="expertise-tag">Cinematography</span>
-                        <span class="expertise-tag">Lighting Design</span>
-                    </div>
-                </div>
-                
-                <div class="team-member">
-                    <div class="team-member-image">
-                        <img src="https://media.rainscopefilmworks.com/team/lava-sood2.jpg" alt="Lava Sood" loading="lazy">
-                    </div>
-                    <h3 class="team-member-name">Lava Sood</h3>
-                    <p class="team-member-title">Director Of Post And Photography</p>
-                    <p class="team-member-bio">Lava transforms raw footage into polished masterpieces through expert editing, color grading, and post-production techniques. With an eye for detail and creative flair, every project receives the finishing touches it deserves.</p>
-                    <div class="team-member-expertise">
-                        <span class="expertise-tag">Video Editing</span>
-                        <span class="expertise-tag">Color Grading</span>
-                    </div>
-                </div>
-                
-                <div class="team-member">
-                    <div class="team-member-image">
-                        <img src="https://media.rainscopefilmworks.com/team/hans-potter.jpg" alt="Hans Potter" loading="lazy">
-                    </div>
-                    <h3 class="team-member-name">Hans Potter</h3>
-                    <p class="team-member-title">Sales</p>
-                    <p class="team-member-bio">Hans connects clients with the perfect production solutions, ensuring smooth communication and seamless project coordination from initial inquiry to final delivery.</p>
-                    <div class="team-member-expertise">
-                        <span class="expertise-tag">Client Relations</span>
-                        <span class="expertise-tag">Project Coordination</span>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
+
+            {% if team.cta and team.cta.label and team.cta.href %}
+            <div class="team-cta">
+                {% if team.cta.text %}
+                <p class="team-cta-text">{{ team.cta.text }}</p>
+                {% endif %}
+                <a href="{{ team.cta.href }}" class="btn-secondary">{{ team.cta.label }}</a>
+            </div>
+            {% endif %}
         </div>
     </main>
     {% include "footer.njk" %}

@@ -3756,189 +3756,151 @@ body.modal-open {
 /* Team Page Styles */
 .team-page {
     margin-top: var(--header-height);
-    padding: var(--spacing-4xl) var(--spacing-3xl);
-    background: var(--color-primary-light);
+    padding: clamp(2.5rem, 7vw, 5rem) clamp(1.25rem, 3vw, 3rem);
+    background: linear-gradient(to bottom, var(--color-primary-light) 0%, var(--color-primary) 100%);
     color: var(--color-text-primary);
     min-height: calc(100vh - var(--header-height));
 }
 
 .team-page .breadcrumbs {
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .team-container {
-    max-width: 100%;
+    max-width: min(1720px, 100%);
     margin: 0 auto;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 clamp(1.5rem, 4vw, 4rem);
+    padding: 0;
 }
 
 .team-title {
     font-family: var(--font-family-display);
-    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-size: clamp(2.3rem, 5vw, 4rem);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
-    letter-spacing: clamp(2px, 0.5vw, 4px);
+    letter-spacing: clamp(1px, 0.4vw, 3px);
     line-height: var(--line-height-tight);
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+    margin: 0 0 clamp(2rem, 4vw, 3rem) 0;
     text-align: center;
     color: var(--color-text-primary);
 }
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: clamp(1.5rem, 3vw, 3rem);
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: clamp(1.5rem, 2.6vw, 2.5rem);
     margin: 0 auto;
-    justify-items: center;
-    align-items: start;
+    justify-items: stretch;
+    align-items: stretch;
     width: 100%;
 }
 
 .team-member {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
     width: 100%;
-    max-width: 280px;
-    padding: var(--spacing-lg);
+    min-height: 100%;
+    background: var(--color-surface-card);
+    border: 1px solid var(--color-border-light);
     border-radius: var(--radius-lg);
-    transition: all var(--transition-base);
-}
-
-.team-member:hover {
-    background: rgba(15, 44, 41, 0.3);
-    transform: translateY(-5px);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
 }
 
 .team-member-image {
-    width: clamp(180px, 18vw, 240px);
-    height: clamp(180px, 18vw, 240px);
-    border-radius: 50%;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
     overflow: hidden;
-    margin-bottom: clamp(1.5rem, 3vw, 2rem);
-    box-shadow: var(--shadow-lg);
-    border: 3px solid var(--color-border);
-    flex-shrink: 0;
-    position: relative;
-    aspect-ratio: 1 / 1;
-    transition: all var(--transition-base);
-}
-
-.team-member:hover .team-member-image {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--color-accent-teal);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border-light);
 }
 
 .team-member-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
     display: block;
 }
 
-/* Bias Hans Potter's image down in the frame */
-.team-member:last-child .team-member-image img {
-    object-position: center 60%;
+.team-member-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    min-height: 4.25rem;
+    padding: clamp(0.9rem, 1.6vw, 1.1rem) clamp(0.9rem, 1.6vw, 1.1rem) clamp(1.1rem, 2vw, 1.4rem);
 }
 
 .team-member-name {
     font-family: var(--font-family-display);
-    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
-    margin-bottom: clamp(0.5rem, 1vw, 0.8rem);
+    margin: 0;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.6px;
     line-height: var(--line-height-tight);
 }
 
 .team-member-title {
     font-family: var(--font-family-base);
-    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    font-size: clamp(0.72rem, 0.9vw, 0.82rem);
     font-weight: var(--font-weight-medium);
-    color: var(--color-text-tertiary);
-    margin: 0 0 clamp(1rem, 2vw, 1.5rem) 0;
+    color: var(--color-accent-sage);
+    margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.1em;
     line-height: var(--line-height-normal);
 }
 
-.team-member-bio {
-    font-family: var(--font-family-base);
-    font-size: clamp(0.85rem, 1.3vw, 1rem);
-    font-weight: var(--font-weight-normal);
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-relaxed);
-    margin: 0 0 clamp(1rem, 2vw, 1.5rem) 0;
-    max-width: 100%;
+.team-cta {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
     text-align: center;
 }
 
-.team-member-expertise {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-xs);
-    justify-content: center;
-    margin-top: auto;
-}
-
-.expertise-tag {
-    display: inline-block;
-    padding: 0.4rem 0.8rem;
-    background: rgba(0, 212, 170, 0.1);
-    border: 1px solid var(--color-accent-teal);
-    border-radius: var(--radius-full);
+.team-cta-text {
+    margin: 0;
+    color: var(--color-text-secondary);
     font-family: var(--font-family-base);
-    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-accent-teal);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    line-height: var(--line-height-normal);
 }
 
-@media (max-width: 1200px) {
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: clamp(2rem, 4vw, 3rem);
-    }
+.team-cta .btn-secondary {
+    margin-top: 0;
 }
 
 @media (max-width: 768px) {
+    .team-page {
+        padding: clamp(2rem, 6vw, 3rem) clamp(1rem, 4vw, 1.25rem);
+    }
+
     .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: clamp(2rem, 5vw, 3rem);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem);
     }
-    
-    .team-member {
-        max-width: 100%;
-    }
-    
-    .team-member-image {
-        width: clamp(140px, 32vw, 180px);
-        height: clamp(140px, 32vw, 180px);
+
+    .team-cta {
+        margin-top: clamp(2rem, 6vw, 3rem);
     }
 }
 
 @media (max-width: 480px) {
     .team-grid {
         grid-template-columns: 1fr;
-        gap: clamp(2.5rem, 6vw, 3.5rem);
+        gap: clamp(1.5rem, 6vw, 2rem);
     }
     
     .team-title {
-        margin-bottom: clamp(2rem, 5vw, 3rem);
-    }
-    
-    .team-member-image {
-        width: clamp(160px, 50vw, 200px);
-        height: clamp(160px, 50vw, 200px);
+        margin-bottom: clamp(1.5rem, 5vw, 2.25rem);
     }
 }
