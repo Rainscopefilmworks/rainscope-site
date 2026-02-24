@@ -111,7 +111,7 @@ seo:
       --rs-font:clamp(13px, 1.05vw, 15px);
       --rs-chip-h:clamp(32px, 4.8vw, 36px);
       --vh: 1vh;
-      --z-shell: 1; --z-sheet: 60; --z-toast: 70;
+      --z-shell: 1; --z-sheet: 60; --z-modal: 75; --z-toast: 80;
     }
 
     .shop-wrapper *{box-sizing:border-box}
@@ -360,6 +360,10 @@ seo:
       color: var(--color-text-primary);
     }
     .shop-wrapper .rs-total{font-size:18px;margin-top:8px;padding-top:8px;border-top:1px solid var(--rs-border)}
+    .shop-wrapper .rs-checkout-note{
+      font-size:12px;
+      color:rgba(255,255,255,0.65);
+    }
     .shop-wrapper .rs-form{
       display:flex;
       flex-direction:column;
@@ -408,6 +412,9 @@ seo:
     }
     .shop-wrapper .rs-status{font-size:13px;color:var(--rs-muted);text-align:center}
     .shop-wrapper .rs-status{color:rgba(255,255,255,0.6)}
+    .shop-wrapper .rs-status.is-error{color:#fca5a5}
+    .shop-wrapper .rs-status.is-success{color:#86efac}
+    .shop-wrapper .rs-cart-actions .rs-btn-primary{width:100%}
 
     /* Square Payment Form Styles */
     .shop-wrapper .square-payment-form{
@@ -473,6 +480,116 @@ seo:
       box-shadow:0 0 0 3px rgba(43,62,94,0.1);
     }
 
+    .shop-wrapper .rs-checkout-modal{
+      position:fixed;
+      inset:0;
+      z-index:var(--z-modal);
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity 0.2s ease;
+    }
+    .shop-wrapper .rs-checkout-modal[data-open="true"]{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+    }
+    .shop-wrapper .rs-checkout-backdrop{
+      position:absolute;
+      inset:0;
+      background:rgba(4,10,10,0.76);
+      backdrop-filter:blur(2px);
+    }
+    .shop-wrapper .rs-checkout-panel{
+      position:relative;
+      width:min(620px,100%);
+      max-height:calc(100vh - 40px);
+      display:flex;
+      flex-direction:column;
+      background:rgba(12,28,27,0.97);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:16px;
+      box-shadow:0 26px 80px rgba(0,0,0,0.5);
+      overflow:hidden;
+      transform:translateY(10px);
+      transition:transform 0.2s ease;
+    }
+    .shop-wrapper .rs-checkout-modal[data-open="true"] .rs-checkout-panel{
+      transform:translateY(0);
+    }
+    .shop-wrapper .rs-checkout-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      background:rgba(8,18,17,0.9);
+    }
+    .shop-wrapper .rs-checkout-head h2{
+      margin:0;
+      font-size:20px;
+      line-height:1.2;
+      color:var(--color-text-primary);
+    }
+    .shop-wrapper .rs-checkout-body{
+      padding:16px;
+      overflow-y:auto;
+    }
+    .shop-wrapper .rs-checkout-summary{
+      margin-bottom:var(--rs-pad);
+      padding:var(--rs-pad);
+      background:rgba(8,18,17,0.6);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:var(--rs-radius);
+    }
+    .shop-wrapper .rs-checkout-total{
+      font-size:17px;
+      margin-bottom:8px;
+    }
+    .shop-wrapper .rs-checkout-lines{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      max-height:140px;
+      overflow:auto;
+      font-size:13px;
+      color:rgba(255,255,255,0.75);
+      padding-right:4px;
+    }
+    .shop-wrapper .rs-checkout-line{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .shop-wrapper .rs-checkout-line strong{
+      font-weight:500;
+      color:var(--color-text-primary);
+    }
+    .shop-wrapper .rs-checkout-result{
+      padding:22px 10px 8px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:flex-start;
+    }
+    .shop-wrapper .rs-checkout-result h3{
+      margin:0;
+      font-size:24px;
+      line-height:1.2;
+      color:var(--color-text-primary);
+    }
+    .shop-wrapper .rs-checkout-result p{
+      margin:0;
+      color:rgba(255,255,255,0.85);
+    }
+    .shop-wrapper .rs-checkout-result .rs-btn-primary{
+      min-width:140px;
+    }
+
     .shop-wrapper .rs-toast{
       position:fixed;
       bottom:20px;
@@ -509,8 +626,11 @@ seo:
       .shop-wrapper .rs-line{grid-template-columns:1fr 90px 24px}
       .shop-wrapper .rs-cart{max-height:none;position:fixed;top:0;right:-100%;width:100%;max-width:420px;z-index:var(--z-sheet);transition:right 0.3s}
       .shop-wrapper .rs-cart[data-open="true"]{right:0}
-      body.rs-lock{overflow:hidden}
+      .shop-wrapper .rs-checkout-modal{padding:10px}
+      .shop-wrapper .rs-checkout-panel{max-height:calc(100vh - 20px)}
+      .shop-wrapper .rs-checkout-lines{max-height:120px}
     }
+    html.rs-lock, body.rs-lock{overflow:hidden}
 
     /* Page content wrapper */
     .page-content {
@@ -602,29 +722,57 @@ seo:
                 <div class="rs-cart-footer">
                   <div class="rs-summary">
                     <div class="rs-total">Total: <strong id="rs-total">—</strong></div>
+                    <div class="rs-checkout-note">Proceed to secure checkout to enter customer and payment details.</div>
                   </div>
 
-                  <div class="rs-form">
-                    <input id="first" placeholder="First name *" />
-                    <input id="last" placeholder="Last name" />
-                    <input id="email" type="email" placeholder="Email *" />
-                    <input id="phone" placeholder="Phone (optional)" />
-
-                    <!-- Square Payment Form -->
-                    <div class="square-payment-form">
-                      <label>Payment Information *</label>
-                      <div id="card-container">
-                        <!-- Square Web Payments SDK v1 will create card input fields here -->
-                      </div>
-                    </div>
-
-                    <div class="rs-actions">
-                      <button id="rs-submit" class="rs-btn-primary">Complete Purchase</button>
-                      <span id="rs-status" class="rs-status"></span>
-                    </div>
+                  <div class="rs-actions rs-cart-actions">
+                    <button id="rs-open-checkout" class="rs-btn-primary" type="button" disabled>Proceed to Checkout</button>
                   </div>
                 </div>
               </aside>
+
+              <!-- Checkout Modal -->
+              <div class="rs-checkout-modal" id="rs-checkout-modal" data-open="false" aria-hidden="true">
+                <div class="rs-checkout-backdrop" id="rs-close-checkout-backdrop"></div>
+                <section class="rs-checkout-panel" role="dialog" aria-modal="true" aria-labelledby="rs-checkout-title">
+                  <header class="rs-checkout-head">
+                    <h2 id="rs-checkout-title">Checkout</h2>
+                    <button class="rs-close" id="rs-close-checkout" aria-label="Close checkout">✕</button>
+                  </header>
+
+                  <div class="rs-checkout-body">
+                    <div id="rs-checkout-form-view">
+                      <div class="rs-checkout-summary">
+                        <div class="rs-checkout-total">Order total: <strong id="rs-checkout-total">—</strong></div>
+                        <div id="rs-checkout-lines" class="rs-checkout-lines"><em>No items yet.</em></div>
+                      </div>
+
+                      <div class="rs-form">
+                        <input id="first" placeholder="First name *" />
+                        <input id="last" placeholder="Last name" />
+                        <input id="email" type="email" placeholder="Email *" />
+                        <input id="phone" placeholder="Phone (optional)" />
+
+                        <div class="square-payment-form">
+                          <label>Payment Information *</label>
+                          <div id="card-container"></div>
+                        </div>
+
+                        <div class="rs-actions">
+                          <button id="rs-submit" class="rs-btn-primary" type="button">Complete Purchase</button>
+                          <span id="rs-status" class="rs-status" aria-live="polite"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="rs-checkout-result" class="rs-checkout-result" hidden>
+                      <h3 id="rs-checkout-result-title">Order Confirmed</h3>
+                      <p id="rs-checkout-result-message"></p>
+                      <button id="rs-checkout-done" class="rs-btn-primary" type="button">Close</button>
+                    </div>
+                  </div>
+                </section>
+              </div>
 
               <!-- Toast -->
               <div id="rs-toast" class="rs-toast" hidden>Added to cart</div>
@@ -769,6 +917,17 @@ seo:
       const $submit = document.getElementById("rs-submit");
       const $status = document.getElementById("rs-status");
       const $total = document.getElementById("rs-total");
+      const $openCheckout = document.getElementById("rs-open-checkout");
+      const $checkoutModal = document.getElementById("rs-checkout-modal");
+      const $closeCheckout = document.getElementById("rs-close-checkout");
+      const $closeCheckoutBackdrop = document.getElementById("rs-close-checkout-backdrop");
+      const $checkoutTotal = document.getElementById("rs-checkout-total");
+      const $checkoutLines = document.getElementById("rs-checkout-lines");
+      const $checkoutFormView = document.getElementById("rs-checkout-form-view");
+      const $checkoutResult = document.getElementById("rs-checkout-result");
+      const $checkoutResultTitle = document.getElementById("rs-checkout-result-title");
+      const $checkoutResultMessage = document.getElementById("rs-checkout-result-message");
+      const $checkoutDone = document.getElementById("rs-checkout-done");
       const $cartPanel = document.getElementById("rs-cart");
       const $openCart = document.getElementById("rs-open-cart");
       const $closeCart = document.getElementById("rs-close-cart");
@@ -928,7 +1087,7 @@ seo:
           callbacks: {
             cardNonceResponseReceived: function(errors, nonce, cardData) {
               if (errors) {
-                $status.textContent = "Payment error: " + errors[0].message;
+                setCheckoutStatus("Payment error: " + errors[0].message, "error");
                 $submit.disabled = false;
                 return;
               }
@@ -1000,13 +1159,64 @@ seo:
 
       function computeTotals(){
         const total = cart.reduce((sum,l)=> sum + priceNum(l.priceMoney) * Math.max(1,parseInt(l.qty||"1",10)), 0);
-        $total.textContent = total ? money(total) : "—";
+        const totalText = total ? money(total) : "—";
+        $total.textContent = totalText;
+        if($checkoutTotal) $checkoutTotal.textContent = totalText;
+        return total;
       }
 
       function saveCart(){ localStorage.setItem("shop_cart", JSON.stringify(cart)); }
+
+      function renderCheckoutSummary(){
+        if($openCheckout) $openCheckout.disabled = !cart.length;
+        if(!$checkoutLines) return;
+        if(!cart.length){
+          $checkoutLines.innerHTML = "<em>No items yet.</em>";
+          return;
+        }
+        $checkoutLines.innerHTML = cart.map(l=>{
+          const qty = Math.max(1, parseInt(l.qty || "1", 10));
+          const lineTotal = priceNum(l.priceMoney) * qty;
+          return `<div class="rs-checkout-line"><span>${qty} × ${escapeHTML(l.name || "Item")}</span><strong>${lineTotal ? money(lineTotal) : "—"}</strong></div>`;
+        }).join("");
+      }
+
+      function setCheckoutStatus(message = "", tone = "default"){
+        if(!$status) return;
+        $status.textContent = message;
+        $status.classList.remove("is-error", "is-success");
+        if(tone === "error") $status.classList.add("is-error");
+        if(tone === "success") $status.classList.add("is-success");
+      }
+
+      function showCheckoutFormView(){
+        if($checkoutFormView) $checkoutFormView.hidden = false;
+        if($checkoutResult) $checkoutResult.hidden = true;
+      }
+
+      function showCheckoutResult(title, message){
+        if($checkoutFormView) $checkoutFormView.hidden = true;
+        if($checkoutResult) $checkoutResult.hidden = false;
+        if($checkoutResultTitle) $checkoutResultTitle.textContent = title || "Order Update";
+        if($checkoutResultMessage) $checkoutResultMessage.textContent = message || "";
+      }
+
+      function syncOverlayLock(){
+        const cartOpen = $cartPanel?.dataset.open === "true";
+        const checkoutOpen = $checkoutModal?.dataset.open === "true";
+        const shouldLock = cartOpen || checkoutOpen;
+        document.documentElement.classList.toggle("rs-lock", shouldLock);
+        document.body.classList.toggle("rs-lock", shouldLock);
+      }
       
       function renderCart(){
-        if(!cart.length){ $lines.innerHTML = "<em>No items yet.</em>"; updateBadges(); computeTotals(); return; }
+        if(!cart.length){
+          $lines.innerHTML = "<em>No items yet.</em>";
+          updateBadges();
+          computeTotals();
+          renderCheckoutSummary();
+          return;
+        }
         $lines.innerHTML = cart.map((l,i)=>`
           <div class="rs-line">
             <div>
@@ -1023,27 +1233,53 @@ seo:
             cart[i].qty=String(newQty); 
             saveCart(); 
             updateBadges(); 
-            computeTotals(); 
+            computeTotals();
+            renderCheckoutSummary();
           };
         });
         $lines.querySelectorAll("[data-rm]").forEach(btn=>{
           btn.onclick=()=>{ cart.splice(+btn.dataset.rm,1); saveCart(); renderCart(); };
         });
-        updateBadges(); computeTotals();
+        updateBadges();
+        computeTotals();
+        renderCheckoutSummary();
       }
 
       function openCart(){
         $cartPanel.dataset.open = "true";
-        document.documentElement.classList.add('rs-lock');
-        document.body.classList.add('rs-lock');
         $openCart?.setAttribute("aria-expanded","true");
+        syncOverlayLock();
       }
       
       function closeCart(){
         $cartPanel.dataset.open = "false";
-        document.documentElement.classList.remove('rs-lock');
-        document.body.classList.remove('rs-lock');
         $openCart?.setAttribute("aria-expanded","false");
+        syncOverlayLock();
+      }
+
+      function openCheckoutModal(){
+        if(!cart.length){
+          showToast("Add at least one item");
+          return;
+        }
+        showCheckoutFormView();
+        setCheckoutStatus("");
+        renderCheckoutSummary();
+        if($checkoutModal){
+          $checkoutModal.dataset.open = "true";
+          $checkoutModal.setAttribute("aria-hidden", "false");
+        }
+        syncOverlayLock();
+        setTimeout(()=>document.getElementById("first")?.focus(), 20);
+      }
+
+      function closeCheckoutModal(){
+        if($submit?.disabled) return;
+        if($checkoutModal){
+          $checkoutModal.dataset.open = "false";
+          $checkoutModal.setAttribute("aria-hidden", "true");
+        }
+        syncOverlayLock();
       }
 
       // Load inventory for items
@@ -1454,26 +1690,27 @@ seo:
         const phone_number = document.getElementById("phone").value.trim() || undefined;
 
         if (!given_name || !email_address) {
-          alert("First name and email are required.");
+          setCheckoutStatus("First name and email are required.", "error");
           return null;
         }
         if (!cart.length) {
-          alert("Add at least one item.");
+          setCheckoutStatus("Add at least one item to cart.", "error");
           return null;
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email_address)) {
-          alert("Please enter a valid email address.");
+          setCheckoutStatus("Please enter a valid email address.", "error");
           return null;
         }
         if (given_name.length > 100 || family_name.length > 100) {
-          alert("Name fields are too long.");
+          setCheckoutStatus("Name fields are too long.", "error");
           return null;
         }
         if (phone_number && phone_number.length > 20) {
-          alert("Phone number is too long.");
+          setCheckoutStatus("Phone number is too long.", "error");
           return null;
         }
+        setCheckoutStatus("");
         return { given_name, family_name, email_address, phone_number };
       }
 
@@ -1485,6 +1722,7 @@ seo:
         document.getElementById("last").value = "";
         document.getElementById("email").value = "";
         document.getElementById("phone").value = "";
+        setCheckoutStatus("");
         closeCart();
       }
 
@@ -1499,16 +1737,14 @@ seo:
 
       // Process purchase
       async function processPurchase(sourceId){
-        const setStatus = m => { if ($status) $status.textContent = m; };
         try {
           const form = getCheckoutFormData();
           if (!form) return;
 
-          setStatus("Creating customer…");
+          setCheckoutStatus("Creating customer…");
           const cust = await createOrGetCustomer(form);
           if (!cust?.customer_id) {
-            alert("Purchase failed: could not create/find customer.");
-            setStatus("");
+            setCheckoutStatus("Purchase failed: could not create/find customer.", "error");
             return;
           }
 
@@ -1527,12 +1763,11 @@ seo:
             return sum + (price * qty);
           }, 0);
           if (cartTotal <= 0) {
-            alert("Cannot process payment: Order total must be greater than $0.00.\n\nIf you're testing with free items, please add a paid item to your cart.");
-            setStatus("");
+            setCheckoutStatus("Cannot process payment: order total must be greater than $0.00.", "error");
             return;
           }
 
-          setStatus("Processing payment…");
+          setCheckoutStatus("Processing payment…");
           const res = await fetch(`${PROXY_BASE}/api/purchase`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -1553,24 +1788,24 @@ seo:
             const errorMsg = data?.error || `HTTP ${res.status}`;
             console.error("Purchase error response:", { status: res.status, statusText: res.statusText, data, lineItems: line_items });
             if (data?.payment_declined) {
-              alert("Purchase failed: " + errorMsg);
+              setCheckoutStatus("Purchase failed: " + errorMsg, "error");
             } else if (data?.insufficient_inventory) {
-              alert("Purchase failed: " + errorMsg + "\n\nSome items may have sold out. Please refresh and try again.");
+              setCheckoutStatus("Purchase failed: " + errorMsg + " Some items may have sold out. Please refresh and try again.", "error");
             } else {
-              alert("Purchase failed:\n" + errorMsg + "\n\nCheck the browser console for more details.");
+              setCheckoutStatus("Purchase failed: " + errorMsg, "error");
             }
-            setStatus("");
             return;
           }
 
-          setStatus("Purchase successful!");
-          alert(`Payment received. Order created${data?.order_id ? ` (ID: ${data.order_id})` : ""} and marked for fulfillment. We'll contact you to schedule pickup.`);
+          const orderLabel = data?.order_id ? `Order ${data.order_id}` : "Your order";
+          showCheckoutResult(
+            "Payment Received",
+            `${orderLabel} is paid and now in fulfillment queue. We'll contact you to schedule pickup details.`
+          );
           resetCheckoutState();
-          setStatus("");
         } catch (err) {
           console.error("Purchase error:", err);
-          alert("Purchase failed: " + (err?.message || "Unknown error"));
-          setStatus("");
+          setCheckoutStatus("Purchase failed: " + (err?.message || "Unknown error"), "error");
         } finally {
           $submit.disabled = false;
         }
@@ -1579,17 +1814,17 @@ seo:
       // Submit handler
       $submit.onclick = async function(){
         if(!cart.length) {
-          alert("Add at least one item to cart.");
+          setCheckoutStatus("Add at least one item to cart.", "error");
           return;
         }
 
         if(!payments) {
-          alert("Payment form not configured. Please set APPLICATION_ID in the code.");
+          setCheckoutStatus("Payment form not configured. Please set APPLICATION_ID in the code.", "error");
           return;
         }
 
         $submit.disabled = true;
-        $status.textContent = "Requesting payment token...";
+        setCheckoutStatus("Requesting payment token...");
 
         try {
           // New Square Web Payments SDK v1 API
@@ -1601,7 +1836,7 @@ seo:
             } else {
               // Handle tokenization errors
               const errorMsg = result.errors?.[0]?.message || 'Payment tokenization failed';
-              $status.textContent = "Payment error: " + errorMsg;
+              setCheckoutStatus("Payment error: " + errorMsg, "error");
               $submit.disabled = false;
             }
           } else if (payments && typeof payments.requestCardNonce === 'function') {
@@ -1612,7 +1847,7 @@ seo:
           }
         } catch (err) {
           console.error("Error tokenizing card:", err);
-          $status.textContent = "Payment error: " + (err?.message || "Unknown error");
+          setCheckoutStatus("Payment error: " + (err?.message || "Unknown error"), "error");
           $submit.disabled = false;
         }
       };
@@ -1621,6 +1856,24 @@ seo:
       $search?.addEventListener("input", renderGrid);
       $openCart?.addEventListener("click", openCart);
       $closeCart?.addEventListener("click", closeCart);
+      $openCheckout?.addEventListener("click", openCheckoutModal);
+      $closeCheckout?.addEventListener("click", closeCheckoutModal);
+      $closeCheckoutBackdrop?.addEventListener("click", closeCheckoutModal);
+      $checkoutDone?.addEventListener("click", ()=>{
+        closeCheckoutModal();
+        showCheckoutFormView();
+        setCheckoutStatus("");
+      });
+      document.addEventListener("keydown", (e)=>{
+        if(e.key !== "Escape") return;
+        if($checkoutModal?.dataset.open === "true"){
+          closeCheckoutModal();
+          return;
+        }
+        if($cartPanel?.dataset.open === "true"){
+          closeCart();
+        }
+      });
       
       // Mobile menu handlers
       document.getElementById("rs-open-cats")?.addEventListener("click", ()=>{
@@ -1631,6 +1884,7 @@ seo:
       });
 
       // Load initial data
+      showCheckoutFormView();
       renderCart();
       loadCatalog();
       })();
