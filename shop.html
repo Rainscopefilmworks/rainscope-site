@@ -1629,9 +1629,15 @@ seo:
           }).join("");
 
           const firstPrice = first?.item_variation_data?.price_money || null;
-          const firstVariationName = escapeHTML(first?.item_variation_data?.name || "Default");
-          const singleVariantLabel = !hasMultipleVariants && firstVariationName !== "Default"
-            ? `<div class="rs-single-variant">${firstVariationName}</div>`
+          const firstVariationNameRaw = (first?.item_variation_data?.name || "Default").trim();
+          const firstVariationNameNormalized = firstVariationNameRaw.toLowerCase();
+          const showSingleVariantLabel =
+            !hasMultipleVariants &&
+            !!firstVariationNameRaw &&
+            firstVariationNameNormalized !== "default" &&
+            firstVariationNameNormalized !== "regular";
+          const singleVariantLabel = showSingleVariantLabel
+            ? `<div class="rs-single-variant">${escapeHTML(firstVariationNameRaw)}</div>`
             : "";
           const firstInv = inventoryCache[first?.id] || {quantity: 0};
           const firstIsRequest = firstInv.quantity === 0;
