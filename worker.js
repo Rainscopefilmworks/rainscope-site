@@ -248,10 +248,11 @@ export default {
       }
 
       // --- Purchase: create Order -> process Payment (for shop items) ---
-      // Body: { customer_id, location_id, line_items[], taxes?, note?, source_id, idempotency_key, customer_email?, customer_name? }
+      // Body: { customer_id, location_id, line_items[], taxes?, note?, source_id, idempotency_key, customer_email?, customer_name?, on_request_variation_ids? }
       // source_id: payment token from Square payment form
       // customer_email: explicitly passed email (ensures receipt is sent to correct address)
       // customer_name: explicitly passed name (for reference)
+      // on_request_variation_ids: optional list of variation IDs that should bypass inventory enforcement
       // Returns: { ok: true, order_id, payment_id, status }
       // Note: Square automatically sends payment receipts when payment is processed
       if (url.pathname === "/api/purchase" && method === "POST") {
@@ -265,6 +266,7 @@ export default {
           idempotency_key, // Optional, will generate if not provided
           customer_email, // Explicitly passed email (for reference, customer should already have email)
           customer_name, // Explicitly passed name (for reference)
+          on_request_variation_ids = [],
         } = await req.json();
 
         if (!customer_id || !location_id || !Array.isArray(line_items) || !line_items.length) {
@@ -289,6 +291,12 @@ export default {
           );
         }
 
+        const onRequestVariationIds = new Set(
+          Array.isArray(on_request_variation_ids)
+            ? on_request_variation_ids.filter((id) => typeof id === "string" && id.trim())
+            : []
+        );
+
         // 1) Check inventory availability before creating order
         const catalogObjectIds = line_items.map(li => li.catalog_object_id).filter(Boolean);
         if (catalogObjectIds.length > 0) {
@@ -306,6 +314,9 @@ export default {
           }
 
           for (const lineItem of line_items) {
+            if (onRequestVariationIds.has(lineItem.catalog_object_id)) {
+              continue;
+            }
             const requestedQty = parseInt(lineItem.quantity || "1", 10);
             const availableQty = inventoryMap[lineItem.catalog_object_id] || 0;
             if (availableQty < requestedQty) {

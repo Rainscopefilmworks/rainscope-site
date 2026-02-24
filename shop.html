@@ -1454,63 +1454,6 @@ seo:
         return response.json();
       }
 
-      async function processOrderRequest() {
-        const setStatus = m => { if ($status) $status.textContent = m; };
-        try {
-          const form = getCheckoutFormData();
-          if (!form) return;
-
-          setStatus("Creating customer…");
-          const cust = await createOrGetCustomer(form);
-          if (!cust?.customer_id) {
-            alert("Order request failed: could not create/find customer.");
-            setStatus("");
-            return;
-          }
-
-          const line_items = cart.map(l => ({
-            catalog_object_id: l.variationId,
-            quantity: String(l.qty),
-          }));
-          const now = new Date();
-          const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-
-          setStatus("Creating order request…");
-          const res = await fetch(`${PROXY_BASE}/api/estimate`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              customer_id: cust.customer_id,
-              location_id: LOCATION_ID,
-              line_items,
-              note: "Shop order request (includes on-request items).",
-              publish: false,
-              start_date: startDate,
-            }),
-          });
-          const data = await res.json();
-
-          if (!res.ok || !data?.ok) {
-            const errorMsg = data?.error || `HTTP ${res.status}`;
-            alert("Order request failed:\n" + errorMsg + "\n\nCheck the browser console for more details.");
-            console.error("Order request error:", { status: res.status, data, line_items });
-            setStatus("");
-            return;
-          }
-
-          setStatus("Order request created!");
-          alert("Order request created successfully. We'll confirm availability and follow up shortly.");
-          resetCheckoutState();
-          setStatus("");
-        } catch (err) {
-          console.error("Order request error:", err);
-          alert("Order request failed: " + (err?.message || "Unknown error"));
-          setStatus("");
-        } finally {
-          $submit.disabled = false;
-        }
-      }
-
       // Process purchase
       async function processPurchase(sourceId){
         const setStatus = m => { if ($status) $status.textContent = m; };
@@ -1530,6 +1473,10 @@ seo:
             catalog_object_id: l.variationId,
             quantity: String(l.qty),
           }));
+          const onRequestVariationIds = cart
+            .filter(l => l.onRequest)
+            .map(l => l.variationId)
+            .filter(Boolean);
 
           const cartTotal = cart.reduce((sum, l) => {
             const price = priceNum(l.priceMoney);
@@ -1550,6 +1497,7 @@ seo:
               customer_id: cust.customer_id,
               location_id: LOCATION_ID,
               line_items,
+              on_request_variation_ids: onRequestVariationIds,
               source_id: sourceId,
               customer_email: form.email_address,
               customer_name: `${form.given_name}${form.family_name ? " " + form.family_name : ""}`.trim(),
@@ -1587,14 +1535,6 @@ seo:
       $submit.onclick = async function(){
         if(!cart.length) {
           alert("Add at least one item to cart.");
-          return;
-        }
-
-        const hasOnRequestItems = cart.some(line => line.onRequest);
-        if (hasOnRequestItems) {
-          $submit.disabled = true;
-          $status.textContent = "Creating order request...";
-          await processOrderRequest();
           return;
         }
 
