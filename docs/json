@@ -1,0 +1,500 @@
+{
+  "name": "Studio - Booking Status Processor (Fixed Email Context)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -520,
+        -40
+      ],
+      "id": "n1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI",
+          "mode": "list",
+          "cachedResultName": "StudioBookings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -320,
+        -40
+      ],
+      "id": "n2",
+      "name": "Sheet Read All",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GpxBBjixLvQ6FePm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map(i => i.json);\nconst emailRe = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nreturn rows.flatMap((r) => {\n  const status = String(r.status || '').trim();\n  const sent = String(r.last_status_email_sent || '').trim();\n  const client_email = String(r.client_email || '').trim();\n\n  if (!(status === 'Confirmed' || status === 'Cancelled')) return [];\n  if (sent === status) return [];\n  if (!emailRe.test(client_email)) return [];\n\n  return [{ json: { ...r, status, client_email } }];\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -40
+      ],
+      "id": "n3",
+      "name": "Filter Actionable"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "Confirmed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c2",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "Cancelled",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        80,
+        -40
+      ],
+      "id": "n4",
+      "name": "Switch Status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "if1",
+              "leftValue": "={{ String($json.calendar_event_id || '').trim() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        280,
+        -220
+      ],
+      "id": "n5",
+      "name": "If Has Event ID (Confirmed)"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "c_599cf273cc6f2bda46802c8f6bb3e8a513473313fb213b88382d5f6cf5b81092@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Shop/Studio"
+        },
+        "eventId": "={{ $json.calendar_event_id }}",
+        "updateFields": {
+          "summary": "={{ 'Studio Booking - Confirmed - ' + $json.client_name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        520,
+        -300
+      ],
+      "id": "n6",
+      "name": "Calendar Update Confirmed",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "3dpDi1z1iT9Tlxnm",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "if2",
+              "leftValue": "={{ String($json.calendar_event_id || '').trim() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        280,
+        140
+      ],
+      "id": "n7",
+      "name": "If Has Event ID (Cancelled)"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "c_599cf273cc6f2bda46802c8f6bb3e8a513473313fb213b88382d5f6cf5b81092@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Shop/Studio"
+        },
+        "eventId": "={{ $json.calendar_event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        520,
+        60
+      ],
+      "id": "n8",
+      "name": "Calendar Delete Cancelled",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "3dpDi1z1iT9Tlxnm",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Filter Actionable').item.json || {};\nconst row = { ...source, ...$json };\n\nrow.client_email = String(row.client_email || '').trim();\nif (!row.client_email) {\n  throw new Error(`Missing client_email for booking_id: ${row.booking_id || 'unknown'}`);\n}\n\nconst logoMark = 'https://media.rainscopefilmworks.com/SignatureFiles/logo.png';\nconst logoType = 'https://media.rainscopefilmworks.com/SignatureFiles/Logotype.png';\n\nfunction esc(v = '') {\n  return String(v)\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#39;');\n}\n\nfunction money(amount, currency = 'CAD') {\n  const n = Number(amount || 0);\n  try {\n    return new Intl.NumberFormat('en-CA', {\n      style: 'currency',\n      currency,\n      maximumFractionDigits: 0,\n    }).format(n);\n  } catch {\n    return `$${Math.round(n)} ${currency}`;\n  }\n}\n\nfunction details({ date, time, duration, estimate }) {\n  return `\n    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"\n      style=\"border-collapse:collapse;background:#f7faf9;border:1px solid #cfdfda;border-radius:10px;margin:0 0 16px;\">\n      <tr><td style=\"padding:12px 14px;border-bottom:1px solid #cfdfda;font-size:14px;line-height:1.45;text-align:left;color:#142f2b;\"><strong>Date</strong><br>${date}</td></tr>\n      <tr><td style=\"padding:12px 14px;border-bottom:1px solid #cfdfda;font-size:14px;line-height:1.45;text-align:left;color:#142f2b;\"><strong>Time</strong><br>${time}</td></tr>\n      <tr><td style=\"padding:12px 14px;border-bottom:1px solid #cfdfda;font-size:14px;line-height:1.45;text-align:left;color:#142f2b;\"><strong>Duration</strong><br>${duration} hour(s)</td></tr>\n      <tr><td style=\"padding:12px 14px;font-size:14px;line-height:1.45;text-align:left;color:#142f2b;\"><strong>Estimate</strong><br>${estimate}</td></tr>\n    </table>\n  `;\n}\n\nfunction shell({ title, subtitle, status, statusBg, statusFg, body }) {\n  return `<!doctype html>\n<html>\n  <head>\n    <meta name=\"color-scheme\" content=\"light dark\">\n    <meta name=\"supported-color-schemes\" content=\"light dark\">\n    <style>\n      @media (prefers-color-scheme: dark) {\n        .rs-body { background:#ffffff !important; }\n        .rs-wrap { background:#ffffff !important; color:#122b27 !important; }\n        .rs-content { color:#122b27 !important; }\n        .rs-p { color:#122b27 !important; }\n      }\n    </style>\n  </head>\n  <body class=\"rs-body\" style=\"margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;\">\n    <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;padding:20px 16px;\">\n      <tr>\n        <td align=\"left\">\n          <table class=\"rs-wrap\" role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\"\n            style=\"width:auto;max-width:760px;background:#ffffff;border-radius:14px;overflow:hidden;\">\n            <tr>\n              <td style=\"background:linear-gradient(135deg,#0f2c29,#173633);padding:26px 30px 24px;text-align:center;\">\n                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse:collapse;margin:0 auto;\">\n                  <tr>\n                    <td style=\"padding:0 12px 0 0;vertical-align:middle;\">\n                      <img src=\"${logoMark}\" width=\"56\" alt=\"Rainscope mark\" style=\"display:block;border:0;\">\n                    </td>\n                    <td style=\"vertical-align:middle;\">\n                      <img src=\"${logoType}\" width=\"290\" alt=\"Rainscope Filmworks\" style=\"display:block;border:0;\">\n                    </td>\n                  </tr>\n                </table>\n                <div style=\"margin-top:12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#b8d0cb;\">Studio Booking</div>\n                <h1 style=\"margin:8px 0 0;font-size:30px;line-height:1.2;color:#ffffff;\">${title}</h1>\n                <p style=\"margin:8px 0 0;font-size:15px;line-height:1.55;color:#d8e7e4;\">${subtitle}</p>\n              </td>\n            </tr>\n            <tr>\n              <td style=\"padding:18px 30px 0;text-align:left;\">\n                <span style=\"display:inline-block;padding:8px 13px;border-radius:999px;background:${statusBg};color:${statusFg};font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;\">${status}</span>\n              </td>\n            </tr>\n            <tr>\n              <td class=\"rs-content\" style=\"padding:18px 30px 30px;color:#183430;font-size:16px;line-height:1.65;text-align:left;\">\n                ${body}\n              </td>\n            </tr>\n          </table>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>`;\n}\n\nconst status = String(row.status || 'Requested').trim();\nconst name = esc(row.client_name || 'there');\nconst date = esc(row.booking_date || '');\nconst start = esc(row.start_time || '');\nconst end = esc(row.end_time || '');\nconst duration = esc(row.duration_hours || '');\nconst estimate = `${money(row.estimated_price, row.currency || 'CAD')} ${esc(row.currency || 'CAD')}`;\nconst card = details({ date, time: `${start} to ${end}`, duration, estimate });\n\nlet email_subject = '';\nlet email_html = '';\nlet email_text = '';\n\nif (status === 'Confirmed') {\n  email_subject = 'Your studio booking is confirmed';\n  email_html = shell({\n    title: 'Booking confirmed',\n    subtitle: 'Your studio time is locked in.',\n    status: 'Confirmed',\n    statusBg: '#dff1e5',\n    statusFg: '#245d35',\n    body: `<p class=\"rs-p\" style=\"margin:0 0 10px;color:#183430;\">Hi ${name}, your booking is now confirmed.</p>${card}<p class=\"rs-p\" style=\"margin:0;color:#183430;\">Please arrive 10 minutes early for setup.</p>`,\n  });\n  email_text = `Hi ${row.client_name || 'there'},\\n\\nYour booking is confirmed.\\n\\nDate: ${row.booking_date || ''}\\nTime: ${row.start_time || ''} to ${row.end_time || ''}\\nDuration: ${row.duration_hours || ''} hour(s)\\n\\nPlease arrive 10 minutes early for setup.`;\n} else {\n  email_subject = 'Your studio booking request was cancelled';\n  email_html = shell({\n    title: 'Booking cancelled',\n    subtitle: 'This time slot is no longer active.',\n    status: 'Cancelled',\n    statusBg: '#fde5e5',\n    statusFg: '#8c2b2b',\n    body: `<p class=\"rs-p\" style=\"margin:0 0 10px;color:#183430;\">Hi ${name}, your requested booking was cancelled.</p>${card}<p class=\"rs-p\" style=\"margin:0;color:#183430;\">Reply to this email for alternate time options.</p>`,\n  });\n  email_text = `Hi ${row.client_name || 'there'},\\n\\nYour booking request was cancelled.\\n\\nDate: ${row.booking_date || ''}\\nTime: ${row.start_time || ''} to ${row.end_time || ''}\\n\\nReply to this email for alternate time options.`;\n}\n\nreturn [{ json: { ...row, email_subject, email_html, email_text } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        -40
+      ],
+      "id": "n9",
+      "name": "Build Status Email"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ String($json.client_email || '').trim() }}",
+        "subject": "={{ $json.email_subject }}",
+        "message": "={{ $json.email_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        980,
+        -40
+      ],
+      "id": "n10",
+      "name": "Gmail Send Status",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "8ayzJMfLOVoC6ak7",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI",
+          "mode": "list",
+          "cachedResultName": "StudioBookings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZX3p7JX2iX1j2c2FpRnI0NFTbfh6Qqrb15DIYKTK6pI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "booking_id": "={{ $json.booking_id }}",
+            "last_status_email_sent": "={{ $json.status }}"
+          },
+          "matchingColumns": [
+            "booking_id"
+          ],
+          "schema": [
+            {
+              "id": "booking_id",
+              "displayName": "booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_status_email_sent",
+              "displayName": "last_status_email_sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        -40
+      ],
+      "id": "n11",
+      "name": "Sheet Mark Status Emailed",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GpxBBjixLvQ6FePm",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sheet Read All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Read All": {
+      "main": [
+        [
+          {
+            "node": "Filter Actionable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Actionable": {
+      "main": [
+        [
+          {
+            "node": "Switch Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Status": {
+      "main": [
+        [
+          {
+            "node": "If Has Event ID (Confirmed)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If Has Event ID (Cancelled)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Has Event ID (Confirmed)": {
+      "main": [
+        [
+          {
+            "node": "Calendar Update Confirmed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Status Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Update Confirmed": {
+      "main": [
+        [
+          {
+            "node": "Build Status Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Has Event ID (Cancelled)": {
+      "main": [
+        [
+          {
+            "node": "Calendar Delete Cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Status Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Delete Cancelled": {
+      "main": [
+        [
+          {
+            "node": "Build Status Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Status Email": {
+      "main": [
+        [
+          {
+            "node": "Gmail Send Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Send Status": {
+      "main": [
+        [
+          {
+            "node": "Sheet Mark Status Emailed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fixed-email-context-v1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

@@ -1,0 +1,751 @@
+---
+nav: booking
+seo:
+  title: "Studatio Booking | Rainscope Filmworks Vancouver"
+  description: "Request studio bookings with live hourly availability, 2-hour minimum blocks, and instant pricing estimates. Requests are reviewed and confirmed by the Rainscope team."
+  keywords: "studio booking Vancouver, production studio booking, film studio rental, hourly studio booking, Rainscope studio"
+  canonical: "https://rainscopefilmworks.com/booking/"
+  robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+  googlebot: "index, follow"
+  ogTitle: "Book the Studio | Rainscope Filmworks"
+  ogDescription: "See available studio time slots, get instant hourly estimates, and send a booking request for review."
+  image: "https://media.rainscopefilmworks.com/logo.png"
+  imageWidth: 1200
+  imageHeight: 630
+  imageAlt: "Rainscope Filmworks Studio Booking"
+  twitterTitle: "Book the Studio | Rainscope Filmworks"
+  twitterDescription: "Live availability calendar, hourly estimate, and booking request flow."
+---
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include "seo-head.njk" %}
+
+    <link rel="icon" type="image/png" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/images/android-chrome-512x512.png">
+
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="preload" as="image" href="https://media.rainscopefilmworks.com/logo.png">
+
+    <link rel="stylesheet" href="/assets/css/styles.css?v=22">
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(loadGA, 1000);
+        });
+      } else {
+        setTimeout(loadGA, 1000);
+      }
+      function loadGA() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
+        document.head.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
+        setTimeout(() => gtag('event', 'page_view'), 2000);
+      }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ReservationPage",
+      "name": "Studio Booking",
+      "description": "Request studio bookings with live availability and hourly pricing.",
+      "url": "https://rainscopefilmworks.com/booking/",
+      "mainEntity": {
+        "@type": "LocalBusiness",
+        "name": "Rainscope Filmworks",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "1868 Glen Dr #235",
+          "addressLocality": "Vancouver",
+          "addressRegion": "BC",
+          "postalCode": "V6A 4K4",
+          "addressCountry": "CA"
+        },
+        "telephone": "604-910-2845",
+        "email": "Hello@rainscopefilmworks.com"
+      }
+    }
+    </script>
+
+    <style>
+        .booking-page {
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+            padding-bottom: clamp(3rem, 8vw, 6rem);
+            background: radial-gradient(circle at 20% 0%, rgba(74, 124, 89, 0.28), rgba(15, 44, 41, 0.9) 50%, var(--color-primary-dark) 100%);
+        }
+
+        .booking-shell {
+            width: min(1200px, 92vw);
+            margin: 0 auto;
+        }
+
+        .booking-hero {
+            padding: clamp(2.75rem, 8vw, 5rem) 0 clamp(2rem, 6vw, 3rem);
+        }
+
+        .booking-kicker {
+            margin: 0 0 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.74rem;
+            color: var(--color-text-tertiary);
+        }
+
+        .booking-title {
+            margin: 0;
+            font-family: var(--font-family-display);
+            font-size: clamp(2rem, 4.8vw, 3.4rem);
+            line-height: 1.08;
+            letter-spacing: 0.02em;
+        }
+
+        .booking-subtitle {
+            margin: 1rem 0 0;
+            max-width: 62ch;
+            color: var(--color-text-secondary);
+            font-size: clamp(1rem, 1.6vw, 1.12rem);
+            line-height: 1.7;
+        }
+
+        .booking-rules {
+            margin: 1.4rem 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .booking-rule {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
+            padding: 0.4rem 0.9rem;
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+            background: rgba(15, 44, 41, 0.45);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .booking-app {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: clamp(1.2rem, 2.4vw, 1.8rem);
+            align-items: start;
+        }
+
+        .booking-card {
+            background: rgba(12, 32, 30, 0.76);
+            border: 1px solid var(--color-border);
+            border-radius: 18px;
+            padding: clamp(1rem, 2vw, 1.4rem);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+
+        .booking-card-title {
+            margin: 0;
+            font-size: clamp(1.2rem, 2vw, 1.45rem);
+            font-family: var(--font-family-display);
+            color: var(--color-text-primary);
+            letter-spacing: 0.01em;
+        }
+
+        .booking-card-subtitle {
+            margin: 0.55rem 0 0;
+            color: var(--color-text-tertiary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .booking-controls {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 0.9rem;
+        }
+
+        .booking-control {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-width: min(220px, 100%);
+        }
+
+        .booking-control label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--color-text-tertiary);
+        }
+
+        .booking-control select {
+            min-height: 44px;
+            background: rgba(7, 23, 21, 0.86);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            color: var(--color-text-primary);
+            padding: 0.65rem 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .booking-control select:focus-visible {
+            outline: 2px solid rgba(143, 188, 143, 0.85);
+            outline-offset: 1px;
+        }
+
+        .booking-estimate {
+            margin-left: auto;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid rgba(143, 188, 143, 0.4);
+            border-radius: 999px;
+            padding: 0.55rem 1rem;
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-semibold);
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            background: rgba(74, 124, 89, 0.22);
+        }
+
+        .booking-live-status {
+            margin: 0.95rem 0 0;
+            color: var(--color-text-secondary);
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+
+        .booking-live-status.is-error {
+            color: #ffc9c9;
+        }
+
+        .booking-calendar {
+            margin-top: 1.1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 0.85rem;
+            background: rgba(7, 23, 21, 0.56);
+        }
+
+        .booking-calendar-toolbar {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .booking-month-button {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            background: rgba(15, 44, 41, 0.8);
+            color: var(--color-text-primary);
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .booking-month-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .booking-month-label {
+            margin: 0;
+            text-align: center;
+            font-size: 0.94rem;
+            color: var(--color-text-secondary);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .booking-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 0.3rem;
+            margin-top: 0.9rem;
+        }
+
+        .booking-weekday {
+            text-align: center;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--color-text-tertiary);
+            padding-bottom: 0.35rem;
+        }
+
+        .booking-days {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 0.35rem;
+        }
+
+        .booking-day {
+            min-height: 64px;
+            border-radius: 10px;
+            border: 1px solid var(--color-border);
+            background: rgba(15, 44, 41, 0.65);
+            color: var(--color-text-primary);
+            padding: 0.4rem 0.35rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+        }
+
+        .booking-day:hover:not(:disabled) {
+            border-color: rgba(143, 188, 143, 0.8);
+            transform: translateY(-1px);
+        }
+
+        .booking-day.is-selected {
+            border-color: rgba(143, 188, 143, 0.95);
+            box-shadow: 0 0 0 1px rgba(143, 188, 143, 0.65);
+            background: rgba(74, 124, 89, 0.32);
+        }
+
+        .booking-day.is-unavailable {
+            opacity: 0.55;
+        }
+
+        .booking-day:disabled {
+            cursor: not-allowed;
+        }
+
+        .booking-day-pad {
+            visibility: hidden;
+            pointer-events: none;
+            min-height: 64px;
+        }
+
+        .booking-day-number {
+            font-size: 0.94rem;
+            line-height: 1;
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .booking-day-count {
+            margin-top: 0.35rem;
+            font-size: 0.63rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-text-tertiary);
+        }
+
+        .booking-slots-wrap {
+            margin-top: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 0.85rem;
+            background: rgba(7, 23, 21, 0.56);
+        }
+
+        .booking-slots-heading {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+        }
+
+        .booking-slots {
+            margin-top: 0.7rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .booking-slot {
+            border-radius: 9px;
+            border: 1px solid var(--color-border);
+            background: rgba(15, 44, 41, 0.72);
+            color: var(--color-text-primary);
+            min-height: 52px;
+            padding: 0.5rem 0.6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+        }
+
+        .booking-slot:hover {
+            transform: translateY(-1px);
+            border-color: rgba(143, 188, 143, 0.8);
+        }
+
+        .booking-slot.is-selected {
+            border-color: rgba(143, 188, 143, 0.95);
+            background: rgba(74, 124, 89, 0.32);
+            box-shadow: 0 0 0 1px rgba(143, 188, 143, 0.65);
+        }
+
+        .booking-slot span {
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .booking-slot small {
+            margin-top: 0.1rem;
+            color: var(--color-text-tertiary);
+            font-size: 0.72rem;
+        }
+
+        .booking-slots-empty {
+            margin: 0;
+            color: var(--color-text-tertiary);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .booking-form {
+            margin-top: 1rem;
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .booking-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .booking-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .booking-field-full {
+            grid-column: 1 / -1;
+        }
+
+        .booking-field label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--color-text-tertiary);
+        }
+
+        .booking-field input,
+        .booking-field textarea {
+            min-height: 44px;
+            border-radius: 10px;
+            border: 1px solid var(--color-border);
+            background: rgba(7, 23, 21, 0.86);
+            color: var(--color-text-primary);
+            padding: 0.65rem 0.8rem;
+            font-size: 0.94rem;
+            font-family: var(--font-family-base);
+        }
+
+        .booking-field textarea {
+            min-height: 108px;
+            resize: vertical;
+        }
+
+        .booking-field input:focus-visible,
+        .booking-field textarea:focus-visible {
+            outline: 2px solid rgba(143, 188, 143, 0.85);
+            outline-offset: 1px;
+        }
+
+        .booking-summary {
+            margin-top: 0.2rem;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            background: rgba(7, 23, 21, 0.56);
+            padding: 0.8rem;
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .booking-summary-title {
+            margin: 0;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-tertiary);
+        }
+
+        .booking-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.55rem;
+        }
+
+        .booking-submit {
+            margin-top: 0.2rem;
+            min-height: 48px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(120deg, #8fbc8f, #4a7c59);
+            color: #08201e;
+            font-family: var(--font-family-display);
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+        }
+
+        .booking-submit:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(74, 124, 89, 0.35);
+        }
+
+        .booking-submit:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .booking-form-status {
+            margin: 0.15rem 0 0;
+            font-size: 0.88rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .booking-form-status.is-error {
+            color: #ffc9c9;
+        }
+
+        .booking-flow {
+            margin-top: clamp(1.4rem, 3vw, 2.1rem);
+            padding: clamp(0.9rem, 2vw, 1.2rem);
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            background: rgba(12, 32, 30, 0.65);
+        }
+
+        .booking-flow h3 {
+            margin: 0;
+            font-size: 0.92rem;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            color: var(--color-text-secondary);
+        }
+
+        .booking-flow ol {
+            margin: 0.8rem 0 0;
+            padding-left: 1.1rem;
+            color: var(--color-text-tertiary);
+            display: grid;
+            gap: 0.45rem;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 1024px) {
+            .booking-app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .booking-page {
+                padding-bottom: 3rem;
+            }
+
+            .booking-shell {
+                width: min(94vw, 1200px);
+            }
+
+            .booking-form-grid,
+            .booking-summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-control {
+                width: 100%;
+            }
+
+            .booking-estimate {
+                width: 100%;
+                justify-content: center;
+                margin-left: 0;
+            }
+
+            .booking-day,
+            .booking-day-pad {
+                min-height: 58px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include "header.njk" %}
+
+    <main id="main-content" class="booking-page">
+        <section class="booking-hero">
+            <div class="booking-shell">
+                <p class="booking-kicker">Studio Scheduling</p>
+                <h1 class="booking-title">Book the studio with live availability.</h1>
+                <p class="booking-subtitle">Choose your duration, see available start times, and submit a request. All bookings are marked as requested until approved by our team.</p>
+                <div class="booking-rules">
+                    <span class="booking-rule">1-hour increments</span>
+                    <span class="booking-rule">2-hour minimum</span>
+                    <span class="booking-rule">Estimate shown before submit</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="booking-shell">
+            <div
+                class="booking-app"
+                data-booking-app
+                data-availability-endpoint="https://ai.rainscopefilmworks.com/webhook/studio-availability"
+                data-booking-endpoint="https://ai.rainscopefilmworks.com/webhook/studio-booking-request"
+                data-hourly-rate="50"
+                data-min-hours="2"
+                data-max-hours="12"
+                data-business-start="09:00"
+                data-business-end="21:00"
+                data-timezone="America/Vancouver"
+                data-currency="CAD"
+                data-days-ahead="60"
+                data-refresh-ms="30000">
+                <section class="booking-card">
+                    <h2 class="booking-card-title">Availability Calendar</h2>
+                    <p class="booking-card-subtitle">Times shown in Pacific Time. Duration changes update available starts instantly.</p>
+
+                    <div class="booking-controls">
+                        <div class="booking-control">
+                            <label for="booking-duration">Booking duration</label>
+                            <select id="booking-duration" data-booking-duration></select>
+                        </div>
+                        <div class="booking-estimate" data-booking-estimate>$0 estimate</div>
+                    </div>
+
+                    <p class="booking-live-status" data-booking-load-status role="status" aria-live="polite"></p>
+
+                    <div class="booking-calendar">
+                        <div class="booking-calendar-toolbar">
+                            <button class="booking-month-button" type="button" data-booking-prev-month aria-label="Previous month">&#x2039;</button>
+                            <p class="booking-month-label" data-booking-month-label>Month</p>
+                            <button class="booking-month-button" type="button" data-booking-next-month aria-label="Next month">&#x203A;</button>
+                        </div>
+                        <div class="booking-weekdays" aria-hidden="true">
+                            <div class="booking-weekday">Sun</div>
+                            <div class="booking-weekday">Mon</div>
+                            <div class="booking-weekday">Tue</div>
+                            <div class="booking-weekday">Wed</div>
+                            <div class="booking-weekday">Thu</div>
+                            <div class="booking-weekday">Fri</div>
+                            <div class="booking-weekday">Sat</div>
+                        </div>
+                        <div class="booking-days" data-booking-days></div>
+                    </div>
+
+                    <div class="booking-slots-wrap">
+                        <h3 class="booking-slots-heading" data-booking-slots-heading>Select a date</h3>
+                        <div class="booking-slots" data-booking-slots></div>
+                    </div>
+                </section>
+
+                <section class="booking-card">
+                    <h2 class="booking-card-title">Send Booking Request</h2>
+                    <p class="booking-card-subtitle">Requests are stored in Google Sheets with a review status, then confirmed or cancelled by the team.</p>
+
+                    <form class="booking-form" data-booking-form>
+                        <div class="booking-form-grid">
+                            <div class="booking-field">
+                                <label for="booking-client-name">Full name *</label>
+                                <input id="booking-client-name" name="client_name" type="text" autocomplete="name" required>
+                            </div>
+                            <div class="booking-field">
+                                <label for="booking-client-email">Email *</label>
+                                <input id="booking-client-email" name="client_email" type="email" autocomplete="email" required>
+                            </div>
+                            <div class="booking-field">
+                                <label for="booking-client-phone">Phone</label>
+                                <input id="booking-client-phone" name="client_phone" type="tel" autocomplete="tel">
+                            </div>
+                            <div class="booking-field">
+                                <label for="booking-company-name">Company</label>
+                                <input id="booking-company-name" name="company_name" type="text" autocomplete="organization">
+                            </div>
+                            <div class="booking-field booking-field-full">
+                                <label for="booking-project-type">Project type</label>
+                                <input id="booking-project-type" name="project_type" type="text" placeholder="Interview shoot, product session, workshop, etc.">
+                            </div>
+                            <div class="booking-field booking-field-full">
+                                <label for="booking-project-notes">Notes</label>
+                                <textarea id="booking-project-notes" name="project_notes" placeholder="Any setup needs, crew size, or special requests"></textarea>
+                            </div>
+                        </div>
+
+                        <section class="booking-summary">
+                            <h3 class="booking-summary-title">Selected Slot</h3>
+                            <div class="booking-summary-grid">
+                                <div class="booking-field">
+                                    <label for="booking-summary-date">Date</label>
+                                    <input id="booking-summary-date" type="text" data-booking-summary-date readonly>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="booking-summary-duration">Duration</label>
+                                    <input id="booking-summary-duration" type="text" data-booking-summary-duration readonly>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="booking-summary-start">Start</label>
+                                    <input id="booking-summary-start" type="text" data-booking-summary-start readonly>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="booking-summary-end">End</label>
+                                    <input id="booking-summary-end" type="text" data-booking-summary-end readonly>
+                                </div>
+                                <div class="booking-field booking-field-full">
+                                    <label for="booking-summary-estimate">Estimated price</label>
+                                    <input id="booking-summary-estimate" type="text" data-booking-summary-estimate readonly>
+                                </div>
+                            </div>
+                        </section>
+
+                        <button class="booking-submit" type="submit" data-booking-submit disabled>Submit Request</button>
+                        <p class="booking-form-status" data-booking-status role="status" aria-live="polite"></p>
+                    </form>
+                </section>
+            </div>
+
+            <aside class="booking-flow">
+                <h3>Automation Flow</h3>
+                <ol>
+                    <li>Client submits a requested time block from the live calendar.</li>
+                    <li>n8n writes booking details to Google Sheets with status fields (`Requested`, `Confirmed`, `Cancelled`).</li>
+                    <li>n8n creates or updates the Google Calendar event and removes it if cancelled.</li>
+                    <li>Client receives a request receipt email, then a second confirmation email after approval.</li>
+                </ol>
+            </aside>
+        </section>
+    </main>
+
+    {% include "footer.njk" %}
+
+    <script src="/assets/js/script.js?v=21"></script>
+    <script src="/assets/js/booking.js?v=1"></script>
+</body>
+</html>
