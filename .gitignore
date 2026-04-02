@@ -48,6 +48,7 @@ yarn-error.log*
 dist/
 build/
 _site/
+_generated/
 *.min.js
 *.min.css
 

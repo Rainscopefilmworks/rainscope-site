@@ -40,7 +40,7 @@ seo:
     <!-- Preload Critical Resources -->
     <link rel="preload" as="image" href="https://media.rainscopefilmworks.com/logo.png">
     
-    <link rel="stylesheet" href="/assets/css/styles.css?v=23">
+    <link rel="stylesheet" href="{{ assets.styles }}">
     
     {% include "analytics.njk" %}
     
@@ -244,6 +244,6 @@ seo:
     </main>
     {% include "footer.njk" %}
 
-    <script src="/assets/js/script.js?v=22"></script>
+    <script src="{{ assets.script }}"></script>
 </body>
 </html>

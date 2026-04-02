@@ -34,7 +34,7 @@ seo:
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
     <link rel="preload" as="image" href="https://media.rainscopefilmworks.com/logo.png">
 
-    <link rel="stylesheet" href="/assets/css/styles.css?v=23">
+    <link rel="stylesheet" href="{{ assets.styles }}">
 
     {% include "analytics.njk" %}
 
@@ -721,7 +721,7 @@ seo:
 
     {% include "footer.njk" %}
 
-    <script src="/assets/js/script.js?v=22"></script>
-    <script src="/assets/js/booking.js?v=2"></script>
+    <script src="{{ assets.script }}"></script>
+    <script src="{{ assets.bookingScript }}"></script>
 </body>
 </html>
