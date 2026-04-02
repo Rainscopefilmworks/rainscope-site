@@ -2182,6 +2182,15 @@ body::after {
     margin: 0;
     font-size: 0.9rem;
     color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.form-status.is-error {
+    color: #ffc9c9;
+}
+
+.form-status.is-success {
+    color: #bdf5d7;
 }
 
 .form-actions {
@@ -2944,6 +2953,7 @@ body::after {
     position: absolute;
     top: 1rem;
     right: 1rem;
+    z-index: 3;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -2953,6 +2963,7 @@ body::after {
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .work-modal-media {

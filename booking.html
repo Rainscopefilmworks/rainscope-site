@@ -36,26 +36,7 @@ seo:
 
     <link rel="stylesheet" href="/assets/css/styles.css?v=22">
 
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
 
     <script type="application/ld+json">
     {
@@ -75,7 +56,7 @@ seo:
           "postalCode": "V6A 4K4",
           "addressCountry": "CA"
         },
-        "telephone": "(604) - 566 - 8856",
+        "telephone": "(604) - 566 - 8855",
         "email": "Hello@rainscopefilmworks.com"
       }
     }
@@ -534,6 +515,10 @@ seo:
             color: #ffc9c9;
         }
 
+        .booking-form-status.is-success {
+            color: #bdf5d7;
+        }
+
         .booking-flow {
             margin-top: clamp(1.4rem, 3vw, 2.1rem);
             padding: clamp(0.9rem, 2vw, 1.2rem);
@@ -605,7 +590,7 @@ seo:
             <div class="booking-shell">
                 <p class="booking-kicker">Studio Scheduling</p>
                 <h1 class="booking-title">Book the studio with live availability.</h1>
-                <p class="booking-subtitle">Choose your duration, see available start times, and submit a request. All bookings are marked as requested until approved by our team.</p>
+                <p class="booking-subtitle">Choose your duration, see available start times, and submit a request. All bookings are marked as requested until approved by our team, and we usually confirm or follow up within one business day.</p>
                 <div class="booking-rules">
                     <span class="booking-rule">1-hour increments</span>
                     <span class="booking-rule">2-hour minimum</span>
@@ -669,7 +654,7 @@ seo:
 
                 <section class="booking-card">
                     <h2 class="booking-card-title">Send Booking Request</h2>
-                    <p class="booking-card-subtitle">Requests are stored in Google Sheets with a review status, then confirmed or cancelled by the team.</p>
+                    <p class="booking-card-subtitle">Send the request once your slot is selected. We review each booking manually and usually reply within one business day.</p>
 
                     <form class="booking-form" data-booking-form>
                         <div class="booking-form-grid">

@@ -42,30 +42,7 @@ seo:
     
     <link rel="stylesheet" href="/assets/css/styles.css?v=22">
     
-    <!-- Google Analytics - Deferred for performance -->
-    <script>
-      // Defer Google Analytics loading
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      // Load GA after page is interactive
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        // Send pageview after a delay
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -78,7 +55,7 @@ seo:
       "mainEntity": {
         "@type": "LocalBusiness",
         "name": "Rainscope Filmworks",
-        "telephone": "(604) - 566 - 8856",
+        "telephone": "(604) - 566 - 8855",
         "email": "Hello@rainscopefilmworks.com",
         "address": {
           "@type": "PostalAddress",
@@ -169,19 +146,24 @@ seo:
                             <form class="multi-step-form" data-multi-step data-endpoint="https://script.google.com/macros/s/AKfycbzMvRqqR_oA5YBljGVrkbpl3EFjQljEu-_uHaHwIJdQPdFw_jWvrxznR7ik-Lu_dURkdw/exec">
                                 <div class="form-step is-active" data-step="1">
                                     <div class="form-step-header">
-                                        <p class="form-step-kicker">Step 1 of 4</p>
-                                        <h3 class="form-step-title">Tell us your name</h3>
+                                        <p class="form-step-kicker">Step 1 of 3</p>
+                                        <h3 class="form-step-title">Start your inquiry</h3>
+                                        <p class="form-helper">Share your name and best email. We usually reply within one business day.</p>
                                     </div>
-                                    <div class="form-grid single">
+                                    <div class="form-grid">
                                         <div class="form-field">
                                             <label class="form-label" for="contact-name">Name *</label>
                                             <input class="form-input" id="contact-name" name="name" type="text" autocomplete="name" required>
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label" for="contact-email">Email *</label>
+                                            <input class="form-input" id="contact-email" name="email" type="email" autocomplete="email" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-step" data-step="2" hidden>
                                     <div class="form-step-header">
-                                        <p class="form-step-kicker">Step 2 of 4</p>
+                                        <p class="form-step-kicker">Step 2 of 3</p>
                                         <h3 class="form-step-title">What do you need help with?</h3>
                                         <p class="form-helper">Select all that apply.</p>
                                     </div>
@@ -207,8 +189,9 @@ seo:
                                 </div>
                                 <div class="form-step" data-step="3" hidden>
                                     <div class="form-step-header">
-                                        <p class="form-step-kicker">Step 3 of 4</p>
+                                        <p class="form-step-kicker">Step 3 of 3</p>
                                         <h3 class="form-step-title">Share project details</h3>
+                                        <p class="form-helper">A little context helps us reply with a more useful quote or next step.</p>
                                     </div>
                                     <div class="form-grid">
                                         <div class="form-field form-field-full">
@@ -226,18 +209,6 @@ seo:
                                         <div class="form-field">
                                             <label class="form-label" for="contact-deadline">Deadline</label>
                                             <input class="form-input" id="contact-deadline" name="project_deadline" type="date">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-step" data-step="4" hidden>
-                                    <div class="form-step-header">
-                                        <p class="form-step-kicker">Step 4 of 4</p>
-                                        <h3 class="form-step-title">How can we contact you?</h3>
-                                    </div>
-                                    <div class="form-grid">
-                                        <div class="form-field">
-                                            <label class="form-label" for="contact-email">Email *</label>
-                                            <input class="form-input" id="contact-email" name="email" type="email" autocomplete="email" required>
                                         </div>
                                         <div class="form-field">
                                             <label class="form-label" for="contact-phone">Phone</label>

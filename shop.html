@@ -55,30 +55,7 @@ seo:
       window._cf_chl_opt = { cv: '1' };
     </script>
     
-    <!-- Google Analytics - Deferred for performance -->
-    <script>
-      // Defer Google Analytics loading
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      // Load GA after page is interactive
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        // Send pageview after a delay
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -97,7 +74,7 @@ seo:
         "postalCode": "V6A 4K4",
         "addressCountry": "CA"
       },
-      "telephone": "(604) - 566 - 8856",
+      "telephone": "(604) - 566 - 8855",
       "email": "Hello@rainscopefilmworks.com"
     }
     </script>
@@ -840,6 +817,7 @@ seo:
     <script data-cfasync="false">
       // Load Square script dynamically and set up callback
       (function() {
+        const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
         window.squareScriptReady = false;
         const script = document.createElement('script');
         script.type = 'text/javascript';
@@ -851,13 +829,12 @@ seo:
         script.onload = function() {
           window.squareScriptLoaded = true;
           window.squareScriptReady = true;
-          console.log('Square Web Payments SDK loaded successfully');
           // Check for both possible Square SDK objects
           if (typeof SqPaymentForm !== 'undefined' || (window.Square && window.Square.payments)) {
             if (typeof window.onSquareScriptLoaded === 'function') {
               window.onSquareScriptLoaded();
             }
-          } else {
+          } else if (isLocalhost) {
             console.warn('Square script loaded but SqPaymentForm not found. Available:', Object.keys(window).filter(k => k.toLowerCase().includes('square')));
           }
         };
@@ -893,15 +870,17 @@ seo:
         }
       }
       
-      console.log('Square script check complete:', {
-        SqPaymentForm: typeof SqPaymentForm,
-        Square: typeof window.Square,
-        SquarePayments: window.Square && typeof window.Square.payments,
-        squareScriptLoaded: window.squareScriptLoaded,
-        squareScriptReady: window.squareScriptReady,
-        attempts: squareLoadAttempts,
-        availableGlobals: Object.keys(window).filter(k => k.toLowerCase().includes('square'))
-      });
+      if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+        console.log('Square script check complete:', {
+          SqPaymentForm: typeof SqPaymentForm,
+          Square: typeof window.Square,
+          SquarePayments: window.Square && typeof window.Square.payments,
+          squareScriptLoaded: window.squareScriptLoaded,
+          squareScriptReady: window.squareScriptReady,
+          attempts: squareLoadAttempts,
+          availableGlobals: Object.keys(window).filter(k => k.toLowerCase().includes('square'))
+        });
+      }
       
       (async () => {
       const PROXY_BASE  = "https://rainscope-square-proxy.sweet-queen-15c3.workers.dev";
@@ -920,6 +899,10 @@ seo:
       const DEBUG_SHOW_ALL_CATEGORIES = false;
       // Keep items visible even when all variations are out of stock
       const SHOW_OUT_OF_STOCK_ITEMS = true;
+      const IS_LOCALHOST = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+      const DEBUG_LOGS = IS_LOCALHOST && (DEBUG_MODE || DEBUG_SHOW_ALL_CATEGORIES);
+      const debugLog = (...args) => { if (DEBUG_LOGS) console.log(...args); };
+      const debugWarn = (...args) => { if (DEBUG_LOGS) console.warn(...args); };
 
       // DOM
       const $cats = document.getElementById("rs-cats-list");
@@ -1018,10 +1001,12 @@ seo:
           }
         } else {
           console.error("Square Web Payments SDK not available. Payment form will not work.");
-          console.log("Square script loaded:", window.squareScriptLoaded);
-          console.log("Square object:", typeof window.Square);
-          console.log("SqPaymentForm type:", typeof SqPaymentForm);
-          console.log("Available globals with 'square':", Object.keys(window).filter(k => k.toLowerCase().includes('square')));
+          if (IS_LOCALHOST) {
+            console.log("Square script loaded:", window.squareScriptLoaded);
+            console.log("Square object:", typeof window.Square);
+            console.log("SqPaymentForm type:", typeof SqPaymentForm);
+            console.log("Available globals with 'square':", Object.keys(window).filter(k => k.toLowerCase().includes('square')));
+          }
           if ($cardContainer) {
             $cardContainer.innerHTML = "<p style='color:#ef4444;font-size:12px;'>Payment form failed to load. Check: 1) Domain whitelisted in Square Dashboard, 2) Ad blockers disabled, 3) Console for details.</p>";
           }
@@ -1071,7 +1056,7 @@ seo:
         }
         await card.attach('#card-container');
         
-        console.log('Square Web Payments SDK v1 initialized successfully');
+        debugLog('Square Web Payments SDK v1 initialized successfully');
       }
 
       // Legacy SqPaymentForm API (for backwards compatibility)
@@ -1330,7 +1315,7 @@ seo:
 
       async function loadCatalog(){
         try {
-          console.log("Loading catalog from:", `${PROXY_BASE}/api/catalog`);
+          debugLog("Loading catalog from:", `${PROXY_BASE}/api/catalog`);
           $grid.innerHTML = "<em>Loading catalog...</em>";
           
           const response = await fetch(`${PROXY_BASE}/api/catalog?bust=${Date.now()}`);
@@ -1340,34 +1325,34 @@ seo:
           }
           
           const data = await response.json();
-          console.log("API Response:", data);
+          debugLog("API Response:", data);
           
           if (!data || typeof data !== 'object') {
             throw new Error("Invalid API response format");
           }
           
           objects    = Array.isArray(data.objects) ? data.objects : [];
-          console.log(`Loaded ${objects.length} objects from API`);
+          debugLog(`Loaded ${objects.length} objects from API`);
           
           imagesById = Object.fromEntries(objects.filter(o=>o.type==="IMAGE" && o.image_data).map(o=>[o.id,o]));
           categories = objects.filter(o => o.type==="CATEGORY" && !o.is_deleted && o.category_data);
           const itemsRaw = objects.filter(o => o.type==="ITEM" && !o.is_deleted && o.item_data);
           
-          console.log(`Found ${categories.length} categories and ${itemsRaw.length} items`);
+          debugLog(`Found ${categories.length} categories and ${itemsRaw.length} items`);
 
           const nameById = Object.fromEntries(categories.map(c => [c.id, c.category_data.name]));
           
           // Debug: Log all category names to help with matching
-          console.log("Available categories:", Object.values(nameById));
-          console.log("Looking for categories:", SHOP_CATEGORY_NAMES);
+          debugLog("Available categories:", Object.values(nameById));
+          debugLog("Looking for categories:", SHOP_CATEGORY_NAMES);
           const normalizedCategories = Object.values(nameById).map(n => ({ original: n, normalized: normalize(n) }));
-          console.log("Normalized categories:", normalizedCategories);
+          debugLog("Normalized categories:", normalizedCategories);
 
           // Filter items for shop (you can customize this logic)
           items = itemsRaw.filter(it=>{
             const pt=(it.item_data?.product_type||"REGULAR").toUpperCase();
             if(pt!=="REGULAR") {
-              console.log(`Item ${it.item_data?.name} filtered: product_type is ${pt}`);
+              debugLog(`Item ${it.item_data?.name} filtered: product_type is ${pt}`);
               return false;
             }
             const catIds = itemCatIds(it);
@@ -1377,21 +1362,21 @@ seo:
               categoryNames = catIds.map(id => nameById[id]).filter(Boolean);
               normalizedNames = categoryNames.map(normalize);
               if(normalizedNames.some(norm => excludeSet.has(norm))) {
-                console.log(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
+                debugLog(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
                 return false;
               }
               // Only show items in configured shop categories (unless debug mode)
               if(shopSet.size > 0 && !normalizedNames.some(norm => shopSet.has(norm))) {
                 if (!DEBUG_SHOW_ALL_CATEGORIES) {
-                  console.log(`Item ${it.item_data?.name} filtered: not in shop categories (categories: [${categoryNames.join(", ")}])`);
+                  debugLog(`Item ${it.item_data?.name} filtered: not in shop categories (categories: [${categoryNames.join(", ")}])`);
                   return false;
                 } else {
-                  console.log(`DEBUG: Including item ${it.item_data?.name} from categories [${categoryNames.join(", ")}] (would normally be filtered)`);
+                  debugLog(`DEBUG: Including item ${it.item_data?.name} from categories [${categoryNames.join(", ")}] (would normally be filtered)`);
                 }
               }
             } else {
               // Items without a category are excluded
-              console.log(`Item ${it.item_data?.name} filtered: no category assigned`);
+              debugLog(`Item ${it.item_data?.name} filtered: no category assigned`);
               return false;
             }
             
@@ -1399,35 +1384,35 @@ seo:
             if (!DEBUG_MODE) {
               const isShopCategoryItem = normalizedNames.some(norm => shopSet.has(norm));
               if (isShopCategoryItem) {
-                console.log(`Item ${it.item_data?.name} included: shop category bypasses location filter`);
+                debugLog(`Item ${it.item_data?.name} included: shop category bypasses location filter`);
                 return true;
               }
               const locs=it.present_at_location_ids||it.item_data?.present_at_location_ids||[];
               const absent=it.absent_at_location_ids||it.item_data?.absent_at_location_ids||[];
               if(absent.includes(LOCATION_ID)) {
-                console.log(`Item ${it.item_data?.name} filtered: absent at location ${LOCATION_ID}`);
+                debugLog(`Item ${it.item_data?.name} filtered: absent at location ${LOCATION_ID}`);
                 return false;
               }
               const locationMatch = (locs.length===0 || locs.includes(LOCATION_ID));
               if (!locationMatch) {
-                console.log(`Item ${it.item_data?.name} filtered: not present at location ${LOCATION_ID}`, {locs, LOCATION_ID});
+                debugLog(`Item ${it.item_data?.name} filtered: not present at location ${LOCATION_ID}`, {locs, LOCATION_ID});
               }
               return locationMatch;
             } else {
-              console.log(`DEBUG MODE: Item ${it.item_data?.name} included (location filtering bypassed)`);
+              debugLog(`DEBUG MODE: Item ${it.item_data?.name} included (location filtering bypassed)`);
               return true;
             }
           });
           
-          console.log(`After filtering: ${items.length} items remain (from ${itemsRaw.length} raw items)`);
+          debugLog(`After filtering: ${items.length} items remain (from ${itemsRaw.length} raw items)`);
           
           // If no items after category filtering, show error immediately
           if (items.length === 0) {
-            console.warn("⚠️ All items were filtered out! Check filtering logic.");
+            debugWarn("All items were filtered out! Check filtering logic.");
             if (itemsRaw.length > 0) {
-              console.log("Sample raw item:", itemsRaw[0]);
+              debugLog("Sample raw item:", itemsRaw[0]);
               const sampleCats = itemCatIds(itemsRaw[0]).map(id => nameById[id]).filter(Boolean);
-              console.log("Sample item categories:", sampleCats.length ? sampleCats : "No category");
+              debugLog("Sample item categories:", sampleCats.length ? sampleCats : "No category");
               // Show a helpful message in the UI
               if ($grid) {
                 $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
@@ -1479,16 +1464,16 @@ seo:
                   if (SHOW_OUT_OF_STOCK_ITEMS) {
                     return true;
                   }
-                  console.log(`Item ${item.item_data?.name} filtered: no stock available`);
+                  debugLog(`Item ${item.item_data?.name} filtered: no stock available`);
                   return false;
                 }
                 return hasStock;
               });
-              console.log(`After inventory filtering: ${items.length} items remain (from ${itemsBeforeInventory})`);
+              debugLog(`After inventory filtering: ${items.length} items remain (from ${itemsBeforeInventory})`);
               
               // If all items filtered out by inventory, show message
               if (items.length === 0 && itemsBeforeInventory > 0 && !SHOW_OUT_OF_STOCK_ITEMS) {
-                console.warn("⚠️ All items filtered out due to zero inventory");
+                debugWarn("All items filtered out due to zero inventory");
                 if ($grid) {
                   $grid.innerHTML = `<div style='padding: 2rem; text-align: center; color: #666;'>
                     <p><strong>No items with available inventory.</strong></p>
@@ -1504,7 +1489,7 @@ seo:
               inventoryCache = {};
             }
           } else {
-            console.warn("No variations found to check inventory");
+            debugWarn("No variations found to check inventory");
             inventoryCache = {};
           }
 
@@ -1537,7 +1522,7 @@ seo:
             b.onclick=()=>{ activeCat=b.dataset.cat; $cats.querySelectorAll(".rs-cat").forEach(x=>x.classList.remove("active")); b.classList.add("active"); renderGrid(); };
           });
           
-          console.log(`Rendered ${chips.length} category chips`);
+          debugLog(`Rendered ${chips.length} category chips`);
           renderGrid();
         } catch (error) {
           console.error("Error loading catalog:", error);
@@ -1576,23 +1561,23 @@ seo:
           return;
         }
         
-        console.log(`renderGrid called with ${items.length} items, activeCat: ${activeCat}`);
+        debugLog(`renderGrid called with ${items.length} items, activeCat: ${activeCat}`);
         
         const q=($search?.value||"").toLowerCase().trim();
         const list=items.filter(it=>{
           if(!inCat(it)) {
-            console.log(`Item ${it.item_data?.name} filtered by category`);
+            debugLog(`Item ${it.item_data?.name} filtered by category`);
             return false;
           }
           if(!q) return true;
           const nameMatch = (it.item_data?.name||"").toLowerCase().includes(q);
           if (!nameMatch) {
-            console.log(`Item ${it.item_data?.name} filtered by search query: "${q}"`);
+            debugLog(`Item ${it.item_data?.name} filtered by search query: "${q}"`);
           }
           return nameMatch;
         });
 
-        console.log(`Rendering ${list.length} items (filtered from ${items.length} total, search: "${q}")`);
+        debugLog(`Rendering ${list.length} items (filtered from ${items.length} total, search: "${q}")`);
 
         if(!list.length){ 
           if (items.length === 0) {

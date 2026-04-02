@@ -46,30 +46,7 @@ seo:
     
     <link rel="stylesheet" href="/assets/css/styles.css?v=22">
     
-    <!-- Google Analytics - Deferred for performance -->
-    <script>
-      // Defer Google Analytics loading
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      // Load GA after page is interactive
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        // Send pageview after a delay
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -255,9 +232,9 @@ seo:
         <section class="video-gallery">
             <div class="video-gallery-grid">
                 {% for project in work %}
-                <button class="video-gallery-item work-overlay-card scroll-reveal" type="button" data-title="{{ project.title }}" data-category="{{ project.category }}" data-description="{{ project.description }}"{% if project.embed %} data-embed="{{ project.embed }}"{% endif %}{% if project.video %} data-video="{{ project.video }}"{% endif %}>
-                    <video autoplay loop muted playsinline loading="lazy" preload="metadata" aria-hidden="true">
-                        <source src="{{ project.preview or project.video }}" type="video/mp4">
+                <button class="video-gallery-item work-overlay-card scroll-reveal" id="{{ project.title | slug }}" type="button" data-project="{{ project.title | slug }}" data-title="{{ project.title }}" data-category="{{ project.category }}" data-description="{{ project.description }}"{% if project.embed %} data-embed="{{ project.embed }}"{% endif %}{% if project.video %} data-video="{{ project.video }}"{% endif %}>
+                    <video loop muted playsinline preload="none" data-deferred-work-video aria-hidden="true">
+                        <source data-src="{{ project.preview or project.video }}" type="video/mp4">
                     </video>
                     <span class="work-overlay">
                         <span class="work-overlay-category">{{ project.category }}</span>
@@ -292,7 +269,7 @@ seo:
             <div class="work-modal-content" role="document">
                 <button class="work-modal-close" type="button" aria-label="Close project">×</button>
                 <div class="work-modal-media">
-                    <iframe id="workModalEmbed" title="Project video player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+                    <iframe id="workModalEmbed" title="Project video player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" hidden></iframe>
                     <video id="workModalVideo" controls playsinline preload="metadata" hidden></video>
                 </div>
                 <div class="work-modal-info">
@@ -309,7 +286,7 @@ seo:
                 <button class="film-modal-close" type="button" aria-label="Close film details">×</button>
                 <div class="film-modal-body">
                     <div class="film-modal-media">
-                        <iframe id="filmModalEmbed" title="Film player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen hidden></iframe>
+                        <iframe id="filmModalEmbed" title="Film player" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" hidden></iframe>
                         <img id="filmModalPoster" alt="" hidden>
                     </div>
                     <div class="film-modal-meta">
@@ -336,10 +313,24 @@ seo:
             const modalDescription = document.getElementById('workModalDescription');
             const closeButton = modal ? modal.querySelector('.work-modal-close') : null;
             const cards = document.querySelectorAll('.video-gallery-item');
+            let lastTrigger = null;
 
             if (!modal || !modalVideo || !modalEmbed || cards.length === 0) return;
 
+            function syncProjectHash(card) {
+                const projectKey = card?.dataset.project;
+                if (!projectKey) return;
+                if (window.location.hash === `#${projectKey}`) return;
+                history.replaceState(null, '', `#${projectKey}`);
+            }
+
+            function clearProjectHash() {
+                if (!window.location.hash) return;
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+
             function openModal(card) {
+                lastTrigger = card;
                 const videoSrc = card.getAttribute('data-video');
                 const embedSrc = card.getAttribute('data-embed');
                 modalTitle.textContent = card.getAttribute('data-title') || 'Project';
@@ -361,9 +352,14 @@ seo:
                 modal.classList.add('open');
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('modal-open');
+                syncProjectHash(card);
+                closeButton?.focus();
             }
 
             function closeModal() {
+                if (document.activeElement instanceof HTMLElement && modal.contains(document.activeElement)) {
+                    (lastTrigger || closeButton)?.focus();
+                }
                 modal.classList.remove('open');
                 modal.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('modal-open');
@@ -373,6 +369,7 @@ seo:
                 modalVideo.hidden = true;
                 modalEmbed.removeAttribute('src');
                 modalEmbed.hidden = true;
+                clearProjectHash();
             }
 
             cards.forEach(card => {
@@ -394,6 +391,18 @@ seo:
                     closeModal();
                 }
             });
+
+            function openFromHash() {
+                const projectKey = window.location.hash.replace(/^#/, '');
+                if (!projectKey) return;
+                const matchingCard = document.querySelector(`.video-gallery-item[data-project="${projectKey}"]`);
+                if (!matchingCard) return;
+                matchingCard.scrollIntoView({ block: 'center', behavior: 'auto' });
+                openModal(matchingCard);
+            }
+
+            openFromHash();
+            window.addEventListener('hashchange', openFromHash);
         })();
     </script>
     <script>
@@ -406,10 +415,12 @@ seo:
             const modalEmbed = document.getElementById('filmModalEmbed');
             const modalPoster = document.getElementById('filmModalPoster');
             const closeButton = modal ? modal.querySelector('.film-modal-close') : null;
+            let lastTrigger = null;
 
             if (!modal || !modalTitle || !modalCredits || !modalEmbed || !modalPoster) return;
 
             function openModal(card) {
+                lastTrigger = card;
                 modalTitle.textContent = card.getAttribute('data-title') || 'Film';
                 modalYear.textContent = card.getAttribute('data-year') || '';
                 modalLogline.textContent = card.getAttribute('data-logline') || '';
@@ -441,9 +452,13 @@ seo:
                 modal.classList.add('open');
                 modal.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('modal-open');
+                closeButton?.focus();
             }
 
             function closeModal() {
+                if (document.activeElement instanceof HTMLElement && modal.contains(document.activeElement)) {
+                    (lastTrigger || closeButton)?.focus();
+                }
                 modal.classList.remove('open');
                 modal.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('modal-open');

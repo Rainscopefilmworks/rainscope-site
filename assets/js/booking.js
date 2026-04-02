@@ -148,7 +148,15 @@
                     throw new Error(`Webhook returned ${response.status}`);
                 }
 
-                setFormStatus('Booking request received. We sent a pending confirmation email.', false);
+                setFormStatus('Booking request received. We usually confirm or follow up within one business day.', false);
+                if (typeof window.rainscopeTrack === 'function') {
+                    window.rainscopeTrack('booking_request_submitted', {
+                        page_path: window.location.pathname,
+                        duration_hours: state.durationHours,
+                        estimated_price: estimatedPrice,
+                        booking_date: state.activeSlot ? state.activeSlot.dateKey : '',
+                    });
+                }
                 clearClientFields();
                 state.selectedSlotId = null;
                 state.activeSlot = null;
@@ -764,6 +772,7 @@
         }
         elements.formStatus.textContent = message;
         elements.formStatus.classList.toggle('is-error', Boolean(isError));
+        elements.formStatus.classList.toggle('is-success', Boolean(message) && !isError);
     }
 
     function clearFormStatus() {

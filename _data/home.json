@@ -40,6 +40,7 @@
         "category": "Commercial",
         "title": "Just Another - Spec Ad",
         "label": "View Project",
+        "href": "/our-work/#just-another-spec-ad",
         "video": "https://media.rainscopefilmworks.com/work/work-7.mp4",
         "aria": "Commercial video production Vancouver - Background video featuring close-ups of food preparation, sizzling ingredients, and ambient restaurant lighting"
       },
@@ -47,6 +48,7 @@
         "category": "Music Video",
         "title": "Performance & Visuals",
         "label": "View Project",
+        "href": "/our-work/#performance-visuals",
         "video": "https://media.rainscopefilmworks.com/work/work-2.mp4",
         "aria": "Concert production services including live music filming, stage lighting, and multi-camera coverage"
       },
@@ -54,6 +56,7 @@
         "category": "Social Media",
         "title": "Gloryday Fine Goods",
         "label": "View Project",
+        "href": "/our-work/#glorydays-fine-goods",
         "video": "https://media.rainscopefilmworks.com/work/work-6.mp4",
         "aria": "Social media content production Vancouver - Creative video for digital marketing and online engagement"
       }

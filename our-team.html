@@ -45,30 +45,7 @@ seo:
     
     <link rel="stylesheet" href="/assets/css/styles.css?v=22">
     
-    <!-- Google Analytics - Deferred for performance -->
-    <script>
-      // Defer Google Analytics loading
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      // Load GA after page is interactive
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        // Send pageview after a delay
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
     
     <!-- Structured Data -->
     <script type="application/ld+json">

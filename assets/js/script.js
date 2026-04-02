@@ -200,7 +200,10 @@
         function setStatus(message, isError) {
             if (!statusEl) return;
             statusEl.textContent = message;
-            statusEl.style.color = isError ? 'var(--color-accent-teal)' : 'var(--color-text-secondary)';
+            statusEl.classList.remove('is-error', 'is-success');
+            if (message) {
+                statusEl.classList.add(isError ? 'is-error' : 'is-success');
+            }
         }
 
         if (nextButton) {
@@ -267,7 +270,13 @@
                 form.reset();
                 currentStepIndex = 0;
                 setStep(currentStepIndex);
-                setStatus('Thanks! We will be in touch shortly.', false);
+                setStatus('Thanks. We received your inquiry and usually reply within one business day.', false);
+                if (typeof window.rainscopeTrack === 'function') {
+                    window.rainscopeTrack('generate_lead', {
+                        form_name: form.closest('#lead-form') ? 'homepage_lead_form' : 'contact_form',
+                        page_path: window.location.pathname,
+                    });
+                }
             } catch (error) {
                 setStatus('Something went wrong. Please try again.', true);
             } finally {
@@ -446,6 +455,69 @@
     }
 })();
 
+// Defer non-hero homepage preview videos until they approach the viewport
+(function initDeferredVideos() {
+    function setupDeferredVideos() {
+        const videos = document.querySelectorAll('video[data-deferred-video]');
+        if (!videos.length) return;
+
+        function loadVideo(video) {
+            if (video.dataset.videoLoaded === 'true') return;
+            const source = video.querySelector('source[data-src]');
+            if (!source) return;
+            source.src = source.dataset.src;
+            source.removeAttribute('data-src');
+            video.load();
+            video.dataset.videoLoaded = 'true';
+        }
+
+        async function playVideo(video) {
+            loadVideo(video);
+            if (video.dataset.videoPlaying === 'true') return;
+            try {
+                await video.play();
+                video.dataset.videoPlaying = 'true';
+            } catch (error) {
+                video.dataset.videoPlaying = 'false';
+            }
+        }
+
+        function pauseVideo(video) {
+            video.pause();
+            video.dataset.videoPlaying = 'false';
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            videos.forEach((video) => {
+                playVideo(video);
+            });
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    playVideo(video);
+                } else if (video.dataset.videoLoaded === 'true') {
+                    pauseVideo(video);
+                }
+            });
+        }, {
+            rootMargin: '240px 0px',
+            threshold: 0.2
+        });
+
+        videos.forEach((video) => observer.observe(video));
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDeferredVideos);
+    } else {
+        setupDeferredVideos();
+    }
+})();
+
 // Smooth scroll for anchor links
 document.addEventListener('DOMContentLoaded', function() {
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
@@ -594,40 +666,51 @@ document.addEventListener('DOMContentLoaded', function() {
 // Count-up Animation for Trust Indicators - Deferred for performance
 (function initCountUp() {
     function initCountUpAnimation() {
-        // Delay count-up initialization
-        setTimeout(function() {
         const trustNumbers = document.querySelectorAll('.trust-number[data-count]');
+        if (!trustNumbers.length) return;
+
+        function animateCount(entryTarget) {
+            entryTarget.classList.add('counted');
+            const target = parseInt(entryTarget.getAttribute('data-count'), 10);
+            const suffix = entryTarget.getAttribute('data-suffix') || '';
+            const duration = 2000;
+            const steps = 60;
+            const increment = target / steps;
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    entryTarget.textContent = target + suffix;
+                    clearInterval(timer);
+                } else {
+                    entryTarget.textContent = Math.floor(current) + suffix;
+                }
+            }, duration / steps);
+        }
         
         const countUpObserver = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
-                    entry.target.classList.add('counted');
-                    const target = parseInt(entry.target.getAttribute('data-count'));
-                    const suffix = entry.target.getAttribute('data-suffix') || '';
-                    const duration = 2000; // 2 seconds
-                    const steps = 60;
-                    const increment = target / steps;
-                    let current = 0;
-                    
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            entry.target.textContent = target + suffix;
-                            clearInterval(timer);
-                        } else {
-                            entry.target.textContent = Math.floor(current) + suffix;
-                        }
-                    }, duration / steps);
-                    
+                    animateCount(entry.target);
                     countUpObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.2 });
         
-            trustNumbers.forEach(num => {
+        trustNumbers.forEach(num => {
+            const target = parseInt(num.getAttribute('data-count'), 10);
+            const suffix = num.getAttribute('data-suffix') || '';
+            if (num.textContent.trim() === `${target}${suffix}`) {
+                num.classList.add('counted');
+                return;
+            }
+            if (num.getBoundingClientRect().top < window.innerHeight) {
+                animateCount(num);
+                return;
+            }
                 countUpObserver.observe(num);
-            });
-        }, 400);
+        });
     }
     
     // Initialize immediately if DOM is ready, otherwise wait
@@ -649,57 +732,74 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!heroVideo) return;
         
         const isMobile = window.innerWidth <= 768;
-        
-        // On mobile, load immediately for better UX
-        if (isMobile) {
-            heroVideo.preload = 'auto';
+        let hasLoadedSource = heroVideo.dataset.loaded === 'true';
+
+        function markLoaded() {
+            heroVideo.dataset.loaded = 'true';
+            hasLoadedSource = true;
+        }
+
+        function ensureLoaded() {
+            if (hasLoadedSource) return;
+            heroVideo.preload = isMobile ? 'auto' : 'metadata';
             heroVideo.load();
-            heroVideo.addEventListener('loadeddata', () => {
-                heroVideo.classList.add('ready');
-                heroVideo.play().catch(err => {
-                    // Autoplay may fail on mobile, that's okay
-                    console.debug('Video autoplay prevented:', err);
-                });
-            }, { once: true });
-            // Add error handler with fallback
-            heroVideo.addEventListener('error', function(e) {
-                console.debug('Video loading error:', e);
-                // Show poster image as fallback
+            hasLoadedSource = true;
+        }
+
+        function handleReady() {
+            markLoaded();
+            heroVideo.classList.add('ready');
+            heroVideo.play().catch(() => {
+                // Silent fail if autoplay is blocked.
+            });
+        }
+
+        function stopPlayback() {
+            heroVideo.pause();
+        }
+
+        heroVideo.addEventListener('loadeddata', handleReady, { once: true });
+        heroVideo.addEventListener('error', function() {
+            // Show poster image as fallback
+            if (!heroVideo.parentElement.querySelector('[data-hero-fallback]')) {
                 heroVideo.style.display = 'none';
                 const fallback = document.createElement('div');
                 fallback.style.cssText = 'width: 100%; height: 100%; background: url(https://media.rainscopefilmworks.com/logo.png) center/cover no-repeat; background-color: #173633;';
                 fallback.setAttribute('aria-label', 'Rainscope Filmworks');
+                fallback.dataset.heroFallback = 'true';
                 heroVideo.parentElement.appendChild(fallback);
-            }, { once: true });
+            }
+        }, { once: true });
+
+        if (!('IntersectionObserver' in window)) {
+            ensureLoaded();
             return;
         }
-        
-        // On desktop, delay loading to prioritize LCP
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => {
-                heroVideo.preload = 'auto';
-                heroVideo.load();
-                heroVideo.addEventListener('loadeddata', () => {
-                    heroVideo.classList.add('ready');
-                }, { once: true });
-            }, { timeout: 3000 });
-        } else {
-            setTimeout(() => {
-                heroVideo.preload = 'auto';
-                heroVideo.load();
-                heroVideo.addEventListener('loadeddata', () => {
-                    heroVideo.classList.add('ready');
-                }, { once: true });
-            }, 2000);
-        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    ensureLoaded();
+                    if (heroVideo.readyState >= 2) {
+                        heroVideo.classList.add('ready');
+                        heroVideo.play().catch(() => {});
+                    }
+                } else {
+                    stopPlayback();
+                }
+            });
+        }, {
+            threshold: 0.35
+        });
+
+        observer.observe(heroVideo);
     }
     
     // Start loading video after DOM is ready or immediately if already loaded
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', loadHeroVideo);
     } else {
-        // DOM already loaded, wait a bit for LCP
-        setTimeout(loadHeroVideo, 1000);
+        loadHeroVideo();
     }
     
     // Delay parallax initialization

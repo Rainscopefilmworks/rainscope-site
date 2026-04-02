@@ -128,3 +128,64 @@
         }
     }, 500);
 })();
+
+// Defer grid preview videos until their cards are near the viewport
+(function initDeferredWorkVideos() {
+    function setupDeferredVideos() {
+        const videos = document.querySelectorAll('video[data-deferred-work-video]');
+        if (!videos.length) return;
+
+        function loadVideo(video) {
+            if (video.dataset.videoLoaded === 'true') return;
+            const source = video.querySelector('source[data-src]');
+            if (!source) return;
+            source.src = source.dataset.src;
+            source.removeAttribute('data-src');
+            video.load();
+            video.dataset.videoLoaded = 'true';
+        }
+
+        async function playVideo(video) {
+            loadVideo(video);
+            if (video.dataset.videoPlaying === 'true') return;
+            try {
+                await video.play();
+                video.dataset.videoPlaying = 'true';
+            } catch (error) {
+                video.dataset.videoPlaying = 'false';
+            }
+        }
+
+        function pauseVideo(video) {
+            video.pause();
+            video.dataset.videoPlaying = 'false';
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            videos.forEach((video) => playVideo(video));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    playVideo(video);
+                } else if (video.dataset.videoLoaded === 'true') {
+                    pauseVideo(video);
+                }
+            });
+        }, {
+            rootMargin: '220px 0px',
+            threshold: 0.2
+        });
+
+        videos.forEach((video) => observer.observe(video));
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDeferredVideos);
+    } else {
+        setupDeferredVideos();
+    }
+})();

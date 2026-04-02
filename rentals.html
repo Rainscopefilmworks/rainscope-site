@@ -46,30 +46,7 @@ seo:
     
     <link rel="stylesheet" href="/assets/css/styles.css?v=22">
     
-    <!-- Google Analytics - Deferred for performance -->
-    <script>
-      // Defer Google Analytics loading
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      // Load GA after page is interactive
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(loadGA, 1000);
-        });
-      } else {
-        setTimeout(loadGA, 1000);
-      }
-      function loadGA() {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7RRQQ33JKM';
-        document.head.appendChild(script);
-        gtag('js', new Date());
-        gtag('config', 'G-7RRQQ33JKM', { 'send_page_view': false });
-        // Send pageview after a delay
-        setTimeout(() => gtag('event', 'page_view'), 2000);
-      }
-    </script>
+    {% include "analytics.njk" %}
     
     <!-- Structured Data - Equipment Rental Service -->
     <script type="application/ld+json">
@@ -80,7 +57,7 @@ seo:
       "description": "Professional film equipment rentals in Vancouver, BC. Rent cameras, lighting, audio gear, gimbals, monitors, and production equipment for film and video production.",
       "url": "https://rainscopefilmworks.com/rentals/",
       "image": "https://media.rainscopefilmworks.com/logo.png",
-      "telephone": "(604) - 566 - 8856",
+      "telephone": "(604) - 566 - 8855",
       "email": "rentals@rainscopefilmworks.com",
       "address": {
         "@type": "PostalAddress",
@@ -1380,6 +1357,10 @@ seo:
       
       // Debug mode: set to true to bypass location filtering
       const DEBUG_MODE = false;
+      const IS_LOCALHOST = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+      const DEBUG_LOGS = DEBUG_MODE && IS_LOCALHOST;
+      const debugLog = (...args) => { if (DEBUG_LOGS) console.log(...args); };
+      const debugWarn = (...args) => { if (DEBUG_LOGS) console.warn(...args); };
 
       // DOM
       const $cats = document.getElementById("rs-cats-list");
@@ -1401,8 +1382,7 @@ seo:
       const $count = document.getElementById("rs-cart-count");
       const $toast = document.getElementById("rs-toast");
 
-      // Debug: Check if DOM elements exist
-      console.log("DOM elements check:", {
+      debugLog("DOM elements check:", {
         cats: !!$cats,
         grid: !!$grid,
         search: !!$search
@@ -1585,7 +1565,7 @@ seo:
 
       async function loadCatalog(){
         try {
-          console.log("Loading catalog from:", `${PROXY_BASE}/api/catalog`);
+          debugLog("Loading catalog from:", `${PROXY_BASE}/api/catalog`);
           $grid.innerHTML = "<em>Loading catalog...</em>";
           
           const response = await fetch(`${PROXY_BASE}/api/catalog?bust=${Date.now()}`);
@@ -1595,27 +1575,27 @@ seo:
           }
           
           const data = await response.json();
-          console.log("API Response:", data);
+          debugLog("API Response:", data);
           
           if (!data || typeof data !== 'object') {
             throw new Error("Invalid API response format");
           }
           
           objects    = Array.isArray(data.objects) ? data.objects : [];
-          console.log(`Loaded ${objects.length} objects from API`);
+          debugLog(`Loaded ${objects.length} objects from API`);
           
           imagesById = Object.fromEntries(objects.filter(o=>o.type==="IMAGE" && o.image_data).map(o=>[o.id,o]));
           categories = objects.filter(o => o.type==="CATEGORY" && !o.is_deleted && o.category_data);
           const itemsRaw = objects.filter(o => o.type==="ITEM" && !o.is_deleted && o.item_data);
           
-          console.log(`Found ${categories.length} categories and ${itemsRaw.length} items`);
+          debugLog(`Found ${categories.length} categories and ${itemsRaw.length} items`);
 
           const nameById = Object.fromEntries(categories.map(c => [c.id, c.category_data.name]));
 
           items = itemsRaw.filter(it=>{
             const pt=(it.item_data?.product_type||"REGULAR").toUpperCase();
             if(pt!=="REGULAR") {
-              console.log(`Item ${it.item_data?.name} filtered: product_type is ${pt}`);
+              debugLog(`Item ${it.item_data?.name} filtered: product_type is ${pt}`);
               return false;
             }
             const catIds = itemCatIds(it);
@@ -1623,7 +1603,7 @@ seo:
               const categoryNames = catIds.map(id => nameById[id]).filter(Boolean);
               const normalizedNames = categoryNames.map(normalize);
               if(normalizedNames.some(norm => excludeSet.has(norm))) {
-                console.log(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
+                debugLog(`Item ${it.item_data?.name} filtered: excluded category match in [${categoryNames.join(", ")}]`);
                 return false;
               }
             }
@@ -1633,24 +1613,24 @@ seo:
               const locs=it.present_at_location_ids||it.item_data?.present_at_location_ids||[];
               const absent=it.absent_at_location_ids||it.item_data?.absent_at_location_ids||[];
               if(absent.includes(LOCATION_ID)) {
-                console.log(`Item ${it.item_data?.name} filtered: absent at location ${LOCATION_ID}`);
+                debugLog(`Item ${it.item_data?.name} filtered: absent at location ${LOCATION_ID}`);
                 return false;
               }
               const locationMatch = (locs.length===0 || locs.includes(LOCATION_ID));
               if (!locationMatch) {
-                console.log(`Item ${it.item_data?.name} filtered: not present at location ${LOCATION_ID}`, {locs, LOCATION_ID});
+                debugLog(`Item ${it.item_data?.name} filtered: not present at location ${LOCATION_ID}`, {locs, LOCATION_ID});
               }
               return locationMatch;
             } else {
-              console.log(`DEBUG MODE: Item ${it.item_data?.name} included (location filtering bypassed)`);
+              debugLog(`DEBUG MODE: Item ${it.item_data?.name} included (location filtering bypassed)`);
               return true;
             }
           });
           
-          console.log(`After filtering: ${items.length} items remain (from ${itemsRaw.length} raw items)`);
+          debugLog(`After filtering: ${items.length} items remain (from ${itemsRaw.length} raw items)`);
           if (items.length === 0 && itemsRaw.length > 0) {
-            console.warn("All items were filtered out! Check filtering logic.");
-            console.log("Sample raw item:", itemsRaw[0]);
+            debugWarn("All items were filtered out! Check filtering logic.");
+            debugLog("Sample raw item:", itemsRaw[0]);
           }
 
           const counts=new Map(); let unassigned=0;
@@ -1681,7 +1661,7 @@ seo:
             b.onclick=()=>{ activeCat=b.dataset.cat; $cats.querySelectorAll(".rs-cat").forEach(x=>x.classList.remove("active")); b.classList.add("active"); renderGrid(); };
           });
           
-          console.log(`Rendered ${chips.length} category chips`);
+          debugLog(`Rendered ${chips.length} category chips`);
         } catch (error) {
           console.error("Error loading catalog:", error);
           const errorMsg = error.message || "Unknown error";
@@ -1720,23 +1700,23 @@ seo:
           return;
         }
         
-        console.log(`renderGrid called with ${items.length} items, activeCat: ${activeCat}`);
+        debugLog(`renderGrid called with ${items.length} items, activeCat: ${activeCat}`);
         
         const q=($search?.value||"").toLowerCase().trim();
         const list=items.filter(it=>{
           if(!inCat(it)) {
-            console.log(`Item ${it.item_data?.name} filtered by category`);
+            debugLog(`Item ${it.item_data?.name} filtered by category`);
             return false;
           }
           if(!q) return true;
           const nameMatch = (it.item_data?.name||"").toLowerCase().includes(q);
           if (!nameMatch) {
-            console.log(`Item ${it.item_data?.name} filtered by search query: "${q}"`);
+            debugLog(`Item ${it.item_data?.name} filtered by search query: "${q}"`);
           }
           return nameMatch;
         });
 
-        console.log(`Rendering ${list.length} items (filtered from ${items.length} total, search: "${q}")`);
+        debugLog(`Rendering ${list.length} items (filtered from ${items.length} total, search: "${q}")`);
 
         if(!list.length){ 
           if (items.length === 0) {
@@ -2010,13 +1990,13 @@ seo:
     }
       // Init
       try{
-        console.log("Initializing rentals app...");
+        debugLog("Initializing rentals app...");
         const today=new Date(), tomorrow=new Date(Date.now()+MS);
         const s=document.getElementById("start"), e=document.getElementById("end");
         if(s && e && !s.value && !e.value){ s.value=toISO(today); e.value=toISO(tomorrow); }
         await loadCatalog();
         renderGrid();
-        console.log("Rentals app initialized successfully");
+        debugLog("Rentals app initialized successfully");
       }catch(e){ 
         console.error("Initialization error:", e);
         if ($grid) {
