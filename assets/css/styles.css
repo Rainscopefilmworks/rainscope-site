@@ -276,8 +276,8 @@ body::after {
     justify-content: flex-start;
     text-decoration: none;
     transition: opacity 0.3s ease;
-    padding: clamp(1rem, 2vw, 1.5rem) clamp(0.5rem, 1vw, 1rem);
-    margin: clamp(0.5rem, 1vw, 1rem) 0;
+    padding: clamp(0.7rem, 1.25vw, 1rem) clamp(0.5rem, 1vw, 1rem);
+    margin: clamp(0.15rem, 0.4vw, 0.4rem) 0;
     margin-right: auto;
 }
 
@@ -292,8 +292,7 @@ body::after {
 }
 
 .logo-img {
-    height: auto;
-    max-height: clamp(25px, 3vw, 35px);
+    height: 56px;
     width: auto;
     display: block;
     object-fit: contain;
@@ -453,14 +452,13 @@ body::after {
     }
 
     .logo {
-        padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(0.5rem, 1vw, 1rem);
-        margin: clamp(0.25rem, 0.75vw, 0.75rem) 0;
+        padding: 0.75rem 0.75rem;
+        margin: 0.2rem 0;
         margin-right: auto;
     }
 
     .logo-img {
-        height: auto;
-        max-height: clamp(20px, 2.5vw, 28px);
+        height: 42px;
         width: auto;
         object-fit: contain;
         object-position: left center;

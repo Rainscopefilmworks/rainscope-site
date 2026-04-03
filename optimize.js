@@ -543,6 +543,11 @@ async function findImages() {
     return files;
 }
 
+function isSupportedImage(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    return ['.jpg', '.jpeg', '.png'].includes(ext);
+}
+
 // Find all video files
 async function findVideos() {
     const patterns = [
@@ -562,6 +567,7 @@ async function findVideos() {
 // Main function
 async function main() {
     const args = process.argv.slice(2);
+    const targetPaths = args.filter(arg => !arg.startsWith('--'));
     const optimizeImages = args.includes('--images') || args.includes('--all') || args.length === 0;
     const optimizeVideos = args.includes('--videos') || args.includes('--all') || args.length === 0;
 
@@ -583,7 +589,9 @@ async function main() {
     // Optimize images
     if (optimizeImages) {
         console.log(chalk.cyan('📸 Optimizing images...\n'));
-        const images = await findImages();
+        const images = targetPaths.length > 0
+            ? targetPaths.filter(isSupportedImage).filter(filePath => fs.existsSync(filePath))
+            : await findImages();
         
         if (images.length === 0) {
             console.log(chalk.yellow('No images found to optimize.'));
@@ -624,4 +632,3 @@ main().catch(error => {
     console.error(chalk.red('Error:'), error);
     process.exit(1);
 });
-
