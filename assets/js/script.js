@@ -722,11 +722,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 })();
 
-// Parallax Effect for Hero Video - Deferred for performance
-// Use DOMContentLoaded or immediate execution depending on script load timing
+// Hero video loading
 (function() {
-    // Load hero video after initial render to improve LCP
-    // Only load video after page is interactive
     function loadHeroVideo() {
         const heroVideo = document.getElementById('heroVideo');
         if (!heroVideo) return;
@@ -800,108 +797,5 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('DOMContentLoaded', loadHeroVideo);
     } else {
         loadHeroVideo();
-    }
-    
-    // Delay parallax initialization
-    setTimeout(function() {
-        const hero = document.querySelector('.hero');
-        if (!hero) return;
-        
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReducedMotion) return;
-        
-        // Cache hero height to avoid forced reflows
-        let cachedHeroHeight = null;
-        function getHeroHeight() {
-            if (cachedHeroHeight === null) {
-                cachedHeroHeight = hero.offsetHeight;
-            }
-            return cachedHeroHeight;
-        }
-        
-        window.addEventListener('resize', () => {
-            cachedHeroHeight = null;
-        }, { passive: true });
-        
-        let parallaxTicking = false;
-        function updateParallax() {
-            if (!parallaxTicking) {
-                window.requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    const heroHeight = getHeroHeight();
-                    
-                    if (scrollY < heroHeight) {
-                        const offset = scrollY * 0.3; // Parallax speed
-                        hero.style.setProperty('--scroll-offset', offset);
-                        hero.classList.add('parallax-active');
-                    } else {
-                        hero.classList.remove('parallax-active');
-                    }
-                    parallaxTicking = false;
-                });
-                parallaxTicking = true;
-            }
-        }
-        
-        window.addEventListener('scroll', function() {
-            updateParallax();
-        }, { passive: true });
-    }, 500);
-})();
-
-// Typewriter Effect for Hero Tagline
-// Disabled on mobile to improve LCP performance
-// Wrapped in IIFE to prevent blocking if script loads early
-(function() {
-    function initTypewriter() {
-        const heroTagline = document.querySelector('.hero-tagline');
-        if (!heroTagline) return;
-        
-        // Tagline is already visible via critical CSS, just add typewriter effect on desktop
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
-        // Disable typewriter on mobile devices (improves LCP significantly)
-        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (prefersReducedMotion || isMobile) {
-            // On mobile or reduced motion, text is already visible via CSS
-            // No JavaScript manipulation needed
-            return;
-        }
-    
-        // Desktop: Get text and clear it for typewriter effect
-        const text = heroTagline.textContent.trim();
-        if (!text) return;
-        
-        heroTagline.textContent = '';
-        heroTagline.style.opacity = '1';
-        heroTagline.style.whiteSpace = 'nowrap';
-        heroTagline.style.overflow = 'hidden';
-        heroTagline.classList.add('typewriter');
-        
-        let index = 0;
-        const speed = 50; // milliseconds per character
-        
-        function typeWriter() {
-            if (index < text.length) {
-                heroTagline.textContent += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, speed);
-            } else {
-                // Keep cursor visible (don't remove it)
-                // The cursor will blink via CSS animation
-            }
-        }
-        
-        // Start typing after a short delay
-        setTimeout(typeWriter, 500);
-    }
-    
-    // Initialize typewriter when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initTypewriter);
-    } else {
-        // DOM already loaded, defer slightly to ensure LCP
-        setTimeout(initTypewriter, 100);
     }
 })();

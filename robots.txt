@@ -1,8 +1,6 @@
 User-agent: *
 # Updated: 2026-01-30
 Allow: /
-Disallow: /docs/
-Disallow: /README/
 Disallow: /pricing/
 
 # Sitemaps

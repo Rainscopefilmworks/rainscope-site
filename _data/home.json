@@ -1,15 +1,46 @@
 {
   "hero": {
     "video": "https://media.rainscopefilmworks.com/hero-videov3.mp4",
-    "tagline": "A CREATIVE PRODUCTION COMPANY SHAPED BY THE PACIFIC NORTHWEST",
+    "tagline": "A creative production company shaped by the Pacific Northwest",
+    "summary": "Production, post-production, and gear support for projects of every scale.",
     "ctaPrimary": {
-      "label": "Start Your Project",
-      "href": "#lead-form"
+      "label": "Get Started",
+      "href": "#get-started"
     },
     "ctaSecondary": {
       "label": "Watch Our Reel",
       "href": "https://youtu.be/0LWSPjODvv0"
     }
+  },
+  "startPaths": {
+    "title": "Start where you are",
+    "subtitle": "Come with a finished brief, a loose idea, a gear list, or a date on the calendar. We will help you find the right next step.",
+    "items": [
+      {
+        "label": "Production / post",
+        "description": "For projects that need planning, filming, editing, color, sound, or final delivery.",
+        "cta": "Start a project",
+        "href": "#lead-form"
+      },
+      {
+        "label": "Gear rentals",
+        "description": "Camera, lens, lighting, audio, monitor, and production gear for local crews.",
+        "cta": "Browse rentals",
+        "href": "/rentals/"
+      },
+      {
+        "label": "Studio booking",
+        "description": "Check availability for interviews, product sessions, workshops, and small shoots.",
+        "cta": "Book studio",
+        "href": "/booking/"
+      },
+      {
+        "label": "Shop gear",
+        "description": "Buy available gear, expendables, and set-ready supplies from the Rainscope shop.",
+        "cta": "Shop gear",
+        "href": "/shop/"
+      }
+    ]
   },
   "testimonials": [
     {

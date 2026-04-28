@@ -3,25 +3,24 @@ layout: null
 nav: home
 showSkipLink: true
 seo:
-  title: "Video Production Vancouver BC - Film Production Company | Rainscope Filmworks"
-  description: "Professional video production company in Vancouver, BC. We create cinematic videos, commercials, corporate content, and wedding films. Full-service production including filming, editing, color grading, and motion graphics. Pacific Northwest filmmaking expertise."
-  keywords: "video production Vancouver, film production BC, video production company, corporate video production, commercial video production, wedding videography, video editing Vancouver, post-production services, color grading, motion graphics, film production company, videography services, video production services BC"
+  title: "Video Production Company Vancouver | Rainscope Filmworks"
+  description: "Creative video production company in Vancouver for commercial video, film production, post-production, equipment rentals, studio booking, and gear sales. Start your project with Rainscope Filmworks."
+  keywords: "video production company Vancouver, creative production company, video production Vancouver, film production Vancouver, equipment rentals Vancouver, studio booking Vancouver, post-production Vancouver, commercial video production"
   canonical: "https://rainscopefilmworks.com/"
   robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
   googlebot: "index, follow"
-  ogTitle: "Video Production Vancouver BC - Rainscope Filmworks"
-  ogDescription: "Professional video production company in Vancouver, BC. Cinematic videos, commercials, corporate content, and wedding films. Full-service production and post-production."
+  ogTitle: "Video Production Company Vancouver - Rainscope Filmworks"
+  ogDescription: "Commercial video, film production, post-production, equipment rentals, studio booking, and gear sales from a Vancouver production company."
   image: "https://media.rainscopefilmworks.com/logo.png"
   imageWidth: 1200
   imageHeight: 630
-  imageAlt: "Rainscope Filmworks - A Creative Production Company"
-  twitterTitle: "Video Production Vancouver BC - Rainscope Filmworks"
-  twitterDescription: "Professional video production company in Vancouver, BC. Cinematic videos, commercials, corporate content, and wedding films. Full-service production."
+  imageAlt: "Rainscope Filmworks - Creative Production Company in Vancouver"
+  twitterTitle: "Video Production Company Vancouver - Rainscope Filmworks"
+  twitterDescription: "Commercial video, film production, post-production, equipment rentals, studio booking, and gear sales from a Vancouver production company."
 ---
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
-    <!-- R2 Media Migration - Updated 2025-01-26 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% include "seo-head.njk" %}
@@ -41,16 +40,15 @@ seo:
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://maps.googleapis.com">
-    <!-- Inter Variable Font - 2026 Typography Enhancement -->
+    <!-- Inter Variable Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Preload Critical Resources for LCP - Hero tagline text is the LCP element -->
+    <!-- Preload critical brand image -->
     <link rel="preload" as="image" href="https://media.rainscopefilmworks.com/logo.png" fetchpriority="high">
 
-    <!-- Critical CSS inlined in head for immediate render - Hero tagline must render first -->
+    <!-- Critical hero CSS for immediate render -->
     <style>
-        /* Critical CSS: Hero tagline must render immediately for LCP */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -61,17 +59,15 @@ seo:
         }
         .hero-content {
             position: absolute !important;
-            top: 50% !important;
-            left: 0 !important;
-            right: 0 !important;
-            transform: translateY(-50%) !important;
+            top: 47% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
             z-index: 2 !important;
-            text-align: center;
-            width: 100% !important;
-            max-width: 100% !important;
+            text-align: center !important;
+            width: min(88vw, 780px) !important;
+            max-width: 780px !important;
             min-width: 0 !important;
             overflow: visible !important;
-            pointer-events: none;
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;
         }
@@ -80,10 +76,10 @@ seo:
             visibility: visible !important;
             display: block !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
-            font-size: clamp(0.75rem, 3.5vw, 1.8rem) !important;
+            font-size: clamp(1.35rem, 3vw, 2.45rem) !important;
             font-weight: bold !important;
             color: white !important;
-            text-transform: uppercase;
+            text-transform: uppercase !important;
             line-height: 1.2 !important;
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -99,21 +95,34 @@ seo:
             text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.4), 0 -2px 4px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
             position: relative;
         }
+        .hero-summary {
+            display: block !important;
+            color: white !important;
+            margin: 0 auto !important;
+            max-width: 680px !important;
+            font-size: clamp(1rem, 2vw, 1.25rem) !important;
+            line-height: 1.55 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+        }
         @media (max-width: 768px) {
             .hero-tagline {
-                font-size: clamp(0.65rem, 4.5vw, 1.3rem) !important;
+                font-size: clamp(1.25rem, 6vw, 2rem) !important;
                 opacity: 1 !important;
                 padding: 0 !important;
             }
             .hero-content {
-                top: 40% !important;
+                top: 44% !important;
             }
         }
         @media (max-width: 480px) {
             .hero-tagline {
-                font-size: clamp(0.6rem, 4vw, 1.1rem) !important;
+                font-size: clamp(1.05rem, 5.6vw, 1.65rem) !important;
                 padding: 0 !important;
-                letter-spacing: clamp(0.3px, 0.1vw, 0.8px) !important;
+                letter-spacing: 0 !important;
+            }
+            .hero-summary {
+                font-size: clamp(0.95rem, 4vw, 1.05rem) !important;
+                max-width: 20rem !important;
             }
         }
     </style>
@@ -124,8 +133,9 @@ seo:
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": ["LocalBusiness", "Organization"],
       "name": "Rainscope Filmworks",
+      "description": "Creative production company in Vancouver offering video production, post-production, equipment rentals, studio booking, and gear sales.",
       "image": "https://media.rainscopefilmworks.com/logo.png",
       "@id": "https://rainscopefilmworks.com",
       "url": "https://rainscopefilmworks.com",
@@ -213,7 +223,7 @@ seo:
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Video Production Services",
+        "name": "Production Company Services",
         "itemListElement": [
           {
             "@type": "Offer",
@@ -243,68 +253,24 @@ seo:
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Wedding Videography",
-              "description": "Cinematic wedding video production and editing services"
+              "name": "Film Equipment Rentals",
+              "description": "Camera, lens, lighting, audio, monitor, and production equipment rentals for Vancouver crews"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Studio Booking",
+              "description": "Studio booking for interviews, product sessions, workshops, and small productions"
             }
           }
         ]
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5.0",
-        "reviewCount": "3",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Noemi Lopez"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "Very easy to work with! Love the quick responses and was able to get my edit done just like my vision was described. Highly recommend! Thanks again.",
-          "datePublished": "2024-09-15"
-        },
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Anton Hing"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "I had the opportunity to work with them for a bunch of short films. Not only professional in manner but also in skills. Great people! Come to them with any project and they will assist you with amazing technical and creative knowledge.",
-          "datePublished": "2024-08-20"
-        },
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Danny Astefan"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "I use Rainscope as a regular rental house and they are nothing short of exceptional. Service is on point, gear is always in perfect condition and they're super kind! Highly recommended going to them for any of their services.",
-          "datePublished": "2024-07-10"
-        }
-      ]
+      }
     }
     </script>
 
-    <!-- Breadcrumb Structured Data - Deferred -->
-    <script type="application/ld+json" defer>
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -314,80 +280,6 @@ seo:
         "name": "Home",
         "item": "https://rainscopefilmworks.com/"
       }]
-    }
-    </script>
-
-    <!-- FAQ Structured Data for Rich Results -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What video production services does Rainscope Filmworks offer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Rainscope Filmworks offers comprehensive video production services including full-service production, post-production (editing, color grading, sound design, motion graphics), commercial video production, wedding videography, corporate videos, and equipment rentals. We handle every aspect from concept development to final delivery, serving clients across Vancouver and Greater Vancouver."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How long does a typical video production project take?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Most video production projects take 2-4 weeks from initial consultation to final delivery, depending on the project's complexity and scope. Simple projects like social media content can be completed in 1-2 weeks, while larger productions such as commercials or wedding films may take 3-6 weeks. We also offer rush services for urgent needs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What areas does Rainscope Filmworks serve?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "We serve Vancouver, Burnaby, Richmond, Surrey, Coquitlam, North Vancouver, West Vancouver, New Westminster, and throughout Greater Vancouver and British Columbia. Our team is experienced with filming across the Pacific Northwest and can travel for larger productions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is included in your video production service?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Our full-service video production includes pre-production planning and storyboarding, professional on-location filming with cinema-grade equipment, professional editing and post-production, color grading for cinematic look, sound design and audio mixing, motion graphics and visual effects, and final delivery in your preferred format. We provide a complete end-to-end solution."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much does video production cost in Vancouver?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Video production costs vary based on project scope, duration, location requirements, and post-production needs. We offer flexible pricing options to fit different budgets without compromising quality. Contact us for a free consultation and custom quote tailored to your specific project requirements."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do you offer equipment rentals?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, Rainscope Filmworks offers professional equipment rentals including cameras, lenses, lighting, audio equipment, and accessories. All our gear is well-maintained and available at competitive rates. We offer flexible rental periods and same-day pickup options for local clients in Vancouver."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you provide just post-production services?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Absolutely! If you already have footage, we offer standalone post-production services including video editing, color grading, sound design, motion graphics, and final delivery. Our post-production team can work with footage from any camera or source to create polished, professional final products."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What makes Rainscope Filmworks different from other video production companies?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Rainscope Filmworks combines Pacific Northwest-inspired creativity with technical excellence. We deliver cinematic-quality videos that fit your budget, maintain quick response times and clear communication, offer comprehensive services from concept to delivery, use professional cinema-grade equipment, and are a trusted rental house with exceptional customer service. Our work is shaped by the beauty and creativity of the Pacific Northwest."
-          }
-        }
-      ]
     }
     </script>
 </head>
@@ -404,10 +296,31 @@ seo:
         </div>
         <div class="hero-content">
             <h1 class="hero-tagline" style="opacity: 1;">{{ home.hero.tagline }}</h1>
+            <p class="hero-summary">{{ home.hero.summary }}</p>
         </div>
         <div class="hero-buttons">
             <a href="{{ home.hero.ctaPrimary.href }}" class="btn-primary btn-primary-filled">{{ home.hero.ctaPrimary.label }}</a>
             <a href="{{ home.hero.ctaSecondary.href }}" target="_blank" rel="noopener noreferrer" class="btn-primary">{{ home.hero.ctaSecondary.label }}</a>
+        </div>
+    </section>
+
+    <!-- Start Paths Section -->
+    <section class="start-paths" id="get-started" aria-labelledby="get-started-title">
+        <div class="start-paths-container">
+            <div class="start-paths-header scroll-reveal">
+                <h2 id="get-started-title" class="section-title">{{ home.startPaths.title }}</h2>
+                <p class="portfolio-subtitle">{{ home.startPaths.subtitle }}</p>
+            </div>
+            <div class="start-paths-grid">
+                {% for item in home.startPaths.items %}
+                <a class="start-path-card scroll-reveal-scale" href="{{ item.href }}">
+                    <span class="start-path-index">0{{ loop.index }}</span>
+                    <h3>{{ item.label }}</h3>
+                    <p>{{ item.description }}</p>
+                    <span class="start-path-link">{{ item.cta }}</span>
+                </a>
+                {% endfor %}
+            </div>
         </div>
     </section>
 
@@ -425,68 +338,6 @@ seo:
             <div class="trust-item scroll-reveal">
                 <div class="trust-number" data-count="3" data-suffix="+">3+</div>
                 <div class="trust-label">Years in Business</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services">
-        <div class="services-container">
-            <h2 class="section-title scroll-reveal" style="text-align: center; margin-bottom: clamp(3rem, 6vw, 5rem);">What We Do</h2>
-            <div class="services-grid">
-                <div class="service-card scroll-reveal-scale">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="8" y="12" width="48" height="36" rx="4"/>
-                            <path d="M20 12 L20 8 L44 8 L44 12"/>
-                            <circle cx="32" cy="30" r="8"/>
-                            <path d="M24 30 L28 34 L40 22"/>
-                        </svg>
-                    </div>
-                    <h3 class="service-title">Commercial and Corporate</h3>
-                    <p class="service-description">Brand films, campaigns, and internal stories that communicate clearly and drive results across web, social, and broadcast.</p>
-                    <ul class="service-features">
-                        <li>Creative direction</li>
-                        <li>Production and post</li>
-                        <li>Clear messaging</li>
-                    </ul>
-                </div>
-
-                <div class="service-card scroll-reveal-scale">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="12" y="8" width="40" height="48" rx="4"/>
-                            <path d="M20 20 L32 28 L44 20"/>
-                            <path d="M20 36 L32 44 L44 36"/>
-                            <circle cx="32" cy="16" r="2"/>
-                        </svg>
-                    </div>
-                    <h3 class="service-title">Film Production</h3>
-                    <p class="service-description">Full-service production for narrative and documentary work, from concept and pre-production through final delivery.</p>
-                    <ul class="service-features">
-                        <li>Story and pre-production</li>
-                        <li>Cinema-grade capture</li>
-                        <li>Cinematic finishing</li>
-                    </ul>
-                </div>
-
-                <div class="service-card scroll-reveal-scale">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 64 64" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="8" y="16" width="48" height="36" rx="4"/>
-                            <circle cx="24" cy="34" r="6"/>
-                            <path d="M40 28 L48 36 L40 44"/>
-                            <path d="M16 20 L16 12 L48 12 L48 20"/>
-                        </svg>
-                    </div>
-                    <h3 class="service-title">Rentals</h3>
-                    <p class="service-description">Cameras, lenses, lighting, and audio gear ready for indie crews who need reliable kit without the hassle.</p>
-                    <ul class="service-features">
-                        <li>Pro equipment</li>
-                        <li>Flexible pickup</li>
-                        <li>Fair rates</li>
-                    </ul>
-                </div>
             </div>
         </div>
     </section>
@@ -513,31 +364,6 @@ seo:
                 {% endfor %}
             </div>
             <a href="{{ home.portfolio.cta.href }}" class="btn-secondary">{{ home.portfolio.cta.label }}</a>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section class="services">
-        <div class="services-container">
-            <h2 class="section-title scroll-reveal" style="text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem);">Our Process</h2>
-            <div class="process-cards">
-                <article class="process-card scroll-reveal">
-                    <h3>Discovery and Creative Direction</h3>
-                    <p>We define the objective, audience, and story so the final video hits your goals and feels on-brand.</p>
-                </article>
-                <article class="process-card scroll-reveal">
-                    <h3>Production and Capture</h3>
-                    <p>Our crew handles shoots with cinema-grade gear, tight planning, and a focus on beautiful, usable footage.</p>
-                </article>
-                <article class="process-card scroll-reveal">
-                    <h3>Post-Production and Delivery</h3>
-                    <p>Editing, sound, and color are crafted to deliver a final cut that is polished, cinematic, and ready to launch.</p>
-                </article>
-                <article class="process-card scroll-reveal">
-                    <h3>Launch and Support</h3>
-                    <p>We provide formats for web, social, and broadcast, plus ongoing support for future iterations.</p>
-                </article>
-            </div>
         </div>
     </section>
 

@@ -859,6 +859,7 @@ seo:
       // Wait for Square script to load with longer timeout
       let squareLoadAttempts = 0;
       const maxAttempts = 50; // 5 seconds total (in case of slow connection)
+      const DEBUG_SQUARE_LOAD = false;
       // Check for both old (SqPaymentForm) and new (Square.payments) API
       while (typeof SqPaymentForm === 'undefined' && !(window.Square && window.Square.payments) && squareLoadAttempts < maxAttempts) {
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -870,7 +871,7 @@ seo:
         }
       }
       
-      if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+      if (DEBUG_SQUARE_LOAD && ["localhost", "127.0.0.1"].includes(window.location.hostname)) {
         console.log('Square script check complete:', {
           SqPaymentForm: typeof SqPaymentForm,
           Square: typeof window.Square,
@@ -990,7 +991,7 @@ seo:
           }
         } else if (typeof SqPaymentForm !== 'undefined') {
           // Fallback: old SqPaymentForm API (deprecated but still supported temporarily)
-          console.warn("Using deprecated SqPaymentForm API. Consider migrating to Square.payments()");
+          if (DEBUG_SQUARE_LOAD) console.warn("Using deprecated SqPaymentForm API. Consider migrating to Square.payments()");
           try {
             initializeSquarePaymentsLegacy();
           } catch (sqError) {
@@ -1001,7 +1002,7 @@ seo:
           }
         } else {
           console.error("Square Web Payments SDK not available. Payment form will not work.");
-          if (IS_LOCALHOST) {
+          if (DEBUG_LOGS) {
             console.log("Square script loaded:", window.squareScriptLoaded);
             console.log("Square object:", typeof window.Square);
             console.log("SqPaymentForm type:", typeof SqPaymentForm);
